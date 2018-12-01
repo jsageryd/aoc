@@ -2,59 +2,55 @@ package main
 
 import (
 	"bufio"
-	"bytes"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"strconv"
 	"strings"
 )
 
 func main() {
-	input, _ := ioutil.ReadAll(os.Stdin)
+	rows := [][]int{}
 
-	fmt.Printf("Part 1: %d\n", checksum(input))
-	fmt.Printf("Part 2: %d\n", checksumDivisibles(input))
-}
-
-func checksum(input []byte) int {
-	sum := 0
-
-	scanner := bufio.NewScanner(bytes.NewReader(input))
+	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
-		var nums []int
+		var row []int
 		for _, s := range strings.Split(scanner.Text(), "\t") {
 			n, _ := strconv.Atoi(s)
-			nums = append(nums, n)
+			row = append(row, n)
 		}
-		lineMin, lineMax := nums[0], nums[0]
-		for _, n := range nums {
+		rows = append(rows, row)
+	}
+
+	fmt.Printf("Part 1: %d\n", checksum(rows))
+	fmt.Printf("Part 2: %d\n", checksumDivisibles(rows))
+}
+
+func checksum(rows [][]int) int {
+	sum := 0
+
+	for _, row := range rows {
+		rowMin, rowMax := row[0], row[0]
+		for _, n := range row {
 			switch {
-			case n < lineMin:
-				lineMin = n
-			case n > lineMax:
-				lineMax = n
+			case n < rowMin:
+				rowMin = n
+			case n > rowMax:
+				rowMax = n
 			}
 		}
-		sum += lineMax - lineMin
+		sum += rowMax - rowMin
 	}
 
 	return sum
 }
 
-func checksumDivisibles(input []byte) int {
+func checksumDivisibles(rows [][]int) int {
 	sum := 0
 
-	scanner := bufio.NewScanner(bytes.NewReader(input))
-	for scanner.Scan() {
-		var nums []int
-		for _, s := range strings.Split(scanner.Text(), "\t") {
-			n, _ := strconv.Atoi(s)
-			nums = append(nums, n)
-		}
+	for _, row := range rows {
 	outer:
-		for i, n := range nums {
-			for j, m := range nums {
+		for i, n := range row {
+			for j, m := range row {
 				if i == j {
 					continue
 				}

@@ -6,26 +6,38 @@ import (
 
 func TestChecksum(t *testing.T) {
 	for n, tc := range []struct {
-		in  []byte
+		in  [][]int
 		out int
 	}{
-		{[]byte("5	1	9	5\n7	5	3\n2	4	6	8\n"), 18},
+		{[][]int{
+			{5, 1, 9, 5},
+			{7, 5, 3},
+			{2, 4, 6, 8},
+		},
+			18,
+		},
 	} {
 		if got, want := checksum(tc.in), tc.out; got != want {
-			t.Errorf("[%d] checksum(%q) = %d, want %d", n, tc.in, got, want)
+			t.Errorf("[%d] checksum(%v) = %d, want %d", n, tc.in, got, want)
 		}
 	}
 }
 
 func TestChecksumDivisibles(t *testing.T) {
 	for n, tc := range []struct {
-		in  []byte
+		in  [][]int
 		out int
 	}{
-		{[]byte("5	9	2	8\n9	4	7	3\n3	8	6	5\n"), 9},
+		{[][]int{
+			{5, 9, 2, 8},
+			{9, 4, 7, 3},
+			{3, 8, 6, 5},
+		},
+			9,
+		},
 	} {
 		if got, want := checksumDivisibles(tc.in), tc.out; got != want {
-			t.Errorf("[%d] checksumDivisibles(%q) = %d, want %d", n, tc.in, got, want)
+			t.Errorf("[%d] checksumDivisibles(%v) = %d, want %d", n, tc.in, got, want)
 		}
 	}
 }
