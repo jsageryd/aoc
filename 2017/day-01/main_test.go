@@ -24,7 +24,7 @@ func TestInverseCaptcha(t *testing.T) {
 		{"12131415", 8 / 2, 4},
 	} {
 		if got, want := inverseCaptcha(tc.in, tc.lookahead), tc.out; got != want {
-			t.Errorf("[%d] inverseCaptcha(%q) = %d, want %d", n, tc.in, got, want)
+			t.Errorf("[%d] inverseCaptcha(%q, %d) = %d, want %d", n, tc.in, tc.lookahead, got, want)
 		}
 	}
 }
