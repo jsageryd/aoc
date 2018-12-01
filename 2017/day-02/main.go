@@ -51,10 +51,7 @@ func checksumDivisibles(rows [][]int) int {
 	outer:
 		for i, n := range row {
 			for j, m := range row {
-				if i == j {
-					continue
-				}
-				if n%m == 0 {
+				if i != j && n%m == 0 {
 					sum += n / m
 					break outer
 				}
