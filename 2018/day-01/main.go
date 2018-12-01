@@ -1,40 +1,38 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
-	"strconv"
 )
 
 func main() {
-	var input []string
+	var input []int
 
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		input = append(input, scanner.Text())
+	for {
+		var n int
+		if _, err := fmt.Scanln(&n); err != nil {
+			break
+		}
+		input = append(input, n)
 	}
 
 	fmt.Printf("Part 1: %d\n", calibrate(0, input))
 	fmt.Printf("Part 2: %d\n", calibrateToFirstSeenTwice(0, input))
 }
 
-func calibrate(val int, calibrations []string) int {
+func calibrate(val int, calibrations []int) int {
 	for _, c := range calibrations {
-		chg, _ := strconv.Atoi(c)
-		val += chg
+		val += c
 	}
 
 	return val
 }
 
-func calibrateToFirstSeenTwice(val int, calibrations []string) int {
+func calibrateToFirstSeenTwice(val int, calibrations []int) int {
 	seen := map[int]bool{}
 
 	for n := 0; !seen[val]; n = (n + 1) % len(calibrations) {
 		seen[val] = true
-		chg, _ := strconv.Atoi(calibrations[n])
-		val += chg
+		val += calibrations[n]
 	}
 
 	return val
