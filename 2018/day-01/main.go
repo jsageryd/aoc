@@ -19,20 +19,20 @@ func main() {
 	fmt.Printf("Part 2: %d\n", calibrateToFirstSeenTwice(0, input))
 }
 
-func calibrate(val int, calibrations []int) int {
-	for _, c := range calibrations {
-		val += c
+func calibrate(val int, adjustments []int) int {
+	for _, adj := range adjustments {
+		val += adj
 	}
 
 	return val
 }
 
-func calibrateToFirstSeenTwice(val int, calibrations []int) int {
+func calibrateToFirstSeenTwice(val int, adjustments []int) int {
 	seen := map[int]bool{}
 
-	for n := 0; !seen[val]; n = (n + 1) % len(calibrations) {
+	for n := 0; !seen[val]; n = (n + 1) % len(adjustments) {
 		seen[val] = true
-		val += calibrations[n]
+		val += adjustments[n]
 	}
 
 	return val
