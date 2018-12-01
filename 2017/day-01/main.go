@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 )
 
 func main() {
@@ -19,8 +18,7 @@ func inverseCaptcha(seq string, lookahead int) int {
 
 	for n := range seq {
 		if seq[n] == seq[(n+lookahead)%len(seq)] {
-			d, _ := strconv.Atoi(string(seq[n]))
-			sum += d
+			sum += int(seq[n]) - '0'
 		}
 	}
 
