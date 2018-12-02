@@ -76,7 +76,7 @@ func spiral(stepFn func(x, y int) bool) {
 	dx, dy := 1, 0
 	radius := 0
 
-	for revolution := 0; ; revolution++ {
+	for {
 		for quadrant := 0; quadrant < 4; quadrant++ {
 			switch quadrant % 4 {
 			case 0:
