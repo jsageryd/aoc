@@ -14,37 +14,17 @@ func main() {
 }
 
 func spiralDistance(target int) int {
-	x, y := 0, 0
-	dx, dy := 1, 0
-	radius := 0
 	n := 0
+	distX, distY := 0, 0
 
-outer:
-	for revolution := 0; ; revolution++ {
-		for quadrant := 0; quadrant < 4; quadrant++ {
-			switch quadrant % 4 {
-			case 0:
-				radius++
-				dx, dy = 1, 0
-			case 1:
-				dx, dy = 0, -1
-			case 2:
-				radius++
-				dx, dy = -1, 0
-			case 3:
-				dx, dy = 0, 1
-			}
-
-			for step := 0; step < radius; step++ {
-				n++
-				if n == target {
-					break outer
-				}
-				x += dx
-				y += dy
-			}
-		}
-	}
+	spiral(
+		func(x, y int) bool {
+			n++
+			distX = x
+			distY = y
+			return n < target
+		},
+	)
 
 	abs := func(n int) int {
 		if n < 0 {
@@ -53,15 +33,11 @@ outer:
 		return n
 	}
 
-	return abs(x) + abs(y)
+	return abs(distX) + abs(distY)
 }
 
 func spiralFirstLargerAdjacentSum(target int) int {
-	x, y := 0, 0
-	dx, dy := 1, 0
-	radius := 0
-
-	spiral := map[int]map[int]int{
+	spiralCells := map[int]map[int]int{
 		0: map[int]int{0: 1},
 	}
 
@@ -69,11 +45,36 @@ func spiralFirstLargerAdjacentSum(target int) int {
 		sum := 0
 		for dy := -1; dy <= 1; dy++ {
 			for dx := -1; dx <= 1; dx++ {
-				sum += spiral[y+dy][x+dx]
+				sum += spiralCells[y+dy][x+dx]
 			}
 		}
 		return sum
 	}
+
+	var sum int
+
+	spiral(
+		func(x, y int) bool {
+			sum = adjSum(x, y)
+
+			if _, ok := spiralCells[y]; !ok {
+				spiralCells[y] = make(map[int]int)
+			}
+			spiralCells[y][x] = sum
+
+			return sum <= target
+		},
+	)
+
+	return sum
+}
+
+// spiral walks in a spiral, calling stepFn with the current coordinates for
+// each step. The spiral continues as long as stepFn returns true.
+func spiral(stepFn func(x, y int) bool) {
+	x, y := 0, 0
+	dx, dy := 1, 0
+	radius := 0
 
 	for revolution := 0; ; revolution++ {
 		for quadrant := 0; quadrant < 4; quadrant++ {
@@ -91,24 +92,14 @@ func spiralFirstLargerAdjacentSum(target int) int {
 			}
 
 			for step := 0; step < radius; step++ {
-				sum := adjSum(x, y)
-
-				if sum > target {
-					return sum
+				if !stepFn(x, y) {
+					return
 				}
-
-				if _, ok := spiral[y]; !ok {
-					spiral[y] = make(map[int]int)
-				}
-				spiral[y][x] = sum
-
 				x += dx
 				y += dy
 			}
 		}
 	}
-
-	return 0
 }
 
 /*
