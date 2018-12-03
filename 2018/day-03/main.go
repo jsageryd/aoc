@@ -35,35 +35,7 @@ type rect struct {
 }
 
 func overlappingArea(claims []claim) int {
-	var fabricW, fabricH int
-
-	for _, c := range claims {
-		if fabricW < c.Rect.X+c.Rect.W {
-			fabricW = c.Rect.X + c.Rect.W
-		}
-		if fabricH < c.Rect.Y+c.Rect.H {
-			fabricH = c.Rect.Y + c.Rect.H
-		}
-	}
-
-	fabric := make([][]byte, fabricH)
-
-	for _, c := range claims {
-		for y := c.Rect.Y; y < c.Rect.Y+c.Rect.H; y++ {
-			if fabric[y] == nil {
-				fabric[y] = make([]byte, fabricW)
-			}
-
-			for x := c.Rect.X; x < c.Rect.X+c.Rect.W; x++ {
-				switch fabric[y][x] {
-				case 0: // first to add fabric here, so add a #
-					fabric[y][x] = '#'
-				case '#', 'X': // # means there is fabric; X means there is overlapping fabric
-					fabric[y][x] = 'X'
-				}
-			}
-		}
-	}
+	fabric := drawClaims(claims)
 
 	overlap := 0
 
@@ -79,35 +51,7 @@ func overlappingArea(claims []claim) int {
 }
 
 func nonOverlappingClaim(claims []claim) claim {
-	var fabricW, fabricH int
-
-	for _, c := range claims {
-		if fabricW < c.Rect.X+c.Rect.W {
-			fabricW = c.Rect.X + c.Rect.W
-		}
-		if fabricH < c.Rect.Y+c.Rect.H {
-			fabricH = c.Rect.Y + c.Rect.H
-		}
-	}
-
-	fabric := make([][]byte, fabricH)
-
-	for _, c := range claims {
-		for y := c.Rect.Y; y < c.Rect.Y+c.Rect.H; y++ {
-			if fabric[y] == nil {
-				fabric[y] = make([]byte, fabricW)
-			}
-
-			for x := c.Rect.X; x < c.Rect.X+c.Rect.W; x++ {
-				switch fabric[y][x] {
-				case 0: // first to add fabric here, so add a #
-					fabric[y][x] = '#'
-				case '#', 'X': // # means there is fabric; X means there is overlapping fabric
-					fabric[y][x] = 'X'
-				}
-			}
-		}
-	}
+	fabric := drawClaims(claims)
 
 	var nonOverlappingClaim claim
 
@@ -124,4 +68,37 @@ next:
 	}
 
 	return nonOverlappingClaim
+}
+
+func drawClaims(claims []claim) [][]byte {
+	var fabricW, fabricH int
+
+	for _, c := range claims {
+		if fabricW < c.Rect.X+c.Rect.W {
+			fabricW = c.Rect.X + c.Rect.W
+		}
+		if fabricH < c.Rect.Y+c.Rect.H {
+			fabricH = c.Rect.Y + c.Rect.H
+		}
+	}
+
+	fabric := make([][]byte, fabricH)
+	for y := range fabric {
+		fabric[y] = make([]byte, fabricW)
+	}
+
+	for _, c := range claims {
+		for y := c.Rect.Y; y < c.Rect.Y+c.Rect.H; y++ {
+			for x := c.Rect.X; x < c.Rect.X+c.Rect.W; x++ {
+				switch fabric[y][x] {
+				case 0: // first to add fabric here, so add a #
+					fabric[y][x] = '#'
+				case '#', 'X': // # means there is fabric; X means there is overlapping fabric
+					fabric[y][x] = 'X'
+				}
+			}
+		}
+	}
+
+	return fabric
 }
