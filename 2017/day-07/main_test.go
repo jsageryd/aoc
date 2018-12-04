@@ -18,14 +18,18 @@ var input = []string{
 	"cntj (57)",
 }
 
-func TestRootProgram(t *testing.T) {
-	if got, want := rootProgram(input).Name, "tknk"; got != want {
+func TestParseProgramTree(t *testing.T) {
+	root := parseProgramTree(input)
+
+	if got, want := root.Name, "tknk"; got != want {
 		t.Errorf("got %q, want %q", got, want)
 	}
 }
 
 func TestFindUnbalancedChild(t *testing.T) {
-	p, diff := findUnbalancedChild(rootProgram(input))
+	root := parseProgramTree(input)
+
+	p, diff := findUnbalancedChild(root)
 
 	if p == nil {
 		t.Fatal("no child found")

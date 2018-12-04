@@ -15,8 +15,7 @@ func main() {
 		input = append(input, scanner.Text())
 	}
 
-	root := rootProgram(input)
-
+	root := parseProgramTree(input)
 	unbalanced, diff := findUnbalancedChild(root)
 
 	fmt.Printf("Part 1: %s\n", root.Name)
@@ -29,15 +28,6 @@ type Program struct {
 	TotalWeight int        `json:"total_weight"`
 	Parent      *Program   `json:"-"`
 	Children    []*Program `json:"children"`
-}
-
-func rootProgram(input []string) *Program {
-	for _, p := range parseProgramTree(input) {
-		if p.Parent == nil {
-			return p
-		}
-	}
-	return nil
 }
 
 func setTotalWeights(root *Program) {
@@ -67,7 +57,7 @@ func findUnbalancedChild(root *Program) (child *Program, diff int) {
 	return nil, 0
 }
 
-func parseProgramTree(input []string) []*Program {
+func parseProgramTree(input []string) (root *Program) {
 	programMap := map[string]*Program{}
 
 	for _, entry := range input {
@@ -93,20 +83,15 @@ func parseProgramTree(input []string) []*Program {
 		}
 	}
 
-	programs := make([]*Program, 0, len(programMap))
-
-	var root *Program
-
 	for _, p := range programMap {
 		if p.Parent != nil {
 			p.Parent.Children = append(p.Parent.Children, p)
 		} else {
 			root = p
 		}
-		programs = append(programs, p)
 	}
 
 	setTotalWeights(root)
 
-	return programs
+	return root
 }
