@@ -6,6 +6,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 1: Chronal Calibration](2018/day-01)
 - [Day 2: Inventory Management System](2018/day-02)
 - [Day 3: No Matter How You Slice It](2018/day-03)
+- [Day 4: Repose Record](2018/day-04)
 
 ## 2017
 - [Day 1: Inverse Captcha](2017/day-01)
