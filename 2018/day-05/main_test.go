@@ -1,6 +1,10 @@
 package main
 
-import "testing"
+import (
+	"fmt"
+	"os"
+	"testing"
+)
 
 func TestReduce(t *testing.T) {
 	for n, tc := range []struct {
@@ -40,5 +44,29 @@ func TestAsciiToLower(t *testing.T) {
 		if got, want := asciiToLower(input[n]), want[n]; got != want {
 			t.Errorf("asciiToLower(%q) = %q, want %q", input[n], got, want)
 		}
+	}
+}
+
+func BenchmarkReduce(b *testing.B) {
+	f, _ := os.Open("input")
+	defer f.Close()
+
+	var input string
+	fmt.Fscanln(f, &input)
+
+	for n := 0; n < b.N; n++ {
+		reduce(input)
+	}
+}
+
+func BenchmarkReduceAlternate(b *testing.B) {
+	f, _ := os.Open("input")
+	defer f.Close()
+
+	var input string
+	fmt.Fscanln(f, &input)
+
+	for n := 0; n < b.N; n++ {
+		reduceAlternate(input)
 	}
 }
