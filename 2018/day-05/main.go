@@ -40,6 +40,8 @@ func reduce(polymer string) string {
 }
 
 func reduceAlternate(polymer string) string {
+	polymer = reduce(polymer)
+
 	m := map[byte]struct{}{}
 
 	for _, b := range []byte(polymer) {
