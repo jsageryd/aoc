@@ -66,8 +66,5 @@ func reduceAlternate(polymer string) string {
 }
 
 func asciiToLower(a byte) byte {
-	if a&0x20 == 0 {
-		return a ^ 0x20
-	}
-	return a
+	return a | 32
 }
