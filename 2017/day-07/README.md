@@ -64,7 +64,7 @@ balancing in front of you is much larger.)
 Before you're ready to help them, you need to make sure your information is
 correct. What is the name of the bottom program?
 
-# Part Two
+## Part Two
 
 The programs explain the situation: they can't get down. Rather, they could get
 down, if they weren't expending all of their energy trying to keep the tower

@@ -41,7 +41,7 @@ How many units remain after fully reacting the polymer you scanned? (Note: in
 this puzzle and others, the input is large; if you copy/paste your input, make
 sure you get the whole thing.)
 
-# Part Two
+## Part Two
 
 Time to improve the polymer.
 
