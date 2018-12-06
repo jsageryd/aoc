@@ -36,8 +36,10 @@ func reduceAlternate(polymer string) string {
 
 	shortest := []byte(polymer)
 
+	stack := make([]byte, 0, len(polymer))
+
 	for unit := range m {
-		var stack []byte
+		stack = stack[:0]
 		for _, b := range []byte(polymer) {
 			switch {
 			case b|32 == unit:
@@ -49,7 +51,8 @@ func reduceAlternate(polymer string) string {
 			}
 		}
 		if len(stack) < len(shortest) {
-			shortest = stack
+			shortest = shortest[:len(stack)]
+			copy(shortest, stack)
 		}
 	}
 
