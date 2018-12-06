@@ -1,6 +1,10 @@
 package main
 
-import "testing"
+import (
+	"fmt"
+	"os"
+	"testing"
+)
 
 func TestLargestNonInfiniteTerritory(t *testing.T) {
 	coords := []coord{{1, 1}, {1, 6}, {8, 3}, {3, 4}, {5, 5}, {8, 9}}
@@ -162,5 +166,43 @@ func TestDistance(t *testing.T) {
 		if got, want := distance(tc.c1, tc.c2), tc.distance; got != want {
 			t.Errorf("[%d] distance(%v, %v) = %d, want %d", n, tc.c1, tc.c2, got, want)
 		}
+	}
+}
+
+func BenchmarkLargestNonInfiniteTerritory(b *testing.B) {
+	f, _ := os.Open("input")
+	defer f.Close()
+
+	var input []coord
+
+	for {
+		var x, y int
+		if _, err := fmt.Fscanf(f, "%d, %d", &x, &y); err != nil {
+			break
+		}
+		input = append(input, coord{x, y})
+	}
+
+	for n := 0; n < b.N; n++ {
+		largestNonInfiniteTerritory(input)
+	}
+}
+
+func BenchmarkSizeOfTerritoryClosestToAllCoords(b *testing.B) {
+	f, _ := os.Open("input")
+	defer f.Close()
+
+	var input []coord
+
+	for {
+		var x, y int
+		if _, err := fmt.Fscanf(f, "%d, %d", &x, &y); err != nil {
+			break
+		}
+		input = append(input, coord{x, y})
+	}
+
+	for n := 0; n < b.N; n++ {
+		sizeOfTerritoryClosestToAllCoords(input, 10000)
 	}
 }
