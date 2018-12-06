@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
 	"os"
 )
 
@@ -43,47 +42,27 @@ type instruction struct {
 func process(instructions []string) (regs map[string]int, maxAlloc int) {
 	regs = map[string]int{}
 
-	op1f := map[string]func(string, int){
-		"inc": func(reg string, n int) {
-			regs[reg] += n
-		},
-		"dec": func(reg string, n int) {
-			regs[reg] -= n
-		},
-	}
-
 	for _, instStr := range instructions {
 		var inst instruction
 
 		fmt.Sscanf(instStr, "%s %s %d if %s %s %d", &inst.reg1, &inst.op1, &inst.val1, &inst.reg2, &inst.op2, &inst.val2)
 
-		switch inst.op2 {
-		case ">":
-			if regs[inst.reg2] > inst.val2 {
-				op1f[inst.op1](inst.reg1, inst.val1)
-			}
-		case "<":
-			if regs[inst.reg2] < inst.val2 {
-				op1f[inst.op1](inst.reg1, inst.val1)
-			}
-		case ">=":
-			if regs[inst.reg2] >= inst.val2 {
-				op1f[inst.op1](inst.reg1, inst.val1)
-			}
-		case "<=":
-			if regs[inst.reg2] <= inst.val2 {
-				op1f[inst.op1](inst.reg1, inst.val1)
-			}
-		case "==":
-			if regs[inst.reg2] == inst.val2 {
-				op1f[inst.op1](inst.reg1, inst.val1)
-			}
-		case "!=":
-			if regs[inst.reg2] != inst.val2 {
-				op1f[inst.op1](inst.reg1, inst.val1)
-			}
+		switch {
+		case inst.op2 == ">" && regs[inst.reg2] > inst.val2:
+		case inst.op2 == "<" && regs[inst.reg2] < inst.val2:
+		case inst.op2 == ">=" && regs[inst.reg2] >= inst.val2:
+		case inst.op2 == "<=" && regs[inst.reg2] <= inst.val2:
+		case inst.op2 == "==" && regs[inst.reg2] == inst.val2:
+		case inst.op2 == "!=" && regs[inst.reg2] != inst.val2:
 		default:
-			log.Fatalf("unknown operator: %q", inst.op2)
+			continue
+		}
+
+		switch inst.op1 {
+		case "inc":
+			regs[inst.reg1] += inst.val1
+		case "dec":
+			regs[inst.reg1] -= inst.val1
 		}
 
 		if regs[inst.reg1] > maxAlloc {
