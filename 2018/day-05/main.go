@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"strings"
 )
 
 func main() {
@@ -15,28 +14,15 @@ func main() {
 }
 
 func reduce(polymer string) string {
-	units := []byte(polymer)
-
-	for loop := true; loop; {
-		loop = false
-		for n := 0; n < len(units)-1; n++ {
-			if units[n] == '.' {
-				continue
-			}
-			m := n + 1
-			for ; m < len(units) && units[m] == '.'; m++ {
-			}
-			if m >= len(units) {
-				break
-			}
-			if units[n] != units[m] && asciiToLower(units[n]) == asciiToLower(units[m]) {
-				units[n], units[m] = '.', '.'
-				loop = true
-			}
+	var stack []byte
+	for _, b := range []byte(polymer) {
+		if len(stack) > 0 && b^32 == stack[len(stack)-1] {
+			stack = stack[:len(stack)-1]
+		} else {
+			stack = append(stack, b)
 		}
 	}
-
-	return strings.Replace(string(units), ".", "", -1)
+	return string(stack)
 }
 
 func reduceAlternate(polymer string) string {
@@ -45,26 +31,27 @@ func reduceAlternate(polymer string) string {
 	m := map[byte]struct{}{}
 
 	for _, b := range []byte(polymer) {
-		m[asciiToLower(b)] = struct{}{}
+		m[b|32] = struct{}{}
 	}
 
-	shortest := polymer
+	shortest := []byte(polymer)
 
 	for unit := range m {
-		p := []byte(polymer)
-		for n := range p {
-			if asciiToLower(p[n]) == unit {
-				p[n] = '.'
+		var stack []byte
+		for _, b := range []byte(polymer) {
+			switch {
+			case b|32 == unit:
+				continue
+			case len(stack) > 0 && b^32 == stack[len(stack)-1]:
+				stack = stack[:len(stack)-1]
+			default:
+				stack = append(stack, b)
 			}
 		}
-		if pp := reduce(string(p)); len(pp) < len(shortest) {
-			shortest = pp
+		if len(stack) < len(shortest) {
+			shortest = stack
 		}
 	}
 
-	return shortest
-}
-
-func asciiToLower(a byte) byte {
-	return a | 32
+	return string(shortest)
 }

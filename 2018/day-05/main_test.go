@@ -36,17 +36,6 @@ func TestReduceAlternate(t *testing.T) {
 	}
 }
 
-func TestAsciiToLower(t *testing.T) {
-	input := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	want := "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz"
-
-	for n := range input {
-		if got, want := asciiToLower(input[n]), want[n]; got != want {
-			t.Errorf("asciiToLower(%q) = %q, want %q", input[n], got, want)
-		}
-	}
-}
-
 func BenchmarkReduce(b *testing.B) {
 	f, _ := os.Open("input")
 	defer f.Close()
