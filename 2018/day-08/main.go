@@ -113,8 +113,10 @@ func dot(root *node) string {
 		for _, n := range root.metadata {
 			if n-1 < len(root.children) {
 				res = append(res, [2]int{nodeIDs[root], nodeIDs[root.children[n-1]]})
-				res = append(res, recurseMetadata(root.children[n-1])...)
 			}
+		}
+		for _, n := range root.children {
+			res = append(res, recurseMetadata(n)...)
 		}
 		return res
 	}
