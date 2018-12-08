@@ -91,12 +91,16 @@ func dot(root *node) string {
 
 	recurseChildren = func(root *node) [][2]int {
 		var res [][2]int
-		nodeID++
-		nodeIDs[root] = nodeID
-		for _, n := range root.children {
+		if _, ok := nodeIDs[root]; !ok {
 			nodeID++
-			nodeIDs[n] = nodeID
-			res = append(res, [2]int{nodeIDs[root], nodeID})
+			nodeIDs[root] = nodeID
+		}
+		for _, n := range root.children {
+			if _, ok := nodeIDs[n]; !ok {
+				nodeID++
+				nodeIDs[n] = nodeID
+			}
+			res = append(res, [2]int{nodeIDs[root], nodeIDs[n]})
 			res = append(res, recurseChildren(n)...)
 		}
 		return res
