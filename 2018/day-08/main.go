@@ -20,7 +20,6 @@ func main() {
 }
 
 type node struct {
-	parent   *node
 	children []*node
 	metadata []int
 }
@@ -32,19 +31,21 @@ func readTree(input []int) *node {
 	}
 	close(in)
 
-	return readTreeRecursively(nil, in)
-}
+	var recurse func(*node) *node
 
-func readTreeRecursively(parent *node, input <-chan int) *node {
-	childrenCount, metadataCount := <-input, <-input
-	n := &node{parent: parent}
-	for i := 0; i < childrenCount; i++ {
-		n.children = append(n.children, readTreeRecursively(n, input))
+	recurse = func(root *node) *node {
+		childrenCount, metadataCount := <-in, <-in
+		n := &node{}
+		for i := 0; i < childrenCount; i++ {
+			n.children = append(n.children, recurse(n))
+		}
+		for i := 0; i < metadataCount; i++ {
+			n.metadata = append(n.metadata, <-in)
+		}
+		return n
 	}
-	for i := 0; i < metadataCount; i++ {
-		n.metadata = append(n.metadata, <-input)
-	}
-	return n
+
+	return recurse(nil)
 }
 
 func sumOfMetadata(root *node) int {
