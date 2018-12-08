@@ -114,6 +114,10 @@ type edge struct {
 	to   *node
 }
 
+func (e *edge) String() string {
+	return fmt.Sprintf("%s -> %s", e.from, e.to)
+}
+
 func (g *graph) addNode(name string) {
 	g.nodes = append(g.nodes, &node{name: name})
 }
@@ -212,9 +216,15 @@ func (g *graph) everServed(name string) bool {
 
 func (g *graph) String() string {
 	lines := []string{"digraph {"}
+	sort.Slice(g.nodes, func(i, j int) bool {
+		return g.nodes[i].name < g.nodes[j].name
+	})
 	for _, n := range g.nodes {
 		lines = append(lines, fmt.Sprintf("  %s;", n.name))
 	}
+	sort.Slice(g.edges, func(i, j int) bool {
+		return g.edges[i].String() < g.edges[j].String()
+	})
 	for _, e := range g.edges {
 		lines = append(lines, fmt.Sprintf("  %s -> %s;", e.from.name, e.to.name))
 	}
