@@ -22,3 +22,6 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 7: Recursive Circus](2017/day-07)
 - [Day 8: I Heard You Like Registers](2017/day-08)
 - [Day 9: Stream Processing](2017/day-09)
+
+## 2015
+- [Day 1: Not Quite Lisp](2015/day-01)
