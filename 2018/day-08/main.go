@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"sort"
+	"strings"
+)
 
 func main() {
 	var input []int
@@ -76,4 +80,74 @@ func valueOfRootNode(root *node) int {
 	}
 
 	return sum
+}
+
+func dot(root *node) string {
+	nodeIDs := map[*node]int{}
+
+	nodeID := 0
+
+	var recurseChildren func(root *node) [][2]int
+
+	recurseChildren = func(root *node) [][2]int {
+		var res [][2]int
+		nodeID++
+		nodeIDs[root] = nodeID
+		for _, n := range root.children {
+			nodeID++
+			nodeIDs[n] = nodeID
+			res = append(res, [2]int{nodeIDs[root], nodeID})
+			res = append(res, recurseChildren(n)...)
+		}
+		return res
+	}
+
+	var recurseMetadata func(root *node) [][2]int
+
+	recurseMetadata = func(root *node) [][2]int {
+		var res [][2]int
+		for _, n := range root.metadata {
+			if n-1 < len(root.children) {
+				res = append(res, [2]int{nodeIDs[root], nodeIDs[root.children[n-1]]})
+				res = append(res, recurseMetadata(root.children[n-1])...)
+			}
+		}
+		return res
+	}
+
+	childEdges := recurseChildren(root)
+	sort.Slice(childEdges, func(i, j int) bool {
+		if childEdges[i][0] == childEdges[j][0] {
+			return childEdges[i][1] < childEdges[j][1]
+		}
+		return childEdges[i][0] < childEdges[j][0]
+	})
+
+	metadataEdges := recurseMetadata(root)
+	sort.Slice(metadataEdges, func(i, j int) bool {
+		if metadataEdges[i][0] == metadataEdges[j][0] {
+			return metadataEdges[i][1] < metadataEdges[j][1]
+		}
+		return metadataEdges[i][0] < metadataEdges[j][0]
+	})
+
+	lines := []string{"digraph {"}
+
+	nodeIDsSorted := make([]int, 0, len(nodeIDs))
+	for _, id := range nodeIDs {
+		nodeIDsSorted = append(nodeIDsSorted, id)
+	}
+	sort.Ints(nodeIDsSorted)
+	for _, id := range nodeIDsSorted {
+		lines = append(lines, fmt.Sprintf("  %d;", id))
+	}
+	for _, e := range childEdges {
+		lines = append(lines, fmt.Sprintf("  %d -> %d;", e[0], e[1]))
+	}
+	for _, e := range metadataEdges {
+		lines = append(lines, fmt.Sprintf("  %d -> %d [style = dotted];", e[0], e[1]))
+	}
+	lines = append(lines, "}")
+
+	return strings.Join(lines, "\n")
 }
