@@ -1,6 +1,7 @@
 package main
 
 import (
+	"container/ring"
 	"fmt"
 	"strings"
 )
@@ -10,52 +11,62 @@ func main() {
 	fmt.Scanf("%d players; last marble is worth %d points", &players, &lastMarble)
 
 	highestScore := play(players, lastMarble)
+	highestScore2 := play(players, lastMarble*100)
 
 	fmt.Printf("Part 1: %d\n", highestScore)
+	fmt.Printf("Part 2: %d\n", highestScore2)
 }
 
 type circle struct {
-	curIdx int
-	data   []int
+	data *ring.Ring
 }
 
 // place places the given marble into the circle between the marbles that are 1
 // and 2 marbles clockwise of the current marble.
 func (c *circle) place(marble int) {
-	idx := 0
-	if len(c.data) > 0 {
-		idx = (c.curIdx + 2) % len(c.data)
+	if c.data == nil {
+		c.data = ring.New(1)
+		c.data.Value = marble
+		return
 	}
-	c.data = append(c.data, 0)
-	if idx == 0 {
-		idx = len(c.data) - 1
-	}
-	copy(c.data[idx+1:], c.data[idx:])
-	c.data[idx] = marble
-	c.curIdx = idx
+	r := ring.New(1)
+	r.Value = marble
+	c.data = c.data.Next()
+	c.data.Link(r)
+	c.data = c.data.Next()
 }
 
 // delete deletes the marble at the given offset from the current marble and
 // returns its value.
 func (c *circle) delete(offset int) (marble int) {
-	idx := (c.curIdx + offset)
-	for idx < 0 {
-		idx += len(c.data)
-	}
-	marble = c.data[idx]
-	c.data = append(c.data[:idx], c.data[idx+1:]...)
-	c.curIdx = idx % len(c.data)
-	return marble
+	c.data = c.data.Move(offset - 1)
+	defer func() { c.data = c.data.Next() }()
+	return c.data.Unlink(1).Value.(int)
 }
 
 func (c *circle) String() string {
-	s := make([]string, 0, len(c.data))
-	for n := range c.data {
+	if c.data == nil {
+		return ""
+	}
+	cur := c.data.Value.(int)
+	var data []int
+	c.data.Do(func(v interface{}) {
+		data = append(data, v.(int))
+	})
+	for data[0] != 0 {
+		zeroth := data[0]
+		for n := 0; n < len(data)-1; n++ {
+			data[n] = data[n+1]
+		}
+		data[len(data)-1] = zeroth
+	}
+	s := make([]string, 0, len(data))
+	for _, d := range data {
 		format := " %d "
-		if n == c.curIdx {
+		if d == cur {
 			format = "[%d]"
 		}
-		m := fmt.Sprintf(format, c.data[n])
+		m := fmt.Sprintf(format, d)
 		s = append(s, m)
 	}
 	return strings.Join(s, "")
