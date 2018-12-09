@@ -11,6 +11,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 6: Chronal Coordinates](2018/day-06)
 - [Day 7: The Sum of Its Parts](2018/day-07)
 - [Day 8: Memory Maneuver](2018/day-08)
+- [Day 9: Marble Mania](2018/day-09)
 
 ## 2017
 - [Day 1: Inverse Captcha](2017/day-01)
