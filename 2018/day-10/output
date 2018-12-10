@@ -1,13 +1,13 @@
 Part 1:
-XX        XX          XXXXXX    XXXXXXXXXX            XXXXXX    XX        XX    XXXXXXXXXX          XXXX        XXXXXXXXXXXX
-XX        XX            XX      XX        XX            XX      XX        XX    XX        XX      XX    XX                XX
-XX        XX            XX      XX        XX            XX        XX    XX      XX        XX    XX        XX              XX
-XX        XX            XX      XX        XX            XX        XX    XX      XX        XX    XX        XX            XX  
-XXXXXXXXXXXX            XX      XXXXXXXXXX              XX          XXXX        XXXXXXXXXX      XX        XX          XX    
-XX        XX            XX      XX        XX            XX          XXXX        XX    XX        XXXXXXXXXXXX        XX      
-XX        XX            XX      XX        XX            XX        XX    XX      XX      XX      XX        XX      XX        
-XX        XX    XX      XX      XX        XX    XX      XX        XX    XX      XX      XX      XX        XX    XX          
-XX        XX    XX      XX      XX        XX    XX      XX      XX        XX    XX        XX    XX        XX    XX          
-XX        XX      XXXXXX        XXXXXXXXXX        XXXXXX        XX        XX    XX        XX    XX        XX    XXXXXXXXXXXX
+#....#.....###..#####......###..#....#..#####.....##....######
+#....#......#...#....#......#...#....#..#....#...#..#........#
+#....#......#...#....#......#....#..#...#....#..#....#.......#
+#....#......#...#....#......#....#..#...#....#..#....#......#.
+######......#...#####.......#.....##....#####...#....#.....#..
+#....#......#...#....#......#.....##....#..#....######....#...
+#....#......#...#....#......#....#..#...#...#...#....#...#....
+#....#..#...#...#....#..#...#....#..#...#...#...#....#..#.....
+#....#..#...#...#....#..#...#...#....#..#....#..#....#..#.....
+#....#...###....#####....###....#....#..#....#..#....#..######
 
 Part 2: 10641

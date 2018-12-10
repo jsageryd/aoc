@@ -118,9 +118,9 @@ func printConstellation(stars []*star) {
 	for y := range starGrid {
 		for x := range starGrid[y] {
 			if starGrid[y][x] {
-				fmt.Print("XX")
+				fmt.Print("#")
 			} else {
-				fmt.Print("  ")
+				fmt.Print(".")
 			}
 		}
 		fmt.Println()
