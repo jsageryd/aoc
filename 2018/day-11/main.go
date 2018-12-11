@@ -56,7 +56,7 @@ func powerLevel(gridSerialNumber, x, y int) int {
 	powerLevel := rackID * y
 	powerLevel += gridSerialNumber
 	powerLevel *= rackID
-	powerLevel = powerLevel/100 - powerLevel/1000*10
+	powerLevel = powerLevel / 100 % 10
 	powerLevel -= 5
 	return powerLevel
 }
