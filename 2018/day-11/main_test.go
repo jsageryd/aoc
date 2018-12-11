@@ -9,7 +9,8 @@ func TestFind3x3Square(t *testing.T) {
 		{18, 33, 45, 29},
 		{42, 21, 61, 30},
 	} {
-		x, y, totalPower := find3x3Square(tc.gridSerialNumber)
+		grid := makeGrid(tc.gridSerialNumber)
+		x, y, totalPower := find3x3Square(grid)
 
 		if x != tc.x || y != tc.y || totalPower != tc.totalPower {
 			t.Errorf(
@@ -27,7 +28,8 @@ func TestFindNxNSquare(t *testing.T) {
 		{18, 90, 269, 16, 113},
 		{42, 232, 251, 12, 119},
 	} {
-		x, y, side, totalPower := findNxNSquare(tc.gridSerialNumber)
+		grid := makeGrid(tc.gridSerialNumber)
+		x, y, side, totalPower := findNxNSquare(grid)
 
 		if x != tc.x || y != tc.y || side != tc.side || totalPower != tc.totalPower {
 			t.Errorf(
