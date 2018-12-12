@@ -59,3 +59,37 @@ func TestPowerLevel(t *testing.T) {
 		}
 	}
 }
+
+func TestSummedGrid(t *testing.T) {
+	var grid [300][300]int
+
+	for y := 0; y < 300; y++ {
+		for x := 0; x < 300; x++ {
+			grid[y][x] = 1
+		}
+	}
+
+	sGrid := summedGrid(grid)
+
+	check := func(x, y, sum int) {
+		if sGrid[y][x] != sum {
+			t.Errorf("%d,%d = %d, want %d", y, x, sGrid[y][x], sum)
+		}
+	}
+
+	/*
+	 1  1  1      1  2  3
+	 1  1  1  ->  2  4  6
+	 1  1  1      3  6  9
+	*/
+
+	check(0, 0, 1)
+	check(0, 1, 2)
+	check(0, 2, 3)
+	check(1, 0, 2)
+	check(1, 1, 4)
+	check(1, 2, 6)
+	check(2, 0, 3)
+	check(2, 1, 6)
+	check(2, 2, 9)
+}

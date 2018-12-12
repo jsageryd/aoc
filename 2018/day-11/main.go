@@ -39,6 +39,8 @@ func find3x3Square(grid [300][300]int) (x, y, totalPower int) {
 }
 
 func findNxNSquare(grid [300][300]int) (x, y, side, totalPower int) {
+	sGrid := summedGrid(grid)
+
 	workers := runtime.NumCPU()
 
 	in := make(chan int, 300)
@@ -58,11 +60,17 @@ func findNxNSquare(grid [300][300]int) (x, y, side, totalPower int) {
 			for squareSide := range in {
 				for yy := 1; yy <= 300-squareSide+1; yy++ {
 					for xx := 1; xx <= 300-squareSide+1; xx++ {
-						sum := 0
-						for oy := 0; oy < squareSide; oy++ {
-							for ox := 0; ox < squareSide; ox++ {
-								sum += grid[yy+oy-1][xx+ox-1]
-							}
+						x1, y1 := xx-2, yy-2
+						x2, y2 := x1+squareSide, y1+squareSide
+						sum := sGrid[y2][x2]
+						if x1 > 0 {
+							sum -= sGrid[y2][x1]
+						}
+						if y1 > 0 {
+							sum -= sGrid[y1][x2]
+						}
+						if x1 > 0 && y1 > 0 {
+							sum += sGrid[y1][x1]
 						}
 						if sum > totalPower {
 							x, y, side, totalPower = xx, yy, squareSide, sum
@@ -97,6 +105,26 @@ func makeGrid(serialNumber int) [300][300]int {
 		}
 	}
 	return grid
+}
+
+func summedGrid(grid [300][300]int) [300][300]int {
+	var sGrid [300][300]int
+	for y := 0; y < len(grid); y++ {
+		for x := 0; x < len(grid[y]); x++ {
+			s := grid[y][x]
+			if y > 0 {
+				s += sGrid[y-1][x]
+			}
+			if x > 0 {
+				s += sGrid[y][x-1]
+			}
+			if x > 0 && y > 0 {
+				s -= sGrid[y-1][x-1]
+			}
+			sGrid[y][x] = s
+		}
+	}
+	return sGrid
 }
 
 func powerLevel(gridSerialNumber, x, y int) int {
