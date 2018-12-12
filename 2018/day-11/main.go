@@ -60,20 +60,11 @@ func findNxNSquare(grid [300][300]int) (x, y, side, totalPower int) {
 			for squareSide := range in {
 				for yy := 1; yy <= 300-squareSide+1; yy++ {
 					for xx := 1; xx <= 300-squareSide+1; xx++ {
-						x1, y1 := xx-2, yy-2
-						x2, y2 := x1+squareSide, y1+squareSide
-						sum := sGrid[y2][x2]
-						if x1 > 0 {
-							sum -= sGrid[y2][x1]
-						}
-						if y1 > 0 {
-							sum -= sGrid[y1][x2]
-						}
-						if x1 > 0 && y1 > 0 {
-							sum += sGrid[y1][x1]
-						}
+						x1, y1 := xx-1, yy-1
+						x2, y2 := x1+squareSide-1, y1+squareSide-1
+						sum := sGrid[y2][x2] - sGrid[y1][x2] - sGrid[y2][x1] + sGrid[y1][x1]
 						if sum > totalPower {
-							x, y, side, totalPower = xx, yy, squareSide, sum
+							x, y, side, totalPower = xx+1, yy+1, squareSide-1, sum
 						}
 					}
 				}
