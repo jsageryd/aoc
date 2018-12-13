@@ -22,14 +22,12 @@ func main() {
 }
 
 func find3x3Square(grid [301][301]int) (x, y, totalPower int) {
+	sGrid := summedGrid(grid)
 	for yy := 1; yy <= 300-2; yy++ {
 		for xx := 1; xx <= 300-2; xx++ {
-			sum := 0
-			for oy := 0; oy < 3; oy++ {
-				for ox := 0; ox < 3; ox++ {
-					sum += grid[yy+oy][xx+ox]
-				}
-			}
+			x1, y1 := xx-1, yy-1
+			x2, y2 := x1+3, y1+3
+			sum := sGrid[y2][x2] - sGrid[y1][x2] - sGrid[y2][x1] + sGrid[y1][x1]
 			if sum > totalPower {
 				x, y, totalPower = xx, yy, sum
 			}
