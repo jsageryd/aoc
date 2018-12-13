@@ -21,7 +21,7 @@ func TestFind3x3Square(t *testing.T) {
 	}
 }
 
-func TestFindNxNSquare(t *testing.T) {
+func TestFindAnySizeSquare(t *testing.T) {
 	for n, tc := range []struct {
 		gridSerialNumber, x, y, side, totalPower int
 	}{
@@ -29,11 +29,11 @@ func TestFindNxNSquare(t *testing.T) {
 		{42, 232, 251, 12, 119},
 	} {
 		grid := makeGrid(tc.gridSerialNumber)
-		x, y, side, totalPower := findNxNSquare(grid)
+		x, y, side, totalPower := findAnySizeSquare(grid)
 
 		if x != tc.x || y != tc.y || side != tc.side || totalPower != tc.totalPower {
 			t.Errorf(
-				"[%d] findNxNSquare(%d) = %d, %d, %d, %d; want %d, %d, %d, %d",
+				"[%d] findAnySizeSquare(%d) = %d, %d, %d, %d; want %d, %d, %d, %d",
 				n, tc.gridSerialNumber, x, y, side, totalPower, tc.x, tc.y, tc.side, tc.totalPower,
 			)
 		}

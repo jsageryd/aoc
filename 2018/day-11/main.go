@@ -17,7 +17,7 @@ func main() {
 	x, y, _ = find3x3Square(grid)
 	fmt.Printf("Part 1: %d,%d\n", x, y)
 
-	x, y, side, _ = findNxNSquare(grid)
+	x, y, side, _ = findAnySizeSquare(grid)
 	fmt.Printf("Part 2: %d,%d,%d\n", x, y, side)
 }
 
@@ -36,7 +36,7 @@ func find3x3Square(grid [301][301]int) (x, y, totalPower int) {
 	return x, y, totalPower
 }
 
-func findNxNSquare(grid [301][301]int) (x, y, side, totalPower int) {
+func findAnySizeSquare(grid [301][301]int) (x, y, side, totalPower int) {
 	sGrid := summedGrid(grid)
 
 	workers := runtime.NumCPU()
