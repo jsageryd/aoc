@@ -21,13 +21,13 @@ func main() {
 	fmt.Printf("Part 2: %d,%d,%d\n", x, y, side)
 }
 
-func find3x3Square(grid [300][300]int) (x, y, totalPower int) {
+func find3x3Square(grid [301][301]int) (x, y, totalPower int) {
 	for yy := 1; yy <= 300-2; yy++ {
 		for xx := 1; xx <= 300-2; xx++ {
 			sum := 0
 			for oy := 0; oy < 3; oy++ {
 				for ox := 0; ox < 3; ox++ {
-					sum += grid[yy+oy-1][xx+ox-1]
+					sum += grid[yy+oy][xx+ox]
 				}
 			}
 			if sum > totalPower {
@@ -38,7 +38,7 @@ func find3x3Square(grid [300][300]int) (x, y, totalPower int) {
 	return x, y, totalPower
 }
 
-func findNxNSquare(grid [300][300]int) (x, y, side, totalPower int) {
+func findNxNSquare(grid [301][301]int) (x, y, side, totalPower int) {
 	sGrid := summedGrid(grid)
 
 	workers := runtime.NumCPU()
@@ -61,10 +61,10 @@ func findNxNSquare(grid [300][300]int) (x, y, side, totalPower int) {
 				for yy := 1; yy <= 300-squareSide+1; yy++ {
 					for xx := 1; xx <= 300-squareSide+1; xx++ {
 						x1, y1 := xx-1, yy-1
-						x2, y2 := x1+squareSide-1, y1+squareSide-1
+						x2, y2 := x1+squareSide, y1+squareSide
 						sum := sGrid[y2][x2] - sGrid[y1][x2] - sGrid[y2][x1] + sGrid[y1][x1]
 						if sum > totalPower {
-							x, y, side, totalPower = xx+1, yy+1, squareSide-1, sum
+							x, y, side, totalPower = xx, yy, squareSide, sum
 						}
 					}
 				}
@@ -88,31 +88,21 @@ func findNxNSquare(grid [300][300]int) (x, y, side, totalPower int) {
 	return x, y, side, totalPower
 }
 
-func makeGrid(serialNumber int) [300][300]int {
-	var grid [300][300]int
-	for y := 0; y < 300; y++ {
-		for x := 0; x < 300; x++ {
-			grid[y][x] = powerLevel(serialNumber, x+1, y+1)
+func makeGrid(serialNumber int) [301][301]int {
+	var grid [301][301]int
+	for y := 1; y <= 300; y++ {
+		for x := 1; x <= 300; x++ {
+			grid[y][x] = powerLevel(serialNumber, x, y)
 		}
 	}
 	return grid
 }
 
-func summedGrid(grid [300][300]int) [300][300]int {
-	var sGrid [300][300]int
-	for y := 0; y < len(grid); y++ {
-		for x := 0; x < len(grid[y]); x++ {
-			s := grid[y][x]
-			if y > 0 {
-				s += sGrid[y-1][x]
-			}
-			if x > 0 {
-				s += sGrid[y][x-1]
-			}
-			if x > 0 && y > 0 {
-				s -= sGrid[y-1][x-1]
-			}
-			sGrid[y][x] = s
+func summedGrid(grid [301][301]int) [301][301]int {
+	var sGrid [301][301]int
+	for y := 1; y < len(grid); y++ {
+		for x := 1; x < len(grid[y]); x++ {
+			sGrid[y][x] = grid[y][x] + sGrid[y-1][x] + sGrid[y][x-1] - sGrid[y-1][x-1]
 		}
 	}
 	return sGrid
