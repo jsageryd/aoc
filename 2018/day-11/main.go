@@ -45,15 +45,9 @@ func findAnySizeSquare(grid [301][301]int) (x, y, side, totalPower int) {
 		go func() {
 			var x, y, side, totalPower int
 			for squareSide := range in {
-				for yy := 1; yy <= 300-squareSide+1; yy++ {
-					for xx := 1; xx <= 300-squareSide+1; xx++ {
-						x1, y1 := xx-1, yy-1
-						x2, y2 := x1+squareSide, y1+squareSide
-						sum := sGrid[y2][x2] - sGrid[y1][x2] - sGrid[y2][x1] + sGrid[y1][x1]
-						if sum > totalPower {
-							x, y, side, totalPower = xx, yy, squareSide, sum
-						}
-					}
+				xx, yy, sum := findNxNSquare(sGrid, squareSide)
+				if sum > totalPower {
+					x, y, side, totalPower = xx, yy, squareSide, sum
 				}
 			}
 			out <- []int{x, y, side, totalPower}
