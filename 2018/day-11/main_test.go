@@ -97,3 +97,25 @@ func TestSummedGrid(t *testing.T) {
 	check(3, 2, 6)
 	check(3, 3, 9)
 }
+
+func BenchmarkFind3x3Square(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		find3x3Square(makeGrid(1308))
+	}
+}
+
+func BenchmarkFindAnySizeSquare(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		findAnySizeSquare(makeGrid(1308))
+	}
+}
+
+func BenchmarkPowerLevel(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		for y := 1; y < 300; y++ {
+			for x := 1; x < 300; x++ {
+				powerLevel(1308, x, y)
+			}
+		}
+	}
+}
