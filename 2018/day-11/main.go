@@ -22,18 +22,7 @@ func main() {
 }
 
 func find3x3Square(grid [301][301]int) (x, y, totalPower int) {
-	sGrid := summedGrid(grid)
-	for yy := 1; yy <= 300-2; yy++ {
-		for xx := 1; xx <= 300-2; xx++ {
-			x1, y1 := xx-1, yy-1
-			x2, y2 := x1+3, y1+3
-			sum := sGrid[y2][x2] - sGrid[y1][x2] - sGrid[y2][x1] + sGrid[y1][x1]
-			if sum > totalPower {
-				x, y, totalPower = xx, yy, sum
-			}
-		}
-	}
-	return x, y, totalPower
+	return findNxNSquare(summedGrid(grid), 3)
 }
 
 func findAnySizeSquare(grid [301][301]int) (x, y, side, totalPower int) {
@@ -84,6 +73,20 @@ func findAnySizeSquare(grid [301][301]int) (x, y, side, totalPower int) {
 	}
 
 	return x, y, side, totalPower
+}
+
+func findNxNSquare(sGrid [301][301]int, n int) (x, y, totalPower int) {
+	for yy := 1; yy <= 300-n+1; yy++ {
+		for xx := 1; xx <= 300-n+1; xx++ {
+			x1, y1 := xx-1, yy-1
+			x2, y2 := x1+n, y1+n
+			sum := sGrid[y2][x2] - sGrid[y1][x2] - sGrid[y2][x1] + sGrid[y1][x1]
+			if sum > totalPower {
+				x, y, totalPower = xx, yy, sum
+			}
+		}
+	}
+	return x, y, totalPower
 }
 
 func makeGrid(serialNumber int) [301][301]int {
