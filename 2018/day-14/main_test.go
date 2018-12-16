@@ -27,10 +27,30 @@ func TestScoresAfterNth(t *testing.T) {
 	}
 }
 
+func TestNumberOfRecipesBeforeSequence(t *testing.T) {
+	for n, tc := range []struct {
+		seq []int
+		n   int
+	}{
+		{[]int{5, 1, 5, 8, 9}, 9},
+		{[]int{0, 1, 2, 4, 5}, 5},
+		{[]int{9, 2, 5, 1, 0}, 18},
+		{[]int{5, 9, 4, 1, 4}, 2018},
+	} {
+		if got, want := numberOfRecipesBeforeSequence(tc.seq), tc.n; got != want {
+			t.Errorf("[%d] got %d, want %d", n, got, want)
+		}
+	}
+}
+
 func TestMakeRecipes(t *testing.T) {
 	wantRecipes := []int{3, 7, 1, 0, 1, 0, 1, 2, 4, 5, 1, 5, 8, 9, 1, 6, 7, 7, 9, 2}
+	var recipes []int
 
-	recipes := makeRecipes(20)
+	c := makeRecipes()
+	for n := 0; n < 20; n++ {
+		recipes = append(recipes, <-c)
+	}
 
 	if len(recipes) != len(wantRecipes) {
 		t.Fatalf("got %v, want %v", recipes, wantRecipes)
