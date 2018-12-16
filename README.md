@@ -15,6 +15,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 10: The Stars Align](2018/day-10)
 - [Day 11: Chronal Charge](2018/day-11)
 - [Day 12: Subterranean Sustainability](2018/day-12)
+- [Day 13: Mine Cart Madness](2018/day-13)
 
 ## 2017
 - [Day 1: Inverse Captcha](2017/day-01)
