@@ -17,6 +17,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 12: Subterranean Sustainability](2018/day-12)
 - [Day 13: Mine Cart Madness](2018/day-13)
 - [Day 14: Chocolate Charts](2018/day-14)
+- [Day 15: Beverage Bandits](2018/day-15)
 
 ## 2017
 - [Day 1: Inverse Captcha](2017/day-01)
