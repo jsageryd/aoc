@@ -43,8 +43,10 @@ func TestLetterOrderIndependentHash(t *testing.T) {
 	}{
 		{"", ""},
 		{"abc", "a1b1c1"},
+		{"cba", "a1b1c1"},
 		{"aabbcc", "a2b2c2"},
-		{"abcabc", "a2b2c2"},
+		{"ccbbaa", "a2b2c2"},
+		{"acbbca", "a2b2c2"},
 		{"aaaaaaaaaabc", "a10b1c1"},
 	} {
 		if got, want := letterOrderIndependentHash(tc.in), tc.out; got != want {
