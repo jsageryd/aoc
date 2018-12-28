@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"crypto/md5"
 	"flag"
 	"fmt"
 	"image"
@@ -129,14 +128,6 @@ func (a Area) Count() (open, trees, lumberyards int) {
 	return open, trees, lumberyards
 }
 
-func (a Area) Hash() []byte {
-	h := md5.New()
-	for y := range a {
-		h.Write(a[y])
-	}
-	return h.Sum(nil)
-}
-
 func step(a Area, steps int) Area {
 	cur := make(Area, len(a))
 	next := make(Area, len(a))
@@ -149,7 +140,7 @@ func step(a Area, steps int) Area {
 
 	buf := []Area{cur, next}
 
-	seen := map[string]int{string(cur.Hash()): 0}
+	seen := map[string]int{cur.String(): 0}
 	skippedAhead := false
 
 	for n := 0; n < steps; n++ {
@@ -183,8 +174,8 @@ func step(a Area, steps int) Area {
 		}
 
 		if !skippedAhead {
-			nh := string(next.Hash())
-			if nn, ok := seen[nh]; ok {
+			ns := next.String()
+			if nn, ok := seen[ns]; ok {
 				odd := false
 				if n%2 != 0 {
 					odd = true
@@ -198,7 +189,7 @@ func step(a Area, steps int) Area {
 					skippedAhead = true
 				}
 			} else {
-				seen[nh] = n
+				seen[ns] = n
 			}
 		}
 	}
