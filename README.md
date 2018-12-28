@@ -20,6 +20,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 15: Beverage Bandits](2018/day-15)
 - [Day 16: Chronal Classification](2018/day-16)
 - [Day 17: Reservoir Research](2018/day-17)
+- [Day 18: Settlers of The North Pole](2018/day-18)
 
 ## 2017
 - [Day 1: Inverse Captcha](2017/day-01)
