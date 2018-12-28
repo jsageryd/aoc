@@ -1,5 +1,8 @@
 # Day 18: Settlers of The North Pole
 
+![Output](./img/output.gif)
+![Example output](./img/example-output.gif)
+
 On the outskirts of the North Pole base construction project, many Elves are
 collecting lumber.
 

@@ -3,12 +3,23 @@ package main
 import (
 	"bufio"
 	"crypto/md5"
+	"flag"
 	"fmt"
+	"image"
+	"image/color"
+	"image/gif"
 	"os"
 	"strings"
 )
 
 func main() {
+	fAGIF := flag.Bool("agif", false, "Output an animated GIF")
+	fASCII := flag.Bool("ascii", false, "Output an ASCII map")
+	fDelay := flag.Int("delay", 8, "Frame delay of animated GIF")
+	fScale := flag.Int("scale", 10, "Scale of output image")
+	fSteps := flag.Int("steps", 10, "Number of steps to run when output is ASCII or GIF")
+	flag.Parse()
+
 	var area Area
 
 	scanner := bufio.NewScanner(os.Stdin)
@@ -16,13 +27,45 @@ func main() {
 		area = append(area, scanner.Bytes())
 	}
 
-	areaAfter10Steps := step(area, 10)
-	_, trees, lumberyards := areaAfter10Steps.Count()
-	fmt.Printf("Part 1: %d\n", trees*lumberyards)
+	var (
+		imgs          []*image.Paletted
+		imgFrameDelay []int
+	)
 
-	areaAfter1000000000Steps := step(area, 1000000000)
-	_, trees, lumberyards = areaAfter1000000000Steps.Count()
-	fmt.Printf("Part 2: %d\n", trees*lumberyards)
+	if *fAGIF {
+		imgs = append(imgs, area.Image(*fScale))
+		imgFrameDelay = append(imgFrameDelay, 200)
+	}
+
+	switch {
+	case *fASCII:
+		area = step(area, *fSteps)
+		fmt.Println(area)
+	case *fAGIF:
+		for n := 0; n < *fSteps; n++ {
+			area = step(area, 1)
+			imgs = append(imgs, area.Image(*fScale))
+			imgFrameDelay = append(imgFrameDelay, *fDelay)
+		}
+		imgBoundsMax := imgs[0].Bounds().Max
+		gif.EncodeAll(os.Stdout, &gif.GIF{
+			Image: imgs,
+			Delay: imgFrameDelay,
+			Config: image.Config{
+				ColorModel: imgs[0].Palette,
+				Width:      imgBoundsMax.X,
+				Height:     imgBoundsMax.Y,
+			},
+		})
+	default:
+		areaAfter10Steps := step(area, 10)
+		_, trees, lumberyards := areaAfter10Steps.Count()
+		fmt.Printf("Part 1: %d\n", trees*lumberyards)
+
+		areaAfter1000000000Steps := step(area, 1000000000)
+		_, trees, lumberyards = areaAfter1000000000Steps.Count()
+		fmt.Printf("Part 2: %d\n", trees*lumberyards)
+	}
 }
 
 type Area [][]byte
@@ -33,6 +76,39 @@ func (a Area) String() string {
 		ss = append(ss, string(a[y]))
 	}
 	return strings.Join(ss, "\n")
+}
+
+func (a Area) Image(scale int) *image.Paletted {
+	open := color.RGBA{0xcc, 0xcc, 0x99, 0xff}
+	tree := color.RGBA{0x99, 0xcc, 0x00, 0xff}
+	lumberyard := color.RGBA{0x30, 0x30, 0x30, 0xff}
+
+	palette := []color.Color{open, tree, lumberyard}
+
+	height, width := len(a), len(a[0])
+
+	img := image.NewPaletted(image.Rect(0, 0, scale*width, scale*height), palette)
+
+	for y := range a {
+		for x := range a[0] {
+			var c color.Color
+			switch a[y][x] {
+			case '.':
+				c = open
+			case '|':
+				c = tree
+			case '#':
+				c = lumberyard
+			}
+			for sy := 0; sy < scale; sy++ {
+				for sx := 0; sx < scale; sx++ {
+					img.Set(scale*x+sx, scale*y+sy, c)
+				}
+			}
+		}
+	}
+
+	return img
 }
 
 func (a Area) Count() (open, trees, lumberyards int) {
