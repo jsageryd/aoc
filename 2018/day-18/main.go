@@ -112,11 +112,13 @@ func step(a Area, steps int) Area {
 					odd = true
 				}
 				cycle := n - nn
-				n += cycle * ((steps - n) / cycle)
-				if odd && n%2 == 0 {
-					n--
+				if cycle != 0 {
+					n += cycle * ((steps - n) / cycle)
+					if odd && n%2 == 0 {
+						n--
+					}
+					skippedAhead = true
 				}
-				skippedAhead = true
 			} else {
 				seen[nh] = n
 			}
