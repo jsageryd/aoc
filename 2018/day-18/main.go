@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"crypto/md5"
 	"fmt"
 	"os"
 	"strings"
@@ -18,6 +19,10 @@ func main() {
 	areaAfter10Steps := step(area, 10)
 	_, trees, lumberyards := areaAfter10Steps.Count()
 	fmt.Printf("Part 1: %d\n", trees*lumberyards)
+
+	areaAfter1000000000Steps := step(area, 1000000000)
+	_, trees, lumberyards = areaAfter1000000000Steps.Count()
+	fmt.Printf("Part 2: %d\n", trees*lumberyards)
 }
 
 type Area [][]byte
@@ -46,6 +51,14 @@ func (a Area) Count() (open, trees, lumberyards int) {
 	return open, trees, lumberyards
 }
 
+func (a Area) Hash() []byte {
+	h := md5.New()
+	for y := range a {
+		h.Write(a[y])
+	}
+	return h.Sum(nil)
+}
+
 func step(a Area, steps int) Area {
 	cur := make(Area, len(a))
 	next := make(Area, len(a))
@@ -57,6 +70,9 @@ func step(a Area, steps int) Area {
 	}
 
 	buf := []Area{cur, next}
+
+	seen := map[string]int{string(cur.Hash()): 0}
+	skippedAhead := false
 
 	for n := 0; n < steps; n++ {
 		cur = buf[n%2]
@@ -85,6 +101,24 @@ func step(a Area, steps int) Area {
 						next[y][x] = '.'
 					}
 				}
+			}
+		}
+
+		if !skippedAhead {
+			nh := string(next.Hash())
+			if nn, ok := seen[nh]; ok {
+				odd := false
+				if n%2 != 0 {
+					odd = true
+				}
+				cycle := n - nn
+				n += cycle * ((steps - n) / cycle)
+				if odd && n%2 == 0 {
+					n--
+				}
+				skippedAhead = true
+			} else {
+				seen[nh] = n
 			}
 		}
 	}
