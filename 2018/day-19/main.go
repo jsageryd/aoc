@@ -22,7 +22,7 @@ func main() {
 }
 
 type Inst struct {
-	op      string
+	op      func(reg *[6]int, a, b, c int)
 	a, b, c int
 }
 
@@ -34,15 +34,17 @@ func run(reg *[6]int, programStrs []string) {
 	program := make([]Inst, 0, len(programStrs))
 
 	for n := range programStrs {
+		var op string
 		var inst Inst
-		fmt.Sscanf(programStrs[n], "%s %d %d %d", &inst.op, &inst.a, &inst.b, &inst.c)
+		fmt.Sscanf(programStrs[n], "%s %d %d %d", &op, &inst.a, &inst.b, &inst.c)
+		inst.op = ops[op]
 		program = append(program, inst)
 	}
 
 	for ip := 0; ip >= 0 && ip < len(program); ip++ {
 		inst := program[ip]
 		reg[ipReg] = ip
-		ops[inst.op](reg, inst.a, inst.b, inst.c)
+		inst.op(reg, inst.a, inst.b, inst.c)
 		ip = reg[ipReg]
 	}
 }
