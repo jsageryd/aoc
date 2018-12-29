@@ -1,6 +1,10 @@
 package main
 
-import "testing"
+import (
+	"io/ioutil"
+	"strings"
+	"testing"
+)
 
 func TestRun(t *testing.T) {
 	program := []string{
@@ -22,5 +26,15 @@ func TestRun(t *testing.T) {
 
 	if reg != wantReg {
 		t.Errorf("got %v, want %v", reg, wantReg)
+	}
+}
+
+func BenchmarkRun(b *testing.B) {
+	input, _ := ioutil.ReadFile("input")
+	programStrs := strings.Split(string(input), "\n")
+
+	for n := 0; n < b.N; n++ {
+		var reg [6]int
+		run(&reg, programStrs)
 	}
 }
