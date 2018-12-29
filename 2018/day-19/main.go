@@ -42,9 +42,8 @@ func run(reg *[6]int, programStrs []string) {
 	}
 
 	for ip := 0; ip >= 0 && ip < len(program); ip++ {
-		inst := program[ip]
 		reg[ipReg] = ip
-		inst.op(reg, inst.a, inst.b, inst.c)
+		program[ip].op(reg, program[ip].a, program[ip].b, program[ip].c)
 		ip = reg[ipReg]
 	}
 }
