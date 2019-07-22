@@ -37,3 +37,4 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 ## 2015
 - [Day 1: Not Quite Lisp](2015/day-01)
 - [Day 2: I Was Told There Would Be No Math](2015/day-02)
+- [Day 3: Perfectly Spherical Houses in a Vacuum](2015/day-03)
