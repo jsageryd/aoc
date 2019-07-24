@@ -17,17 +17,32 @@ func main() {
 
 	b := append(input, '1')
 
+	var n1, n2 int64
 	n := int64(1)
 
-	for !md5HexHasFiveLeadingZeros(b) {
+	for n1 == 0 || n2 == 0 {
+		if n1 == 0 && md5HexHasFiveLeadingZeros(b) {
+			n1 = n
+		}
+
+		if n2 == 0 && md5HexHasSixLeadingZeros(b) {
+			n2 = n
+		}
+
 		n++
 		b = strconv.AppendInt(b[:len(input)], n, 10)
 	}
 
-	fmt.Printf("Part 1: %d\n", n)
+	fmt.Printf("Part 1: %d\n", n1)
+	fmt.Printf("Part 2: %d\n", n2)
 }
 
 func md5HexHasFiveLeadingZeros(b []byte) bool {
 	s := md5.Sum(b)
 	return strings.HasPrefix(hex.EncodeToString(s[:]), "00000")
+}
+
+func md5HexHasSixLeadingZeros(b []byte) bool {
+	s := md5.Sum(b)
+	return strings.HasPrefix(hex.EncodeToString(s[:]), "000000")
 }
