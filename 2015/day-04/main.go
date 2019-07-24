@@ -3,38 +3,49 @@ package main
 import (
 	"bytes"
 	"crypto/md5"
-	"encoding/hex"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"strconv"
-	"strings"
 )
 
 func main() {
 	input, _ := ioutil.ReadAll(os.Stdin)
 	input = bytes.TrimSpace(input)
 
-	b := append(input, '1')
-
-	var n1, n2 int64
-	n := int64(1)
+	var n, n1, n2 int
 
 	for n1 == 0 || n2 == 0 {
-		s := md5.Sum(b)
+		n++
 
-		if n1 == 0 && strings.HasPrefix(hex.EncodeToString(s[:]), "00000") {
+		s := md5.Sum(strconv.AppendInt(input[:len(input)], int64(n), 10))
+		z := leadingHexZeros(s[:])
+
+		if n1 == 0 && z >= 5 {
 			n1 = n
 		}
 
-		if n2 == 0 && strings.HasPrefix(hex.EncodeToString(s[:]), "000000") {
+		if n2 == 0 && z >= 6 {
 			n2 = n
 		}
-
-		n++
-		b = strconv.AppendInt(b[:len(input)], n, 10)
 	}
 
 	fmt.Printf("Part 1: %d\n", n1)
 	fmt.Printf("Part 2: %d\n", n2)
+}
+
+func leadingHexZeros(input []byte) int {
+	var c int
+loop:
+	for n := 0; n < len(input); n++ {
+		switch {
+		case input[n] == 0:
+			c += 2
+		case input[n] <= 0x0f:
+			c++
+		default:
+			break loop
+		}
+	}
+	return c
 }
