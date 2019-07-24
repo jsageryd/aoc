@@ -21,11 +21,13 @@ func main() {
 	n := int64(1)
 
 	for n1 == 0 || n2 == 0 {
-		if n1 == 0 && md5HexHasFiveLeadingZeros(b) {
+		s := md5.Sum(b)
+
+		if n1 == 0 && strings.HasPrefix(hex.EncodeToString(s[:]), "00000") {
 			n1 = n
 		}
 
-		if n2 == 0 && md5HexHasSixLeadingZeros(b) {
+		if n2 == 0 && strings.HasPrefix(hex.EncodeToString(s[:]), "000000") {
 			n2 = n
 		}
 
@@ -35,14 +37,4 @@ func main() {
 
 	fmt.Printf("Part 1: %d\n", n1)
 	fmt.Printf("Part 2: %d\n", n2)
-}
-
-func md5HexHasFiveLeadingZeros(b []byte) bool {
-	s := md5.Sum(b)
-	return strings.HasPrefix(hex.EncodeToString(s[:]), "00000")
-}
-
-func md5HexHasSixLeadingZeros(b []byte) bool {
-	s := md5.Sum(b)
-	return strings.HasPrefix(hex.EncodeToString(s[:]), "000000")
 }
