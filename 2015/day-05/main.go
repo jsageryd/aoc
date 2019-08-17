@@ -27,7 +27,7 @@ func main() {
 }
 
 func nice(s string) bool {
-	return hasThreeVowels(s) &&
+	return hasN(s, 3, "aeiou") &&
 		hasDoubleLetter(s) &&
 		!hasForbiddenString(s, []string{"ab", "cd", "pq", "xy"})
 }
@@ -36,16 +36,15 @@ func nice2(s string) bool {
 	return hasTwoNonOverlappingPairs(s) && hasRepeatedLetterWithOneInbetween(s)
 }
 
-func hasThreeVowels(s string) bool {
-	const vowels = "aiueo"
+func hasN(s string, n int, set string) bool {
 	var count int
 
 	for _, r := range s {
-		for _, v := range vowels {
+		for _, v := range set {
 			if r == v {
 				count++
 			}
-			if count >= 3 {
+			if count >= n {
 				return true
 			}
 		}

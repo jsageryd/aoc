@@ -35,30 +35,41 @@ func TestNice2(t *testing.T) {
 	}
 }
 
-func TestHasThreeVowels(t *testing.T) {
+func TestHasN(t *testing.T) {
 	for n, tc := range []struct {
 		s    string
+		n    int
+		set  string
 		want bool
 	}{
-		{"", false},
-		{"a", false},
-		{"aa", false},
-		{"aaa", true},
-		{"eee", true},
-		{"iii", true},
-		{"ooo", true},
-		{"uuu", true},
-		{"xxx", false},
-		{"aei", true},
-		{"eio", true},
-		{"iou", true},
-		{"a_e_i", true},
-		{"_a_e_i", true},
-		{"a_e_i_", true},
-		{"_a_e_i_", true},
+		{"", 0, "", false},
+		{"", 1, "", false},
+		{"", 2, "", false},
+		{"", 3, "", false},
+		{"", 3, "aeiou", false},
+		{"a", 1, "a", true},
+		{"a", 2, "a", false},
+		{"aa", 1, "a", true},
+		{"aa", 2, "a", true},
+		{"aa", 3, "a", false},
+		{"a", 3, "aeiou", false},
+		{"aa", 3, "aeiou", false},
+		{"aaa", 3, "aeiou", true},
+		{"eee", 3, "aeiou", true},
+		{"iii", 3, "aeiou", true},
+		{"ooo", 3, "aeiou", true},
+		{"uuu", 3, "aeiou", true},
+		{"xxx", 3, "aeiou", false},
+		{"aei", 3, "aeiou", true},
+		{"eio", 3, "aeiou", true},
+		{"iou", 3, "aeiou", true},
+		{"a_e_i", 3, "aeiou", true},
+		{"_a_e_i", 3, "aeiou", true},
+		{"a_e_i_", 3, "aeiou", true},
+		{"_a_e_i_", 3, "aeiou", true},
 	} {
-		if got, want := hasThreeVowels(tc.s), tc.want; got != want {
-			t.Errorf("[%d] hasThreeVowels(%q) = %t, want %t", n, tc.s, got, want)
+		if got, want := hasN(tc.s, tc.n, tc.set), tc.want; got != want {
+			t.Errorf("[%d] hasN(%q, %d, %s) = %t, want %t", n, tc.s, tc.n, tc.set, got, want)
 		}
 	}
 }
