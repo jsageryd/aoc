@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -26,46 +27,55 @@ func main() {
 }
 
 func nice(s string) bool {
-	const vowels = "aeiou"
+	return hasThreeVowels(s) &&
+		hasDoubleLetter(s) &&
+		!hasForbiddenString(s, []string{"ab", "cd", "pq", "xy"})
+}
 
-	var (
-		hasThreeVowels     bool
-		hasDoubleLetter    bool
-		hasForbiddenString bool
-	)
+func nice2(s string) bool {
+	return hasTwoNonOverlappingPairs(s) && hasRepeatedLetterWithOneInbetween(s)
+}
 
-	var vowelCount int
-	var lastR rune
+func hasThreeVowels(s string) bool {
+	const vowels = "aiueo"
+	var count int
 
 	for _, r := range s {
 		for _, v := range vowels {
 			if r == v {
-				vowelCount++
-				break
+				count++
+			}
+			if count >= 3 {
+				return true
 			}
 		}
+	}
 
-		if r == lastR {
-			hasDoubleLetter = true
-		}
+	return false
+}
 
-		if lastR == 'a' && r == 'b' ||
-			lastR == 'c' && r == 'd' ||
-			lastR == 'p' && r == 'q' ||
-			lastR == 'x' && r == 'y' {
-			hasForbiddenString = true
+func hasDoubleLetter(s string) bool {
+	var lastR rune
+
+	for _, r := range s {
+		if lastR == r {
+			return true
 		}
 
 		lastR = r
 	}
 
-	hasThreeVowels = vowelCount >= 3
-
-	return hasThreeVowels && hasDoubleLetter && !hasForbiddenString
+	return false
 }
 
-func nice2(s string) bool {
-	return hasTwoNonOverlappingPairs(s) && hasRepeatedLetterWithOneInbetween(s)
+func hasForbiddenString(s string, forbidden []string) bool {
+	for _, f := range forbidden {
+		if strings.Contains(s, f) {
+			return true
+		}
+	}
+
+	return false
 }
 
 func hasTwoNonOverlappingPairs(s string) bool {
