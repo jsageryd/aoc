@@ -39,3 +39,4 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 2: I Was Told There Would Be No Math](2015/day-02)
 - [Day 3: Perfectly Spherical Houses in a Vacuum](2015/day-03)
 - [Day 4: The Ideal Stocking Stuffer](2015/day-04)
+- [Day 5: Doesn't He Have Intern-Elves For This?](2015/day-05)
