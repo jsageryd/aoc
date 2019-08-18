@@ -23,7 +23,7 @@ func lightsLit(g grid) int {
 
 	for y := range g {
 		for x := range g[y] {
-			if g[y][x] {
+			if g[y][x] > 0 {
 				count++
 			}
 		}
@@ -35,7 +35,7 @@ func lightsLit(g grid) int {
 func newGrid(sizeX, sizeY int) grid {
 	g := make(grid, sizeY)
 	for n := range g {
-		g[n] = make([]bool, sizeX)
+		g[n] = make([]int, sizeX)
 	}
 
 	return g
@@ -48,11 +48,15 @@ func applyInstruction(instStr string, g grid) grid {
 		for x := inst.from.x; x <= inst.to.x; x++ {
 			switch inst.action {
 			case actionOn:
-				g[y][x] = true
+				g[y][x] = 1
 			case actionOff:
-				g[y][x] = false
+				g[y][x] = 0
 			case actionToggle:
-				g[y][x] = !g[y][x]
+				if g[y][x] == 0 {
+					g[y][x] = 1
+				} else {
+					g[y][x] = 0
+				}
 			}
 		}
 	}
@@ -94,14 +98,14 @@ const (
 	actionToggle
 )
 
-type grid [][]bool
+type grid [][]int
 
 func (g grid) String() string {
 	rows := make([]string, len(g))
 	for y := range g {
 		row := make([]rune, len(g[y]))
 		for x := range g[y] {
-			if g[y][x] {
+			if g[y][x] > 0 {
 				row[x] = 'o'
 			} else {
 				row[x] = '-'
