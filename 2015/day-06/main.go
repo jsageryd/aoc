@@ -9,13 +9,16 @@ import (
 
 func main() {
 	g := newGrid(1000, 1000)
+	g2 := newGrid(1000, 1000)
 
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		g = applyInstruction(scanner.Text(), g)
+		g2 = applyInstruction2(scanner.Text(), g2)
 	}
 
 	fmt.Printf("Part 1: %d\n", lightsLit(g))
+	fmt.Printf("Part 2: %d\n", totalBrightness(g2))
 }
 
 func lightsLit(g grid) int {
@@ -30,6 +33,18 @@ func lightsLit(g grid) int {
 	}
 
 	return count
+}
+
+func totalBrightness(g grid) int {
+	var total int
+
+	for y := range g {
+		for x := range g[y] {
+			total += g[y][x]
+		}
+	}
+
+	return total
 }
 
 func newGrid(sizeX, sizeY int) grid {
@@ -57,6 +72,28 @@ func applyInstruction(instStr string, g grid) grid {
 				} else {
 					g[y][x] = 0
 				}
+			}
+		}
+	}
+
+	return g
+}
+
+func applyInstruction2(instStr string, g grid) grid {
+	inst := parseInstruction(instStr)
+
+	for y := inst.from.y; y <= inst.to.y; y++ {
+		for x := inst.from.x; x <= inst.to.x; x++ {
+			switch inst.action {
+			case actionOn:
+				g[y][x]++
+			case actionOff:
+				g[y][x]--
+				if g[y][x] < 0 {
+					g[y][x] = 0
+				}
+			case actionToggle:
+				g[y][x] += 2
 			}
 		}
 	}

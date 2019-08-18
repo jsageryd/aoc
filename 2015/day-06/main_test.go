@@ -67,6 +67,77 @@ func TestApplyInstruction(t *testing.T) {
 	}
 }
 
+func TestApplyInstruction2(t *testing.T) {
+	for n, tc := range []struct {
+		inst   string
+		before grid
+		after  grid
+	}{
+		{
+			inst: "turn on 0,0 through 2,0",
+			before: grid{
+				[]int{0, 0, 0},
+				[]int{0, 0, 0},
+				[]int{0, 0, 0},
+			},
+			after: grid{
+				[]int{1, 1, 1},
+				[]int{0, 0, 0},
+				[]int{0, 0, 0},
+			},
+		},
+		{
+			inst: "turn off 0,0 through 2,0",
+			before: grid{
+				[]int{1, 1, 1},
+				[]int{0, 0, 0},
+				[]int{0, 0, 0},
+			},
+			after: grid{
+				[]int{0, 0, 0},
+				[]int{0, 0, 0},
+				[]int{0, 0, 0},
+			},
+		},
+		{
+			inst: "toggle 0,0 through 2,0",
+			before: grid{
+				[]int{0, 1, 1},
+				[]int{0, 0, 0},
+				[]int{0, 0, 0},
+			},
+			after: grid{
+				[]int{2, 3, 3},
+				[]int{0, 0, 0},
+				[]int{0, 0, 0},
+			},
+		},
+		{
+			inst: "toggle 0,0 through 2,2",
+			before: grid{
+				[]int{0, 1, 1},
+				[]int{0, 1, 0},
+				[]int{0, 0, 1},
+			},
+			after: grid{
+				[]int{2, 3, 3},
+				[]int{2, 3, 2},
+				[]int{2, 2, 3},
+			},
+		},
+	} {
+		after := applyInstruction2(tc.inst, tc.before)
+
+		if got, want := after, tc.after; got.String() != want.String() {
+			t.Errorf("[%d]\n%s\n\nbefore:\n%s\n\nafter:\n%s\n\nwant:\n%s", n, tc.inst, tc.before, got, want)
+		}
+
+		if got, want := totalBrightness(after), totalBrightness(tc.after); got != want {
+			t.Errorf("[%d] total brightness is %d, want %d\n\n", n, got, want)
+		}
+	}
+}
+
 func TestParseInstruction(t *testing.T) {
 	for n, tc := range []struct {
 		in  string
