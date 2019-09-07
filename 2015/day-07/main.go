@@ -18,7 +18,14 @@ func main() {
 
 	c := newCircuit(instructions)
 
-	fmt.Printf("Part 1: %d\n", c.measure("a"))
+	a := c.measure("a")
+
+	fmt.Printf("Part 1: %d\n", a)
+
+	c = newCircuit(instructions)
+	c.signals["b"] = &signal{v: a}
+
+	fmt.Printf("Part 2: %d\n", c.measure("a"))
 }
 
 type circuit struct {
