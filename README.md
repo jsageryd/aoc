@@ -42,3 +42,4 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 5: Doesn't He Have Intern-Elves For This?](2015/day-05)
 - [Day 6: Probably a Fire Hazard](2015/day-06)
 - [Day 7: Some Assembly Required](2015/day-07)
+- [Day 8: Matchsticks](2015/day-08)
