@@ -2,6 +2,9 @@
 
 My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 
+## 2019
+- [Day 1: The Tyranny of the Rocket Equation](2019/day-01)
+
 ## 2018
 - [Day 1: Chronal Calibration](2018/day-01)
 - [Day 2: Inventory Management System](2018/day-02)
