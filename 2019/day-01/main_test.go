@@ -17,3 +17,18 @@ func TestFuel(t *testing.T) {
 		}
 	}
 }
+
+func TestFuelWithFuel(t *testing.T) {
+	for n, tc := range []struct {
+		mass int
+		fuel int
+	}{
+		{14, 2},
+		{1969, 966},
+		{100756, 50346},
+	} {
+		if got, want := fuelWithFuel(tc.mass), tc.fuel; got != want {
+			t.Errorf("[%d] fuelWithFuel(%d) = %d, want %d", n, tc.mass, got, want)
+		}
+	}
+}
