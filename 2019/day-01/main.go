@@ -5,18 +5,19 @@ import (
 )
 
 func main() {
-	var input []int
+	var totalFuel, totalFuelWithFuel int
 
 	for {
-		var n int
-		if _, err := fmt.Scanln(&n); err != nil {
+		var mass int
+		if _, err := fmt.Scanln(&mass); err != nil {
 			break
 		}
-		input = append(input, n)
+		totalFuel += fuel(mass)
+		totalFuelWithFuel += fuelWithFuel(mass)
 	}
 
-	fmt.Printf("Part 1: %d\n", totalFuel(input))
-	fmt.Printf("Part 2: %d\n", totalFuelWithFuel(input))
+	fmt.Printf("Part 1: %d\n", totalFuel)
+	fmt.Printf("Part 2: %d\n", totalFuelWithFuel)
 }
 
 func fuel(mass int) int {
@@ -31,20 +32,4 @@ func fuelWithFuel(mass int) int {
 	}
 
 	return f
-}
-
-func totalFuel(masses []int) int {
-	var total int
-	for _, mass := range masses {
-		total += fuel(mass)
-	}
-	return total
-}
-
-func totalFuelWithFuel(masses []int) int {
-	var total int
-	for _, mass := range masses {
-		total += fuelWithFuel(mass)
-	}
-	return total
 }
