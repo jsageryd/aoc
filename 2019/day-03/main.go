@@ -42,27 +42,18 @@ func drawWire(path string) []coord {
 	wire := []coord{cur}
 
 	for _, inst := range strings.Split(path, ",") {
-		switch inst[0] {
-		case 'U':
-			for n := 0; n < dist(inst); n++ {
+		for n := 0; n < dist(inst); n++ {
+			switch inst[0] {
+			case 'U':
 				cur.y--
-				wire = append(wire, cur)
-			}
-		case 'D':
-			for n := 0; n < dist(inst); n++ {
+			case 'D':
 				cur.y++
-				wire = append(wire, cur)
-			}
-		case 'L':
-			for n := 0; n < dist(inst); n++ {
+			case 'L':
 				cur.x--
-				wire = append(wire, cur)
-			}
-		case 'R':
-			for n := 0; n < dist(inst); n++ {
+			case 'R':
 				cur.x++
-				wire = append(wire, cur)
 			}
+			wire = append(wire, cur)
 		}
 	}
 
