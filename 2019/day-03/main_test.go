@@ -149,3 +149,28 @@ func TestClosestIntersection(t *testing.T) {
 		}
 	}
 }
+
+func TestClosestIntersectionByWire(t *testing.T) {
+	for n, tc := range []struct {
+		w1, w2               []coord
+		closest              coord
+		combinedWireDistance int
+	}{
+		{
+			w1:                   drawWire("R75,D30,R83,U83,L12,D49,R71,U7,L72"),
+			w2:                   drawWire("U62,R66,U55,R34,D71,R55,D58,R83"),
+			closest:              coord{158, 12},
+			combinedWireDistance: 604,
+		},
+		{
+			w1:                   drawWire("R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51"),
+			w2:                   drawWire("U98,R91,D20,R16,D67,R40,U7,R15,U6,R7"),
+			closest:              coord{107, -47},
+			combinedWireDistance: 410,
+		},
+	} {
+		if got, want := closestIntersectionByWire(tc.w1, tc.w2), tc.closest; got != want {
+			t.Errorf("[%d] got %v (combined wire distance %d), want %v (%d)", n, got, idxOf(got, tc.w1)+idxOf(got, tc.w2), want, tc.combinedWireDistance)
+		}
+	}
+}

@@ -20,7 +20,11 @@ func main() {
 	wire1 := drawWire(input[0])
 	wire2 := drawWire(input[1])
 
-	fmt.Printf("Part 1: %d\n", distance(coord{}, closestIntersection(wire1, wire2)))
+	closestByManhattan := closestIntersection(wire1, wire2)
+	closestByWire := closestIntersectionByWire(wire1, wire2)
+
+	fmt.Printf("Part 1: %d\n", distance(coord{}, closestByManhattan))
+	fmt.Printf("Part 2: %d\n", idxOf(closestByWire, wire1)+idxOf(closestByWire, wire2))
 }
 
 type coord struct {
@@ -115,4 +119,30 @@ func closestIntersection(w1, w2 []coord) coord {
 	}
 
 	return closest
+}
+
+func closestIntersectionByWire(w1, w2 []coord) coord {
+	var closest coord
+	shortestWires := -1
+
+	for _, c := range intersections(w1, w2) {
+		d1 := idxOf(c, w1)
+		d2 := idxOf(c, w2)
+
+		if shortestWires == -1 || d1+d2 < shortestWires {
+			closest = c
+			shortestWires = d1 + d2
+		}
+	}
+
+	return closest
+}
+
+func idxOf(c coord, wire []coord) int {
+	for idx := range wire {
+		if wire[idx] == c {
+			return idx
+		}
+	}
+	return -1
 }
