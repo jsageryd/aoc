@@ -27,9 +27,7 @@ type coord struct {
 	x, y int
 }
 
-func drawWire(path string) map[coord]struct{} {
-	m := make(map[coord]struct{})
-
+func drawWire(path string) []coord {
 	dist := func(inst string) int {
 		d, _ := strconv.Atoi(inst[1:])
 		return d
@@ -37,44 +35,55 @@ func drawWire(path string) map[coord]struct{} {
 
 	var cur coord
 
-	m[cur] = struct{}{}
+	wire := []coord{cur}
 
 	for _, inst := range strings.Split(path, ",") {
 		switch inst[0] {
 		case 'U':
 			for n := 0; n < dist(inst); n++ {
 				cur.y--
-				m[cur] = struct{}{}
+				wire = append(wire, cur)
 			}
 		case 'D':
 			for n := 0; n < dist(inst); n++ {
 				cur.y++
-				m[cur] = struct{}{}
+				wire = append(wire, cur)
 			}
 		case 'L':
 			for n := 0; n < dist(inst); n++ {
 				cur.x--
-				m[cur] = struct{}{}
+				wire = append(wire, cur)
 			}
 		case 'R':
 			for n := 0; n < dist(inst); n++ {
 				cur.x++
-				m[cur] = struct{}{}
+				wire = append(wire, cur)
 			}
 		}
 	}
 
-	return m
+	return wire
 }
 
-func intersections(w1, w2 map[coord]struct{}) []coord {
+func intersections(w1, w2 []coord) []coord {
 	var cs []coord
 
-	for c1 := range w1 {
+	m1 := make(map[coord]struct{})
+	m2 := make(map[coord]struct{})
+
+	for _, c := range w1 {
+		m1[c] = struct{}{}
+	}
+
+	for _, c := range w2 {
+		m2[c] = struct{}{}
+	}
+
+	for c1 := range m1 {
 		if c1 == (coord{}) {
 			continue
 		}
-		if _, ok := w2[c1]; ok {
+		if _, ok := m2[c1]; ok {
 			cs = append(cs, c1)
 		}
 	}
@@ -96,7 +105,7 @@ func distance(c1, c2 coord) int {
 	return abs(c2.x-c1.x) + abs(c2.y-c1.y)
 }
 
-func closestIntersection(w1, w2 map[coord]struct{}) coord {
+func closestIntersection(w1, w2 []coord) coord {
 	var closest coord
 
 	for _, c := range intersections(w1, w2) {
