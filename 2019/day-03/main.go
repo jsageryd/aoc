@@ -41,18 +41,18 @@ func drawWire(path string) []coord {
 
 	wire := []coord{cur}
 
+	deltas := map[byte]coord{
+		'U': {0, -1},
+		'D': {0, 1},
+		'L': {-1, 0},
+		'R': {1, 0},
+	}
+
 	for _, inst := range strings.Split(path, ",") {
+		d := deltas[inst[0]]
 		for n := 0; n < dist(inst); n++ {
-			switch inst[0] {
-			case 'U':
-				cur.y--
-			case 'D':
-				cur.y++
-			case 'L':
-				cur.x--
-			case 'R':
-				cur.x++
-			}
+			cur.x += d.x
+			cur.y += d.y
 			wire = append(wire, cur)
 		}
 	}
