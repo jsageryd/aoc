@@ -6,6 +6,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 1: The Tyranny of the Rocket Equation](2019/day-01)
 - [Day 2: 1202 Program Alarm](2019/day-02)
 - [Day 3: Crossed Wires](2019/day-03)
+- [Day 4: Secure Container](2019/day-04)
 
 ## 2018
 - [Day 1: Chronal Calibration](2018/day-01)
