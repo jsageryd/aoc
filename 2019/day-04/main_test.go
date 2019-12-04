@@ -32,3 +32,9 @@ func TestValidPassword(t *testing.T) {
 		}
 	}
 }
+
+func BenchmarkNumberOfValidPasswords(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		numberOfValidPasswords(137683, 596253, false)
+	}
+}
