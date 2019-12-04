@@ -22,7 +22,7 @@ func main() {
 func numberOfValidPasswords(min, max int, strictDouble bool) int {
 	var count int
 
-	for pass := min; pass <= max; pass++ {
+	for pass := min + skipahead(min); pass <= max; pass += skipahead(pass) {
 		if validPassword(pass, strictDouble) {
 			count++
 		}
@@ -56,4 +56,29 @@ func validPassword(pass int, strictDouble bool) bool {
 	}
 
 	return double && digits == 6
+}
+
+func skipahead(pass int) int {
+	var digits []int
+	p := pass
+	if p%10 == 9 {
+		p++
+	}
+	for ; p > 0; p /= 10 {
+		digits = append(digits, p%10)
+	}
+	for n := len(digits) - 1; n > 0; n-- {
+		if digits[n-1] < digits[n] {
+			npass := pass
+			for i := 0; i < n+1; i++ {
+				npass /= 10
+			}
+			for i := 0; i < n+1; i++ {
+				npass *= 10
+				npass += digits[n]
+			}
+			return npass - pass
+		}
+	}
+	return 1
 }
