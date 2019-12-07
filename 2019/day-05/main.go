@@ -13,11 +13,13 @@ func main() {
 
 	fmt.Scanln(&input)
 
-	{
+	var outV [][]int
+
+	for _, inV := range []int{1, 5} {
 		code := parse(input)
 
 		in := make(chan int, 1)
-		in <- 1
+		in <- inV
 		close(in)
 
 		out := make(chan int)
@@ -41,39 +43,11 @@ func main() {
 
 		<-sem
 
-		fmt.Printf("Part 1: %d\n", outs[len(outs)-1])
+		outV = append(outV, outs)
 	}
 
-	{
-		code := parse(input)
-
-		in := make(chan int, 1)
-		in <- 5
-		close(in)
-
-		out := make(chan int)
-
-		sem := make(chan struct{})
-
-		var outs []int
-
-		go func() {
-			for n := range out {
-				outs = append(outs, n)
-			}
-			sem <- struct{}{}
-		}()
-
-		if err := run(code, in, out); err != nil {
-			log.Fatal(err)
-		}
-
-		close(out)
-
-		<-sem
-
-		fmt.Printf("Part 2: %d\n", outs[len(outs)-1])
-	}
+	fmt.Printf("Part 1: %d\n", outV[0][len(outV[0])-1])
+	fmt.Printf("Part 2: %d\n", outV[1][len(outV[1])-1])
 }
 
 func parse(code string) []int {
