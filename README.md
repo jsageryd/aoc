@@ -7,6 +7,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 2: 1202 Program Alarm](2019/day-02)
 - [Day 3: Crossed Wires](2019/day-03)
 - [Day 4: Secure Container](2019/day-04)
+- [Day 5: Sunny with a Chance of Asteroids](2019/day-05)
 
 ## 2018
 - [Day 1: Chronal Calibration](2018/day-01)
