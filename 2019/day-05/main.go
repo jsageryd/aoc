@@ -13,34 +13,67 @@ func main() {
 
 	fmt.Scanln(&input)
 
-	code := parse(input)
+	{
+		code := parse(input)
 
-	in := make(chan int, 1)
-	in <- 1
-	close(in)
+		in := make(chan int, 1)
+		in <- 1
+		close(in)
 
-	out := make(chan int)
+		out := make(chan int)
 
-	sem := make(chan struct{})
+		sem := make(chan struct{})
 
-	var outs []int
+		var outs []int
 
-	go func() {
-		for n := range out {
-			outs = append(outs, n)
+		go func() {
+			for n := range out {
+				outs = append(outs, n)
+			}
+			sem <- struct{}{}
+		}()
+
+		if err := run(code, in, out); err != nil {
+			log.Fatal(err)
 		}
-		sem <- struct{}{}
-	}()
 
-	if err := run(code, in, out); err != nil {
-		log.Fatal(err)
+		close(out)
+
+		<-sem
+
+		fmt.Printf("Part 1: %d\n", outs[len(outs)-1])
 	}
 
-	close(out)
+	{
+		code := parse(input)
 
-	<-sem
+		in := make(chan int, 1)
+		in <- 5
+		close(in)
 
-	fmt.Printf("Part 1: %d\n", outs[len(outs)-1])
+		out := make(chan int)
+
+		sem := make(chan struct{})
+
+		var outs []int
+
+		go func() {
+			for n := range out {
+				outs = append(outs, n)
+			}
+			sem <- struct{}{}
+		}()
+
+		if err := run(code, in, out); err != nil {
+			log.Fatal(err)
+		}
+
+		close(out)
+
+		<-sem
+
+		fmt.Printf("Part 2: %d\n", outs[len(outs)-1])
+	}
 }
 
 func parse(code string) []int {
@@ -108,6 +141,40 @@ func run(code []int, in <-chan int, out chan<- int) error {
 		case 4:
 			out <- readVal(code, cur+1, paramMode(code[cur], 0))
 			cur += 2
+		case 5:
+			p1 := readVal(code, cur+1, paramMode(code[cur], 0))
+			p2 := readVal(code, cur+2, paramMode(code[cur], 1))
+			if p1 != 0 {
+				cur = p2
+			} else {
+				cur += 3
+			}
+		case 6:
+			p1 := readVal(code, cur+1, paramMode(code[cur], 0))
+			p2 := readVal(code, cur+2, paramMode(code[cur], 1))
+			if p1 == 0 {
+				cur = p2
+			} else {
+				cur += 3
+			}
+		case 7:
+			p1 := readVal(code, cur+1, paramMode(code[cur], 0))
+			p2 := readVal(code, cur+2, paramMode(code[cur], 1))
+			if p1 < p2 {
+				writeVal(code, cur+3, paramMode(code[cur], 2), 1)
+			} else {
+				writeVal(code, cur+3, paramMode(code[cur], 2), 0)
+			}
+			cur += 4
+		case 8:
+			p1 := readVal(code, cur+1, paramMode(code[cur], 0))
+			p2 := readVal(code, cur+2, paramMode(code[cur], 1))
+			if p1 == p2 {
+				writeVal(code, cur+3, paramMode(code[cur], 2), 1)
+			} else {
+				writeVal(code, cur+3, paramMode(code[cur], 2), 0)
+			}
+			cur += 4
 		case 99:
 			return nil
 		default:
