@@ -99,7 +99,7 @@ diagnostic program ran successfully.
 After providing `1` to the only input instruction and passing all the tests,
 what diagnostic code does the program produce?
 
-# Part Two
+## Part Two
 
 The air conditioner comes online! Its cold air feels good for a while, but then
 the TEST alarms start to go off. Since the air conditioner can't vent its heat
