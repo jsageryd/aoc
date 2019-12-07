@@ -19,6 +19,7 @@ func main() {
 	com := parse(input)
 
 	fmt.Printf("Part 1: %d\n", totalOrbits(com))
+	fmt.Printf("Part 2: %d\n", orbitalTransfers(find(com, "YOU").Parent, find(com, "SAN").Parent))
 }
 
 func totalOrbits(o *Object) int {
@@ -38,6 +39,57 @@ func totalOrbits(o *Object) int {
 	return total
 }
 
+func orbitalTransfers(from, to *Object) int {
+	var base *Object
+
+	seen := make(map[*Object]struct{})
+
+	for obj := from; obj != nil; obj = obj.Parent {
+		seen[obj] = struct{}{}
+	}
+
+	for obj := to; obj != nil; obj = obj.Parent {
+		if _, ok := seen[obj]; ok {
+			base = obj
+			break
+		}
+	}
+
+	if base == nil {
+		return -1
+	}
+
+	var transfers int
+
+	for obj := from; obj != base; obj = obj.Parent {
+		transfers++
+	}
+
+	for obj := to; obj != base; obj = obj.Parent {
+		transfers++
+	}
+
+	return transfers
+}
+
+func find(root *Object, objName string) *Object {
+	var f func(o *Object) *Object
+
+	f = func(o *Object) *Object {
+		if o.Name == objName {
+			return o
+		}
+		for _, orbit := range o.Orbits {
+			if o := f(orbit); o != nil {
+				return o
+			}
+		}
+		return nil
+	}
+
+	return f(root)
+}
+
 func parse(input []string) *Object {
 	m := make(map[string]*Object)
 
@@ -53,6 +105,7 @@ func parse(input []string) *Object {
 			orbit = &Object{Name: pair[1]}
 			m[orbit.Name] = orbit
 		}
+		orbit.Parent = object
 		object.Orbits = append(object.Orbits, orbit)
 	}
 
@@ -67,6 +120,7 @@ func parse(input []string) *Object {
 
 type Object struct {
 	Name   string
+	Parent *Object
 	Orbits []*Object
 }
 

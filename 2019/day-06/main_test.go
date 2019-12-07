@@ -21,6 +21,24 @@ func TestTotalOrbits(t *testing.T) {
 	}
 }
 
+func TestOrbitalTransfers(t *testing.T) {
+	com := parse([]string{"COM)B", "B)C", "C)D", "D)E", "E)F", "B)G", "G)H", "D)I", "E)J", "J)K", "K)L", "K)YOU", "I)SAN"})
+
+	if got, want := orbitalTransfers(find(com, "YOU").Parent, find(com, "SAN").Parent), 4; got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
+func TestFind(t *testing.T) {
+	com := parse([]string{"COM)A", "A)B", "A)C", "C)D"})
+
+	obj := find(com, "C")
+
+	if got, want := obj.Name, "C"; got != want {
+		t.Errorf("got %q, want %q", got, want)
+	}
+}
+
 func TestParse(t *testing.T) {
 	for n, tc := range []struct {
 		input []string
