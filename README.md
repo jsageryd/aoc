@@ -2,6 +2,9 @@
 
 My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 
+## 2020
+- [Day 1: Report Repair](2020/day-01)
+
 ## 2019
 - [Day 1: The Tyranny of the Rocket Equation](2019/day-01)
 - [Day 2: 1202 Program Alarm](2019/day-02)
