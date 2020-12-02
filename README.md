@@ -3,7 +3,7 @@
 My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 
 ## 2020
-- [Day 1: Report Repair](2020/day-01)
+- [Day 1: Report Repair](2020/day-01) ([alternative implementation](2020/day-01/alternative))
 - [Day 2: Password Philosophy](2020/day-02)
 
 ## 2019
