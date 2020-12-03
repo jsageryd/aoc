@@ -28,9 +28,8 @@ func treeCount(forest []string, vx, vy int) int {
 }
 
 func traverseForest(forest []string, vx, vy int, f func(x, y int, c byte)) {
-	var x, y int
-	for _, row := range forest {
-		f(x, y, row[x%len(row)])
-		x, y = x+vx, y+vy
+	maxX := len(forest[0])
+	for x, y := 0, 0; y < len(forest); x, y = x+vx, y+vy {
+		f(x, y, forest[y][x%maxX])
 	}
 }
