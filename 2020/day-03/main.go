@@ -20,7 +20,7 @@ func main() {
 
 func treeCount(forest []string, vx, vy int) int {
 	var trees int
-	traverseForest(forest, vx, vy, func(x, y int, c byte) {
+	traverseForest(forest, vx, vy, func(c byte) {
 		if c == '#' {
 			trees++
 		}
@@ -35,15 +35,16 @@ func multipliedTreeCounts(forest []string) int {
 
 	prod := treeCount(forest, vs[0].x, vs[0].y)
 	for i := 1; i < len(vs); i++ {
-		prod *= treeCount(forest, vs[i].x, vs[i].y)
+		count := treeCount(forest, vs[i].x, vs[i].y)
+		prod *= count
 	}
 
 	return prod
 }
 
-func traverseForest(forest []string, vx, vy int, f func(x, y int, c byte)) {
+func traverseForest(forest []string, vx, vy int, f func(c byte)) {
 	maxX := len(forest[0])
 	for x, y := 0, 0; y < len(forest); x, y = x+vx, y+vy {
-		f(x, y, forest[y][x%maxX])
+		f(forest[y][x%maxX])
 	}
 }
