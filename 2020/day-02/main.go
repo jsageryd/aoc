@@ -47,5 +47,5 @@ func valid(min, max int, letter byte, password string) bool {
 func validPart2(pos1, pos2 int, letter byte, password string) bool {
 	p1 := password[pos1-1] == letter
 	p2 := password[pos2-1] == letter
-	return (p1 || p2) && !(p1 && p2)
+	return p1 != p2
 }
