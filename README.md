@@ -6,6 +6,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 1: Report Repair](2020/day-01) ([alternative implementation](2020/day-01/alternative))
 - [Day 2: Password Philosophy](2020/day-02)
 - [Day 3: Toboggan Trajectory](2020/day-03)
+- [Day 4: Passport Processing](2020/day-04)
 
 ## 2019
 - [Day 1: The Tyranny of the Rocket Equation](2019/day-01)
