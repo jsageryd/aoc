@@ -27,8 +27,10 @@ func main() {
 	}
 
 	_, shortestDistance := findShortestRoute(distances)
+	_, longestDistance := findLongestRoute(distances)
 
 	fmt.Printf("Part 1: %d\n", shortestDistance)
+	fmt.Printf("Part 2: %d\n", longestDistance)
 }
 
 func findShortestRoute(distances map[string]map[string]int) (route []string, distance int) {
@@ -47,6 +49,30 @@ func findShortestRoute(distances map[string]map[string]int) (route []string, dis
 			distCandidate += distances[from][to]
 		}
 		if distance == 0 || distCandidate < distance {
+			copy(route, locations)
+			distance = distCandidate
+		}
+	}
+
+	return route, distance
+}
+
+func findLongestRoute(distances map[string]map[string]int) (route []string, distance int) {
+	locations := make([]string, 0, len(distances))
+	for loc := range distances {
+		locations = append(locations, loc)
+	}
+
+	route = make([]string, len(locations))
+	sort.Strings(locations)
+
+	for perm(locations) {
+		distCandidate := 0
+		for i := 0; i < len(locations)-1; i++ {
+			from, to := locations[i], locations[i+1]
+			distCandidate += distances[from][to]
+		}
+		if distCandidate > distance {
 			copy(route, locations)
 			distance = distCandidate
 		}

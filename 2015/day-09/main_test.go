@@ -5,26 +5,37 @@ import (
 	"testing"
 )
 
-func TestFindShortestRoute(t *testing.T) {
-	distances := map[string]map[string]int{
-		"London": map[string]int{
-			"Belfast": 518,
-			"Dublin":  464,
-		},
-		"Dublin": map[string]int{
-			"Belfast": 141,
-			"London":  464,
-		},
-		"Belfast": map[string]int{
-			"Dublin": 141,
-			"London": 518,
-		},
-	}
+var distances = map[string]map[string]int{
+	"London": map[string]int{
+		"Belfast": 518,
+		"Dublin":  464,
+	},
+	"Dublin": map[string]int{
+		"Belfast": 141,
+		"London":  464,
+	},
+	"Belfast": map[string]int{
+		"Dublin": 141,
+		"London": 518,
+	},
+}
 
+func TestFindShortestRoute(t *testing.T) {
 	gotRoute, gotDistance := findShortestRoute(distances)
 
 	wantRoute := []string{"London", "Dublin", "Belfast"}
 	wantDistance := 605
+
+	if fmt.Sprint(gotRoute) != fmt.Sprint(wantRoute) || gotDistance != wantDistance {
+		t.Errorf("got %v (%d), want %v (%d)", gotRoute, gotDistance, wantRoute, wantDistance)
+	}
+}
+
+func TestFindLongestRoute(t *testing.T) {
+	gotRoute, gotDistance := findLongestRoute(distances)
+
+	wantRoute := []string{"Belfast", "London", "Dublin"}
+	wantDistance := 982
 
 	if fmt.Sprint(gotRoute) != fmt.Sprint(wantRoute) || gotDistance != wantDistance {
 		t.Errorf("got %v (%d), want %v (%d)", gotRoute, gotDistance, wantRoute, wantDistance)
