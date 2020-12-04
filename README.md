@@ -57,3 +57,4 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 6: Probably a Fire Hazard](2015/day-06)
 - [Day 7: Some Assembly Required](2015/day-07)
 - [Day 8: Matchsticks](2015/day-08)
+- [Day 9: All in a Single Night](2015/day-09)
