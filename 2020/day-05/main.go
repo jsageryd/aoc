@@ -52,16 +52,14 @@ func findMissing(s []int) int {
 }
 
 func parseSpec(spec string) (row, col, id int) {
-	parseBase2 := func(spec string, one rune) int {
-		var res int
-		p := 1 << (len(spec) - 1)
+	parseBase2 := func(spec string, one rune) (dec int) {
 		for _, r := range spec {
+			dec *= 2
 			if r == one {
-				res += p
+				dec++
 			}
-			p /= 2
 		}
-		return res
+		return dec
 	}
 
 	row = parseBase2(spec[:7], 'B')
