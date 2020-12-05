@@ -14,6 +14,14 @@ func TestHighestSeatID(t *testing.T) {
 	}
 }
 
+func TestFindMissing(t *testing.T) {
+	s := []int{3, 4, 5, 7, 8, 9}
+
+	if got, want := findMissing(s), 6; got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
 func TestParseSpec(t *testing.T) {
 	for n, tc := range []struct {
 		spec         string
