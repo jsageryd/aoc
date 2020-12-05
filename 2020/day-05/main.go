@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"sort"
+	"strconv"
+	"strings"
 )
 
 func main() {
@@ -52,22 +54,21 @@ func findMissing(s []int) int {
 }
 
 func parseSpec(spec string) (row, col, id int) {
-	rp, cp := 64, 4
-
-	for _, r := range spec {
+	base2 := func(r rune) rune {
 		switch r {
-		case 'F':
-			rp /= 2
-		case 'B':
-			row |= rp
-			rp /= 2
-		case 'L':
-			cp /= 2
-		case 'R':
-			col |= cp
-			cp /= 2
+		case 'F', 'L':
+			return '0'
+		case 'B', 'R':
+			return '1'
+		default:
+			return r
 		}
 	}
+
+	r, _ := strconv.ParseInt(strings.Map(base2, spec[:7]), 2, 64)
+	c, _ := strconv.ParseInt(strings.Map(base2, spec[7:]), 2, 64)
+
+	row, col = int(r), int(c)
 
 	return row, col, row*8 + col
 }
