@@ -14,7 +14,13 @@ func main() {
 		part1Str = lookAndSay(part1Str)
 	}
 
+	part2Str := input
+	for i := 0; i < 50; i++ {
+		part2Str = lookAndSay(part2Str)
+	}
+
 	fmt.Printf("Part 1: %d\n", len(part1Str))
+	fmt.Printf("Part 2: %d\n", len(part2Str))
 }
 
 func lookAndSay(input string) string {
