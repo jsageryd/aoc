@@ -7,6 +7,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 2: Password Philosophy](2020/day-02)
 - [Day 3: Toboggan Trajectory](2020/day-03)
 - [Day 4: Passport Processing](2020/day-04)
+- [Day 5: Binary Boarding](2020/day-05)
 
 ## 2019
 - [Day 1: The Tyranny of the Rocket Equation](2019/day-01)
