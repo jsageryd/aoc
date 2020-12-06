@@ -10,6 +10,7 @@ func main() {
 	fmt.Scanln(&input)
 
 	fmt.Printf("Part 1: %s\n", nextPassword(input))
+	fmt.Printf("Part 2: %s\n", nextPassword(nextPassword(input)))
 }
 
 func nextPassword(current string) string {
