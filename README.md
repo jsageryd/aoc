@@ -61,3 +61,4 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 8: Matchsticks](2015/day-08)
 - [Day 9: All in a Single Night](2015/day-09)
 - [Day 10: Elves Look, Elves Say](2015/day-10)
+- [Day 11: Corporate Policy](2015/day-11)
