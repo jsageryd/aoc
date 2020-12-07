@@ -9,6 +9,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 4: Passport Processing](2020/day-04)
 - [Day 5: Binary Boarding](2020/day-05)
 - [Day 6: Custom Customs](2020/day-06)
+- [Day 7: Handy Haversacks](2020/day-07)
 
 ## 2019
 - [Day 1: The Tyranny of the Rocket Equation](2019/day-01)
