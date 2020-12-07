@@ -16,6 +16,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(rules []string) int {
@@ -47,6 +48,23 @@ func part1(rules []string) int {
 	}
 
 	return len(bags)
+}
+
+func part2(rules []string) int {
+	m := parseRules(rules)
+
+	var findChildren func(parent string) []string
+
+	findChildren = func(parent string) []string {
+		var children []string
+		for _, childBag := range m[parent] {
+			children = append(children, childBag)
+			children = append(children, findChildren(childBag)...)
+		}
+		return children
+	}
+
+	return len(findChildren("shiny gold"))
 }
 
 // parseRules parses rules into a map of bag -> list of bags

@@ -25,6 +25,12 @@ func TestPart1(t *testing.T) {
 	}
 }
 
+func TestPart2(t *testing.T) {
+	if got, want := part2(rules), 32; got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
 func TestParseRules(t *testing.T) {
 	gotMap := parseRules(rules)
 
