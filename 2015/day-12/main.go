@@ -10,10 +10,11 @@ import (
 func main() {
 	input, _ := ioutil.ReadAll(os.Stdin)
 
-	fmt.Printf("Part 1: %d\n", sumOfNumbers(input))
+	fmt.Printf("Part 1: %d\n", sumOfNumbers(input, false))
+	fmt.Printf("Part 2: %d\n", sumOfNumbers(input, true))
 }
 
-func sumOfNumbers(input []byte) int {
+func sumOfNumbers(input []byte, skipRedObjects bool) int {
 	var v interface{}
 	json.Unmarshal(input, &v)
 
@@ -26,6 +27,13 @@ func sumOfNumbers(input []byte) int {
 		case float64:
 			s = int(val)
 		case map[string]interface{}:
+			if skipRedObjects {
+				for _, v := range val {
+					if s, ok := v.(string); ok && s == "red" {
+						return 0
+					}
+				}
+			}
 			for _, v := range val {
 				s += sum(v)
 			}
