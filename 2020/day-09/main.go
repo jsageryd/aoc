@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 )
 
 func main() {
@@ -16,6 +17,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", findNumber(input, 25))
+	fmt.Printf("Part 2: %d\n", findWeakness(input, findNumber(input, 25)))
 }
 
 func findNumber(input []int, windowSize int) int {
@@ -32,6 +34,20 @@ next:
 			}
 		}
 		return input[i]
+	}
+	return 0
+}
+
+func findWeakness(input []int, invalidNumber int) int {
+	for i := 0; i < len(input); i++ {
+		var sum int
+		for j := i; j < len(input); j++ {
+			sum += input[j]
+			if sum == invalidNumber {
+				sort.Ints(input[i : j+1])
+				return input[i] + input[j]
+			}
+		}
 	}
 	return 0
 }
