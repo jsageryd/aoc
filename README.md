@@ -11,6 +11,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 6: Custom Customs](2020/day-06)
 - [Day 7: Handy Haversacks](2020/day-07)
 - [Day 8: Handheld Halting](2020/day-08)
+- [Day 9: Encoding Error](2020/day-09)
 
 ## 2019
 - [Day 1: The Tyranny of the Rocket Equation](2019/day-01)
