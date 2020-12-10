@@ -48,14 +48,11 @@ func possibleArrangements(joltages []int) int {
 		totalConnections int
 	}
 
-	adapters := make([]*adapter, len(joltages))
-	for i := range adapters {
-		adapters[i] = &adapter{}
-	}
+	adapters := make([]adapter, len(joltages))
 
 	for i := 0; i < len(joltages); i++ {
 		for j := i + 1; j < len(joltages) && joltages[j]-joltages[i] <= 3; j++ {
-			adapters[i].connections = append(adapters[i].connections, adapters[j])
+			adapters[i].connections = append(adapters[i].connections, &adapters[j])
 		}
 	}
 
@@ -74,5 +71,5 @@ func possibleArrangements(joltages []int) int {
 		return a.totalConnections
 	}
 
-	return rec(adapters[0])
+	return rec(&adapters[0])
 }
