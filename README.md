@@ -14,6 +14,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 9: Encoding Error](2020/day-09)
 - [Day 10: Adapter Array](2020/day-10)
 - [Day 11: Seating System](2020/day-11)
+- [Day 12: Rain Risk](2020/day-12)
 
 ## 2019
 - [Day 1: The Tyranny of the Rocket Equation](2019/day-01)
