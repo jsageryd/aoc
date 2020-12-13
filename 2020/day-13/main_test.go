@@ -10,9 +10,9 @@ func TestEarliestBus(t *testing.T) {
 7,13,x,x,59,x,31,19
 `
 
-	estimate, buses := parseInput(strings.NewReader(input))
+	estimate, schedule := parseInput(strings.NewReader(input))
 
-	busID, waitTime := earliestBus(estimate, buses)
+	busID, waitTime := earliestBus(estimate, schedule)
 
 	if got, want := busID, 59; got != want {
 		t.Errorf("bus ID is %d, want %d", got, want)
