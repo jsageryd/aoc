@@ -4,8 +4,11 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"runtime"
+	"sort"
 	"strconv"
 	"strings"
+	"sync"
 )
 
 func main() {
@@ -47,15 +50,59 @@ func earliestTimestampForSubsequentDepartures(schedule []string) int {
 		scheduleInt = append(scheduleInt, b)
 	}
 
-next:
-	for t := 0; ; t++ {
-		for n, b := range scheduleInt {
-			if b != -1 {
-				if dep := t + n; dep%b != 0 {
-					continue next
-				}
+	workers := runtime.NumCPU()
+
+	var wg sync.WaitGroup
+	wg.Add(workers)
+
+	in := make(chan int, 64)
+	out := make(chan int, workers)
+	done := make(chan struct{}, workers)
+
+	sliceSize := 1_000_000
+
+	go func() {
+		for startAt := 0; ; startAt += sliceSize {
+			select {
+			case <-done:
+				close(in)
+				return
+			case in <- startAt:
 			}
 		}
-		return t
+	}()
+
+	for n := 0; n < workers; n++ {
+		go func() {
+			defer wg.Done()
+			for startAt := range in {
+			next:
+				for t := startAt; t < startAt+sliceSize; t++ {
+					for n, b := range scheduleInt {
+						if b != -1 {
+							if dep := t + n; dep%b != 0 {
+								continue next
+							}
+						}
+					}
+					done <- struct{}{}
+					out <- t
+					return
+				}
+			}
+		}()
 	}
+
+	go func() {
+		wg.Wait()
+		close(out)
+	}()
+
+	var ts []int
+	for t := range out {
+		ts = append(ts, t)
+	}
+	sort.Ints(ts)
+
+	return ts[0]
 }
