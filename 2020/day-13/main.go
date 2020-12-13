@@ -38,10 +38,19 @@ func earliestBus(notBefore int, schedule []string) (id int, waitTime int) {
 }
 
 func earliestTimestampForSubsequentDepartures(schedule []string) int {
+	var scheduleInt []int
+	for _, bStr := range schedule {
+		b, err := strconv.Atoi(bStr)
+		if err != nil {
+			b = -1
+		}
+		scheduleInt = append(scheduleInt, b)
+	}
+
 next:
 	for t := 0; ; t++ {
-		for n, bStr := range schedule {
-			if b, err := strconv.Atoi(bStr); err == nil {
+		for n, b := range scheduleInt {
+			if b != -1 {
 				if dep := t + n; dep%b != 0 {
 					continue next
 				}
