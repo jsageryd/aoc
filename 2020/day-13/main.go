@@ -14,6 +14,7 @@ func main() {
 	busID, waitTime := earliestBus(estimate, schedule)
 
 	fmt.Printf("Part 1: %d\n", busID*waitTime)
+	fmt.Printf("Part 2: %d\n", earliestTimestampForSubsequentDepartures(schedule))
 }
 
 func parseInput(r io.Reader) (estimate int, schedule []string) {
@@ -34,4 +35,18 @@ func earliestBus(notBefore int, schedule []string) (id int, waitTime int) {
 		}
 	}
 	return id, waitTime
+}
+
+func earliestTimestampForSubsequentDepartures(schedule []string) int {
+next:
+	for t := 0; ; t++ {
+		for n, bStr := range schedule {
+			if b, err := strconv.Atoi(bStr); err == nil {
+				if dep := t + n; dep%b != 0 {
+					continue next
+				}
+			}
+		}
+		return t
+	}
 }
