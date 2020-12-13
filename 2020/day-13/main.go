@@ -3,12 +3,11 @@ package main
 import (
 	"fmt"
 	"io"
+	"log"
 	"os"
-	"runtime"
 	"sort"
 	"strconv"
 	"strings"
-	"sync"
 )
 
 func main() {
@@ -41,68 +40,40 @@ func earliestBus(notBefore int, schedule []string) (id int, waitTime int) {
 }
 
 func earliestTimestampForSubsequentDepartures(schedule []string) int {
-	var scheduleInt []int
-	for _, bStr := range schedule {
-		b, err := strconv.Atoi(bStr)
-		if err != nil {
-			b = -1
+	offsets := make(map[int]int) // bus ID -> offset
+	for offset, idStr := range schedule {
+		if id, err := strconv.Atoi(idStr); err == nil {
+			offsets[id] = offset
 		}
-		scheduleInt = append(scheduleInt, b)
 	}
+	var busIDs []int
+	for id := range offsets {
+		busIDs = append(busIDs, id)
+	}
+	sort.Sort(sort.Reverse(sort.IntSlice(busIDs)))
 
-	workers := runtime.NumCPU()
+	var count int
 
-	var wg sync.WaitGroup
-	wg.Add(workers)
+	var rec func(startT, idIdx int) int
 
-	in := make(chan int, 64)
-	out := make(chan int, workers)
-	done := make(chan struct{}, workers)
-
-	sliceSize := 1_000_000
-
-	go func() {
-		for startAt := 0; ; startAt += sliceSize {
-			select {
-			case <-done:
-				close(in)
-				return
-			case in <- startAt:
-			}
-		}
-	}()
-
-	for n := 0; n < workers; n++ {
-		go func() {
-			defer wg.Done()
-			for startAt := range in {
-			next:
-				for t := startAt; t < startAt+sliceSize; t++ {
-					for n, b := range scheduleInt {
-						if b != -1 {
-							if dep := t + n; dep%b != 0 {
-								continue next
-							}
-						}
-					}
-					done <- struct{}{}
-					out <- t
-					return
+	rec = func(startT, idIdx int) int {
+		log.Printf("recursing to idx %d/%d, currently at timestamp %d", idIdx, len(busIDs), startT)
+		id := busIDs[idIdx]
+	next:
+		for t := startT + offsets[id]; ; t += id {
+			for i := 0; i < idIdx; i++ {
+				count++
+				if (t-offsets[id]+offsets[busIDs[i]])%busIDs[i] != 0 {
+					continue next
 				}
 			}
-		}()
+			if idIdx == len(busIDs)-1 {
+				return t - offsets[id]
+			} else {
+				return rec(t-offsets[id], idIdx+1)
+			}
+		}
 	}
 
-	go func() {
-		wg.Wait()
-		close(out)
-	}()
-
-	var ts []int
-	for t := range out {
-		ts = append(ts, t)
-	}
-	sort.Ints(ts)
-
-	return ts[0]
+	return rec(0, 0)
 }
