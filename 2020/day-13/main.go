@@ -3,9 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
-	"log"
 	"os"
-	"sort"
 	"strconv"
 	"strings"
 )
@@ -46,34 +44,15 @@ func earliestTimestampForSubsequentDepartures(schedule []string) int {
 			offsets[id] = offset
 		}
 	}
-	var busIDs []int
-	for id := range offsets {
-		busIDs = append(busIDs, id)
-	}
-	sort.Sort(sort.Reverse(sort.IntSlice(busIDs)))
 
-	var count int
-
-	var rec func(startT, idIdx int) int
-
-	rec = func(startT, idIdx int) int {
-		log.Printf("recursing to idx %d/%d, currently at timestamp %d", idIdx, len(busIDs), startT)
-		id := busIDs[idIdx]
-	next:
-		for t := startT + offsets[id]; ; t += id {
-			for i := 0; i < idIdx; i++ {
-				count++
-				if (t-offsets[id]+offsets[busIDs[i]])%busIDs[i] != 0 {
-					continue next
-				}
-			}
-			if idIdx == len(busIDs)-1 {
-				return t - offsets[id]
-			} else {
-				return rec(t-offsets[id], idIdx+1)
+	freq := make(map[int]int) // timestamp -> number of times seen
+	for multiplier := 1; ; multiplier++ {
+		for id, offset := range offsets {
+			t := id*multiplier - offset
+			freq[t]++
+			if freq[t] == len(offsets) {
+				return t
 			}
 		}
 	}
-
-	return rec(0, 0)
 }
