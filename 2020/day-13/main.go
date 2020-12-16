@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -45,14 +46,24 @@ func earliestTimestampForSubsequentDepartures(schedule []string) int {
 		}
 	}
 
-	freq := make(map[int]int) // timestamp -> number of times seen
-	for multiplier := 1; ; multiplier++ {
-		for id, offset := range offsets {
-			t := id*multiplier - offset
-			freq[t]++
-			if freq[t] == len(offsets) {
-				return t
+	var ids []int
+	for id := range offsets {
+		ids = append(ids, id)
+	}
+	sort.Sort(sort.Reverse(sort.IntSlice(ids)))
+
+	t := 0
+	step := 1
+	for _, id := range ids {
+		offset := offsets[id]
+		for {
+			t += step
+			if (t+offset)%id == 0 {
+				step *= id
+				break
 			}
 		}
 	}
+
+	return t
 }
