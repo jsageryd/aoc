@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"sort"
 	"strconv"
 	"strings"
 )
@@ -39,31 +38,14 @@ func earliestBus(notBefore int, schedule []string) (id int, waitTime int) {
 }
 
 func earliestTimestampForSubsequentDepartures(schedule []string) int {
-	offsets := make(map[int]int) // bus ID -> offset
+	t, step := 0, 1
 	for offset, idStr := range schedule {
 		if id, err := strconv.Atoi(idStr); err == nil {
-			offsets[id] = offset
-		}
-	}
-
-	var ids []int
-	for id := range offsets {
-		ids = append(ids, id)
-	}
-	sort.Sort(sort.Reverse(sort.IntSlice(ids)))
-
-	t := 0
-	step := 1
-	for _, id := range ids {
-		offset := offsets[id]
-		for {
-			t += step
-			if (t+offset)%id == 0 {
-				step *= id
-				break
+			for (t+offset)%id != 0 {
+				t += step
 			}
+			step *= id
 		}
 	}
-
 	return t
 }
