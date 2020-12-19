@@ -19,25 +19,31 @@ func main() {
 }
 
 func part1(input []string) int {
-	applyMask := func(val, maskZeros, maskOnes int) int {
-		val &= ^maskZeros
-		val |= maskOnes
+	applyMask := func(val int, mask string) int {
+		for i := range mask {
+			switch mask[len(mask)-i-1] {
+			case '0':
+				val &= ^(1 << i)
+			case '1':
+				val |= 1 << i
+			}
+		}
 		return val
 	}
 
 	var sum int
 	mem := make(map[int]int)
 
-	var mZeros, mOnes int
+	var mask string
 
 	for _, row := range input {
 		switch {
 		case strings.HasPrefix(row, "mask"):
-			mZeros, mOnes = parseMask(strings.TrimPrefix(row, "mask = "))
+			mask = strings.TrimPrefix(row, "mask = ")
 		case strings.HasPrefix(row, "mem"):
 			var addr, val int
 			fmt.Sscanf(row, "mem[%d] = %d", &addr, &val)
-			mem[addr] = applyMask(val, mZeros, mOnes)
+			mem[addr] = applyMask(val, mask)
 		}
 	}
 
@@ -46,16 +52,4 @@ func part1(input []string) int {
 	}
 
 	return sum
-}
-
-func parseMask(mask string) (zeros, ones int) {
-	for i := range mask {
-		switch mask[len(mask)-i-1] {
-		case '0':
-			zeros += 1 << i
-		case '1':
-			ones += 1 << i
-		}
-	}
-	return zeros, ones
 }
