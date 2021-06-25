@@ -108,22 +108,13 @@ type signal struct {
 }
 
 func newSignal(f func() uint16) *signal {
-	var s *signal
-
-	s = &signal{
-		f: func() uint16 {
-			s.v, s.f = f(), nil
-			return s.v
-		},
-	}
-
-	return s
+	return &signal{f: f}
 }
 
 func (s *signal) val() uint16 {
-	if s.f == nil {
-		return s.v
+	if s.f != nil {
+		s.v, s.f = s.f(), nil
 	}
 
-	return s.f()
+	return s.v
 }
