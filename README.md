@@ -2,6 +2,9 @@
 
 My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 
+## 2021
+- [Day 1: Sonar Sweep](2021/day-01)
+
 ## 2020
 - [Day 1: Report Repair](2020/day-01) ([alternative implementation](2020/day-01/alternative))
 - [Day 2: Password Philosophy](2020/day-02)
