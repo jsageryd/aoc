@@ -19,15 +19,9 @@ func main() {
 
 func countIncreases(input []int, windowSize int) int {
 	var count int
-	var sum, lastSum int
-	for i := 1; i < len(input); i++ {
-		lastSum = sum
-		sum += input[i]
-		if i >= windowSize {
-			sum -= input[i-windowSize]
-			if sum > lastSum {
-				count++
-			}
+	for i := windowSize; i < len(input); i++ {
+		if input[i] > input[i-windowSize] {
+			count++
 		}
 	}
 	return count
