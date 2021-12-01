@@ -13,14 +13,21 @@ func main() {
 		input = append(input, n)
 	}
 
-	fmt.Printf("Part 1: %d\n", countIncreases(input))
+	fmt.Printf("Part 1: %d\n", countIncreases(input, 1))
+	fmt.Printf("Part 2: %d\n", countIncreases(input, 3))
 }
 
-func countIncreases(input []int) int {
+func countIncreases(input []int, windowSize int) int {
 	var count int
+	var sum, lastSum int
 	for i := 1; i < len(input); i++ {
-		if input[i] > input[i-1] {
-			count++
+		lastSum = sum
+		sum += input[i]
+		if i >= windowSize {
+			sum -= input[i-windowSize]
+			if sum > lastSum {
+				count++
+			}
 		}
 	}
 	return count
