@@ -24,3 +24,26 @@ func TestSubmarine_Pilot(t *testing.T) {
 		)
 	}
 }
+
+func TestSubmarine_PilotWithAim(t *testing.T) {
+	var s submarine
+
+	s.pilotWithAim([]string{
+		`forward 5`,
+		`down 5`,
+		`forward 8`,
+		`up 3`,
+		`down 8`,
+		`forward 2`,
+	})
+
+	wantHorizontal := 15
+	wantDepth := 60
+
+	if s.horizontal != wantHorizontal || s.depth != wantDepth {
+		t.Errorf(
+			"got (%d, %d), want (%d, %d)",
+			s.horizontal, s.depth, wantHorizontal, wantDepth,
+		)
+	}
+}
