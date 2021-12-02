@@ -4,6 +4,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 
 ## 2021
 - [Day 1: Sonar Sweep](2021/day-01)
+- [Day 2: Dive!](2021/day-02)
 
 ## 2020
 - [Day 1: Report Repair](2020/day-01) ([alternative implementation](2020/day-01/alternative))
