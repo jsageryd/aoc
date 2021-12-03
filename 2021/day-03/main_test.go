@@ -43,3 +43,45 @@ func TestEpsilonRate(t *testing.T) {
 		t.Errorf("got %[1]b (%[1]d), want %[2]b (%[2]d)", got, want)
 	}
 }
+
+func TestOxygenGeneratorRating(t *testing.T) {
+	input := []int{
+		0b00100,
+		0b11110,
+		0b10110,
+		0b10111,
+		0b10101,
+		0b01111,
+		0b00111,
+		0b11100,
+		0b10000,
+		0b11001,
+		0b00010,
+		0b01010,
+	}
+
+	if got, want := oxygenGeneratorRating(input), 0b10111; got != want {
+		t.Errorf("got %[1]b (%[1]d), want %[2]b (%[2]d)", got, want)
+	}
+}
+
+func TestCO2ScrubberRating(t *testing.T) {
+	input := []int{
+		0b00100,
+		0b11110,
+		0b10110,
+		0b10111,
+		0b10101,
+		0b01111,
+		0b00111,
+		0b11100,
+		0b10000,
+		0b11001,
+		0b00010,
+		0b01010,
+	}
+
+	if got, want := co2ScrubberRating(input), 0b01010; got != want {
+		t.Errorf("got %[1]b (%[1]d), want %[2]b (%[2]d)", got, want)
+	}
+}
