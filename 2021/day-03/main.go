@@ -22,23 +22,9 @@ func main() {
 func gammaRate(input []int) int {
 	var rate int
 
-	var max int
-	for _, n := range input {
-		if n > max {
-			max = n
-		}
-	}
-
-	for bit := 1; bit < max; bit *= 2 {
-		var ones, zeros int
-		for _, n := range input {
-			if n&bit != 0 {
-				ones++
-			} else {
-				zeros++
-			}
-		}
-		if ones > zeros {
+	for _, bit := range bits(input) {
+		ones, zeros := onesAndZeros(input, bit)
+		if len(ones) > len(zeros) {
 			rate += bit
 		}
 	}
@@ -49,23 +35,9 @@ func gammaRate(input []int) int {
 func epsilonRate(input []int) int {
 	var rate int
 
-	var max int
-	for _, n := range input {
-		if n > max {
-			max = n
-		}
-	}
-
-	for bit := 1; bit < max; bit *= 2 {
-		var ones, zeros int
-		for _, n := range input {
-			if n&bit != 0 {
-				ones++
-			} else {
-				zeros++
-			}
-		}
-		if ones < zeros {
+	for _, bit := range bits(input) {
+		ones, zeros := onesAndZeros(input, bit)
+		if len(ones) < len(zeros) {
 			rate += bit
 		}
 	}
@@ -74,67 +46,52 @@ func epsilonRate(input []int) int {
 }
 
 func oxygenGeneratorRating(input []int) int {
-	var max int
-	for _, n := range input {
-		if n > max {
-			max = n
-		}
-	}
+	keep := make([]int, len(input))
+	copy(keep, input)
 
-	for i := 1; ; i *= 2 {
-		if i >= max {
-			max = i / 2
+	for _, bit := range bits(input) {
+		ones, zeros := onesAndZeros(keep, bit)
+
+		if len(ones) < len(zeros) {
+			keep = subtract(keep, ones)
+		} else {
+			keep = subtract(keep, zeros)
+		}
+
+		if len(keep) == 1 {
 			break
 		}
 	}
 
-	keep := make(map[int]struct{})
-	for _, n := range input {
-		keep[n] = struct{}{}
-	}
-
-outer:
-	for {
-		for bit := max; bit >= 1; bit /= 2 {
-			if len(keep) == 1 {
-				break outer
-			}
-
-			var nOnes, nZeros []int
-
-			for n := range keep {
-				if n&bit != 0 {
-					nOnes = append(nOnes, n)
-				} else {
-					nZeros = append(nZeros, n)
-				}
-			}
-
-			var nRemove []int
-
-			if len(nOnes) < len(nZeros) {
-				nRemove = nOnes
-			} else {
-				nRemove = nZeros
-			}
-
-			for _, n := range nRemove {
-				delete(keep, n)
-			}
-		}
-	}
-
-	var rating int
-
-	for k := range keep {
-		rating = k
-	}
-
-	return rating
+	return keep[0]
 }
 
 func co2ScrubberRating(input []int) int {
+	keep := make([]int, len(input))
+	copy(keep, input)
+
+	for _, bit := range bits(input) {
+		ones, zeros := onesAndZeros(keep, bit)
+
+		if len(ones) >= len(zeros) {
+			keep = subtract(keep, ones)
+		} else {
+			keep = subtract(keep, zeros)
+		}
+
+		if len(keep) == 1 {
+			break
+		}
+	}
+
+	return keep[0]
+}
+
+func bits(input []int) []int {
+	var bits []int
+
 	var max int
+
 	for _, n := range input {
 		if n > max {
 			max = n
@@ -148,48 +105,33 @@ func co2ScrubberRating(input []int) int {
 		}
 	}
 
-	keep := make(map[int]struct{})
-	for _, n := range input {
-		keep[n] = struct{}{}
+	for bit := max; bit >= 1; bit /= 2 {
+		bits = append(bits, bit)
 	}
 
-outer:
-	for {
-		for bit := max; bit >= 1; bit /= 2 {
-			if len(keep) == 1 {
-				break outer
-			}
+	return bits
+}
 
-			var nOnes, nZeros []int
-
-			for n := range keep {
-				if n&bit != 0 {
-					nOnes = append(nOnes, n)
-				} else {
-					nZeros = append(nZeros, n)
-				}
-			}
-
-			var nRemove []int
-
-			if len(nOnes) >= len(nZeros) {
-				nRemove = nOnes
-			} else {
-				nRemove = nZeros
-			}
-
-			for _, n := range nRemove {
-				delete(keep, n)
-			}
-
+func onesAndZeros(input []int, bit int) (ones, zeros []int) {
+	for _, n := range input {
+		if n&bit != 0 {
+			ones = append(ones, n)
+		} else {
+			zeros = append(zeros, n)
 		}
 	}
 
-	var rating int
+	return ones, zeros
+}
 
-	for k := range keep {
-		rating = k
+func subtract(a, b []int) []int {
+	for _, n := range b {
+		for idx, m := range a {
+			if n == m {
+				a = append(a[:idx], a[idx+1:]...)
+				break
+			}
+		}
 	}
-
-	return rating
+	return a
 }
