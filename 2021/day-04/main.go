@@ -31,12 +31,11 @@ func main() {
 		}
 	}
 
-	winningBoard := playBingo(numbers, boards)
-
-	fmt.Printf("Part 1: %d\n", winningBoard.score())
+	fmt.Printf("Part 1: %d\n", firstWinningBoard(numbers, boards).score())
+	fmt.Printf("Part 2: %d\n", lastWinningBoard(numbers, boards).score())
 }
 
-func playBingo(numbers []int, boards []*board) (winningBoard *board) {
+func firstWinningBoard(numbers []int, boards []*board) *board {
 	for _, n := range numbers {
 		for _, b := range boards {
 			b.mark(n)
@@ -46,6 +45,25 @@ func playBingo(numbers []int, boards []*board) (winningBoard *board) {
 		}
 	}
 	return nil
+}
+
+func lastWinningBoard(numbers []int, boards []*board) *board {
+	var lastBoard *board
+	done := make(map[*board]bool)
+
+	for _, n := range numbers {
+		for _, b := range boards {
+			if !done[b] {
+				b.mark(n)
+				if b.bingo() {
+					lastBoard = b
+					done[b] = true
+				}
+			}
+		}
+	}
+
+	return lastBoard
 }
 
 type board struct {
