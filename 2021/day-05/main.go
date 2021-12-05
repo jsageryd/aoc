@@ -11,7 +11,7 @@ func main() {
 		var l line
 		if _, err := fmt.Scanf(
 			"%d,%d -> %d,%d",
-			&l.from.x, &l.from.y, &l.to.x, &l.to.y,
+			&l.x1, &l.y1, &l.x2, &l.y2,
 		); err != nil {
 			break
 		}
@@ -43,27 +43,24 @@ func drawLines(lines []line, drawDiagonals bool) map[coord]int {
 	grid := make(map[coord]int)
 
 	for _, l := range lines {
-		x1, y1, x2, y2 := l.from.x, l.from.y, l.to.x, l.to.y
-
-		if !drawDiagonals && !(x1 == x2 || y1 == y2) {
+		if !drawDiagonals && !(l.x1 == l.x2 || l.y1 == l.y2) {
 			continue
 		}
-
-		steps := abs(x1-x2) + 1
+		steps := abs(l.x1-l.x2) + 1
 		if steps == 1 {
-			steps = abs(y1-y2) + 1
+			steps = abs(l.y1-l.y2) + 1
 		}
-		x, y := x1, y1
+		x, y := l.x1, l.y1
 		for i := 0; i < steps; i++ {
 			grid[coord{x, y}]++
-			if x1 < x2 {
+			if l.x1 < l.x2 {
 				x++
-			} else if x1 > x2 {
+			} else if l.x1 > l.x2 {
 				x--
 			}
-			if y1 < y2 {
+			if l.y1 < l.y2 {
 				y++
-			} else if y1 > y2 {
+			} else if l.y1 > l.y2 {
 				y--
 			}
 		}
@@ -73,8 +70,7 @@ func drawLines(lines []line, drawDiagonals bool) map[coord]int {
 }
 
 type line struct {
-	from coord
-	to   coord
+	x1, y1, x2, y2 int
 }
 
 type coord struct {
