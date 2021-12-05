@@ -23,7 +23,15 @@ func TestCountOverlaps(t *testing.T) {
 		makeLine(5, 5, 8, 2),
 	}
 
-	if got, want := countOverlaps(lines), 5; got != want {
-		t.Errorf("got %d, want %d", got, want)
-	}
+	t.Run("Without diagonals", func(t *testing.T) {
+		if got, want := countOverlaps(lines, false), 5; got != want {
+			t.Errorf("got %d, want %d", got, want)
+		}
+	})
+
+	t.Run("With diagonals", func(t *testing.T) {
+		if got, want := countOverlaps(lines, true), 12; got != want {
+			t.Errorf("got %d, want %d", got, want)
+		}
+	})
 }

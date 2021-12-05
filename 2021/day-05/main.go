@@ -18,12 +18,13 @@ func main() {
 		lines = append(lines, l)
 	}
 
-	fmt.Printf("Part 1: %d\n", countOverlaps(lines))
+	fmt.Printf("Part 1: %d\n", countOverlaps(lines, false))
+	fmt.Printf("Part 2: %d\n", countOverlaps(lines, true))
 }
 
-func countOverlaps(lines []line) int {
+func countOverlaps(lines []line, countDiagonals bool) int {
 	var overlaps int
-	for _, n := range drawLines(lines) {
+	for _, n := range drawLines(lines, countDiagonals) {
 		if n > 1 {
 			overlaps++
 		}
@@ -31,25 +32,43 @@ func countOverlaps(lines []line) int {
 	return overlaps
 }
 
-func drawLines(lines []line) map[coord]int {
+func drawLines(lines []line, drawDiagonals bool) map[coord]int {
+	abs := func(n int) int {
+		if n < 0 {
+			return -n
+		}
+		return n
+	}
+
 	grid := make(map[coord]int)
+
 	for _, l := range lines {
-		if !(l.from.x == l.to.x || l.from.y == l.to.y) {
+		x1, y1, x2, y2 := l.from.x, l.from.y, l.to.x, l.to.y
+
+		if !drawDiagonals && !(x1 == x2 || y1 == y2) {
 			continue
 		}
-		x1, y1, x2, y2 := l.from.x, l.from.y, l.to.x, l.to.y
-		if x1 > x2 {
-			x1, x2 = x2, x1
+
+		steps := abs(x1-x2) + 1
+		if steps == 1 {
+			steps = abs(y1-y2) + 1
 		}
-		if y1 > y2 {
-			y1, y2 = y2, y1
-		}
-		for y := y1; y <= y2; y++ {
-			for x := x1; x <= x2; x++ {
-				grid[coord{x, y}]++
+		x, y := x1, y1
+		for i := 0; i < steps; i++ {
+			grid[coord{x, y}]++
+			if x1 < x2 {
+				x++
+			} else if x1 > x2 {
+				x--
+			}
+			if y1 < y2 {
+				y++
+			} else if y1 > y2 {
+				y--
 			}
 		}
 	}
+
 	return grid
 }
 
