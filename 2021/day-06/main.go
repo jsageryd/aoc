@@ -12,37 +12,47 @@ func main() {
 
 	fmt.Scanln(&input)
 
-	fish := spawn(parse(input), 80)
-	fmt.Printf("Part 1: %d\n", len(fish))
+	fish := parse(input)
+	spawn(fish, 80)
+	fmt.Printf("Part 1: %d\n", countFish(fish))
+
+	fish = parse(input)
+	spawn(fish, 256)
+	fmt.Printf("Part 2: %d\n", countFish(fish))
 }
 
-func spawn(fish []int, days int) []int {
+func spawn(fishFreq []int, days int) {
 	for day := 0; day < days; day++ {
-		var newFishCount int
-		for i := range fish {
-			if fish[i] == 0 {
-				newFishCount++
-				fish[i] = 6
-			} else {
-				fish[i]--
-			}
-		}
-		for i := 0; i < newFishCount; i++ {
-			fish = append(fish, 8)
-		}
+		zeros := fishFreq[0]
+		fishFreq[0] = fishFreq[1]
+		fishFreq[1] = fishFreq[2]
+		fishFreq[2] = fishFreq[3]
+		fishFreq[3] = fishFreq[4]
+		fishFreq[4] = fishFreq[5]
+		fishFreq[5] = fishFreq[6]
+		fishFreq[6] = fishFreq[7] + zeros
+		fishFreq[7] = fishFreq[8]
+		fishFreq[8] = zeros
 	}
-	return fish
 }
 
-func parse(input string) []int {
+func countFish(fishFreq []int) int {
+	var sum int
+	for _, f := range fishFreq {
+		sum += f
+	}
+	return sum
+}
+
+func parse(input string) (fishFreq []int) {
 	strs := strings.Split(input, ",")
-	ints := make([]int, 0, len(strs))
+	f := make([]int, 9)
 	for _, s := range strs {
 		n, err := strconv.Atoi(s)
 		if err != nil {
 			log.Fatal(err)
 		}
-		ints = append(ints, n)
+		f[n]++
 	}
-	return ints
+	return f
 }
