@@ -24,14 +24,8 @@ func main() {
 func spawn(fishFreq []int, days int) {
 	for day := 0; day < days; day++ {
 		zeros := fishFreq[0]
-		fishFreq[0] = fishFreq[1]
-		fishFreq[1] = fishFreq[2]
-		fishFreq[2] = fishFreq[3]
-		fishFreq[3] = fishFreq[4]
-		fishFreq[4] = fishFreq[5]
-		fishFreq[5] = fishFreq[6]
-		fishFreq[6] = fishFreq[7] + zeros
-		fishFreq[7] = fishFreq[8]
+		copy(fishFreq, fishFreq[1:])
+		fishFreq[6] += zeros
 		fishFreq[8] = zeros
 	}
 }
