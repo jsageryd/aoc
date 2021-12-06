@@ -8,6 +8,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 3: Binary Diagnostic](2021/day-03)
 - [Day 4: Giant Squid](2021/day-04)
 - [Day 5: Hydrothermal Venture](2021/day-05)
+- [Day 6: Lanternfish](2021/day-06)
 
 ## 2020
 - [Day 1: Report Repair](2020/day-01) ([alternative implementation](2020/day-01/alternative))
