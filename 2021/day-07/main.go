@@ -28,16 +28,9 @@ func part2(values []int) int {
 		return 0
 	}
 
+	sort.Ints(values)
 	min := values[0]
-	max := values[0]
-	for _, v := range values {
-		if v < min {
-			min = v
-		}
-		if v > max {
-			max = v
-		}
-	}
+	max := values[len(values)-1]
 
 	minCost := alignmentCost2(values, min)
 
