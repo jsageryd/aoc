@@ -66,9 +66,8 @@ func alignmentCost2(values []int, alignAt int) int {
 	var cost int
 
 	for _, v := range values {
-		for i := 1; i <= abs(v-alignAt); i++ {
-			cost += i
-		}
+		n := abs(v - alignAt)
+		cost += n * (n + 1) / 2
 	}
 
 	return cost
