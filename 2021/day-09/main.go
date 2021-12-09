@@ -30,10 +30,8 @@ func part1(input []string) int {
 
 	var riskLevelSum int
 
-	for y := 0; y < len(input); y++ {
-		for x := 0; x < len(input[0]); x++ {
-			riskLevelSum += riskLevel(x, y, heightMap)
-		}
+	for _, c := range findLowPoints(heightMap) {
+		riskLevelSum += heightMap[c] + 1
 	}
 
 	return riskLevelSum
@@ -75,25 +73,6 @@ func parse(input []string) map[coord]int {
 		}
 	}
 	return heightMap
-}
-
-func riskLevel(x, y int, heightMap map[coord]int) int {
-	height := heightMap[coord{x, y}]
-
-	for _, adjCoord := range []coord{
-		{x, y - 1},
-		{x - 1, y},
-		{x, y + 1},
-		{x + 1, y},
-	} {
-		if adjHeight, ok := heightMap[adjCoord]; ok {
-			if adjHeight <= height {
-				return 0
-			}
-		}
-	}
-
-	return height + 1
 }
 
 func findLowPoints(heightMap map[coord]int) []coord {
