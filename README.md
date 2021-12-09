@@ -11,6 +11,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 6: Lanternfish](2021/day-06)
 - [Day 7: The Treachery of Whales](2021/day-07)
 - [Day 8: Seven Segment Search](2021/day-08)
+- [Day 9: Smoke Basin](2021/day-09)
 
 ## 2020
 - [Day 1: Report Repair](2020/day-01) ([alternative implementation](2020/day-01/alternative))
