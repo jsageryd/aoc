@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"sort"
 )
 
 func main() {
@@ -15,6 +16,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -26,6 +28,24 @@ func part1(input []string) int {
 		}
 	}
 	return score
+}
+
+func part2(input []string) int {
+	scoreMap := map[byte]int{')': 1, ']': 2, '}': 3, '>': 4}
+	var scores []int
+	for _, line := range input {
+		if _, ok := findIncorrectChar(line); !ok {
+			tail := findTail(line)
+			var score int
+			for i := range tail {
+				score *= 5
+				score += scoreMap[tail[i]]
+			}
+			scores = append(scores, score)
+		}
+	}
+	sort.Ints(scores)
+	return scores[len(scores)/2]
 }
 
 func findIncorrectChar(line string) (c byte, ok bool) {
@@ -43,4 +63,22 @@ func findIncorrectChar(line string) (c byte, ok bool) {
 		}
 	}
 	return 0, false
+}
+
+func findTail(line string) string {
+	matching := map[byte]byte{'(': ')', '[': ']', '{': '}', '<': '>'}
+	var stack []byte
+	for i := range line {
+		switch c := line[i]; c {
+		case '(', '[', '{', '<':
+			stack = append(stack, c)
+		case ')', ']', '}', '>':
+			stack = stack[:len(stack)-1]
+		}
+	}
+	var tail []byte
+	for i := len(stack) - 1; i >= 0; i-- {
+		tail = append(tail, matching[stack[i]])
+	}
+	return string(tail)
 }
