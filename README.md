@@ -13,6 +13,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 8: Seven Segment Search](2021/day-08)
 - [Day 9: Smoke Basin](2021/day-09)
 - [Day 10: Syntax Scoring](2021/day-10)
+- [Day 11: Dumbo Octopus](2021/day-11)
 
 ## 2020
 - [Day 1: Report Repair](2020/day-01) ([alternative implementation](2020/day-01/alternative))
