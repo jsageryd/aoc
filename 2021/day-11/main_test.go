@@ -23,6 +23,25 @@ func TestPart1(t *testing.T) {
 	}
 }
 
+func TestPart2(t *testing.T) {
+	input := []string{
+		`5483143223`,
+		`2745854711`,
+		`5264556173`,
+		`6141336146`,
+		`6357385478`,
+		`4167524645`,
+		`2176841721`,
+		`6882881134`,
+		`4846848554`,
+		`5283751526`,
+	}
+
+	if got, want := part2(input), 195; got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
 func TestStep(t *testing.T) {
 	t.Run("Grid 1", func(t *testing.T) {
 		input := []string{

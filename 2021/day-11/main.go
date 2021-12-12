@@ -18,6 +18,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -31,6 +32,19 @@ func part1(input []string) int {
 	}
 
 	return totalFlashes
+}
+
+func part2(input []string) int {
+	g := parse(input)
+
+	var stepCount int
+
+	for g.flashCount() != len(g) {
+		stepCount++
+		step(g)
+	}
+
+	return stepCount
 }
 
 func step(g grid) {
