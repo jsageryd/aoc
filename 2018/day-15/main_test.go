@@ -170,10 +170,10 @@ func TestCave_DistanceMap(t *testing.T) {
 	// 3 #......#
 	// 4 ########
 	wantDistanceMap := map[Coord]int{
-		Coord{3, 2}: 0,
-		Coord{1, 1}: 3, Coord{3, 1}: 1, Coord{4, 1}: 2, Coord{5, 1}: 3, Coord{6, 1}: 4,
-		Coord{1, 2}: 2, Coord{2, 2}: 1, Coord{4, 2}: 1, Coord{6, 2}: 5,
-		Coord{1, 3}: 3, Coord{2, 3}: 2, Coord{3, 3}: 1, Coord{4, 3}: 2, Coord{5, 3}: 3, Coord{6, 3}: 4,
+		{3, 2}: 0,
+		{1, 1}: 3, {3, 1}: 1, {4, 1}: 2, {5, 1}: 3, {6, 1}: 4,
+		{1, 2}: 2, {2, 2}: 1, {4, 2}: 1, {6, 2}: 5,
+		{1, 3}: 3, {2, 3}: 2, {3, 3}: 1, {4, 3}: 2, {5, 3}: 3, {6, 3}: 4,
 	}
 
 	if got, want := len(gotDistanceMap), len(wantDistanceMap); got != want {

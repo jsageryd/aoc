@@ -316,7 +316,7 @@ func (c *Cave) LocationsNearEnemies(me *Unit) []Coord {
 
 	cc := make([]Coord, 0, len(coordMap))
 
-	for c, _ := range coordMap {
+	for c := range coordMap {
 		cc = append(cc, c)
 	}
 

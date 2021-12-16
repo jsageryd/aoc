@@ -112,7 +112,7 @@ func newMap(input []string) *Map {
 
 	m := &Map{
 		m:           map[Coord]byte{},
-		movingWater: map[Coord]struct{}{tap: struct{}{}},
+		movingWater: map[Coord]struct{}{tap: {}},
 	}
 
 	for _, line := range input {

@@ -87,8 +87,8 @@ func TestExtractCarts(t *testing.T) {
   `)), []byte("\n"))
 
 	wantCarts := []*cart{
-		&cart{id: 0, heading: east, x: 2, y: 0},
-		&cart{id: 1, heading: south, x: 9, y: 3},
+		{id: 0, heading: east, x: 2, y: 0},
+		{id: 1, heading: south, x: 9, y: 3},
 	}
 
 	carts := extractCarts(tracks)

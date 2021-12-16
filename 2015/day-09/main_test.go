@@ -6,15 +6,15 @@ import (
 )
 
 var distances = map[string]map[string]int{
-	"London": map[string]int{
+	"London": {
 		"Belfast": 518,
 		"Dublin":  464,
 	},
-	"Dublin": map[string]int{
+	"Dublin": {
 		"Belfast": 141,
 		"London":  464,
 	},
-	"Belfast": map[string]int{
+	"Belfast": {
 		"Dublin": 141,
 		"London": 518,
 	},

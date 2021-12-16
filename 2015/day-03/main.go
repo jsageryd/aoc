@@ -18,7 +18,7 @@ type coord struct {
 }
 
 func findHouses(input []byte, santas int) map[coord]int {
-	m := map[coord]int{coord{0, 0}: santas}
+	m := map[coord]int{{0, 0}: santas}
 
 	var currentSanta int
 	cs := make([]coord, santas)

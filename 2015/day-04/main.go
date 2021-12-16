@@ -18,7 +18,7 @@ func main() {
 	for n1 == 0 || n2 == 0 {
 		n++
 
-		s := md5.Sum(strconv.AppendInt(input[:len(input)], int64(n), 10))
+		s := md5.Sum(strconv.AppendInt(input[:], int64(n), 10))
 		z := leadingHexZeros(s[:])
 
 		if n1 == 0 && z >= 5 {

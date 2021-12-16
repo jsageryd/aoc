@@ -38,7 +38,7 @@ func spiralDistance(target int) int {
 
 func spiralFirstLargerAdjacentSum(target int) int {
 	spiralCells := map[int]map[int]int{
-		0: map[int]int{0: 1},
+		0: {0: 1},
 	}
 
 	adjSum := func(x, y int) int {
