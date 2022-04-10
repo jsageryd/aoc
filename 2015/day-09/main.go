@@ -42,7 +42,7 @@ func findShortestRoute(distances map[string]map[string]int) (route []string, dis
 	route = make([]string, len(locations))
 	sort.Strings(locations)
 
-	for perm(locations) {
+	for ok := true; ok; ok = perm(locations) {
 		distCandidate := 0
 		for i := 0; i < len(locations)-1; i++ {
 			from, to := locations[i], locations[i+1]
@@ -66,7 +66,7 @@ func findLongestRoute(distances map[string]map[string]int) (route []string, dist
 	route = make([]string, len(locations))
 	sort.Strings(locations)
 
-	for perm(locations) {
+	for ok := true; ok; ok = perm(locations) {
 		distCandidate := 0
 		for i := 0; i < len(locations)-1; i++ {
 			from, to := locations[i], locations[i+1]

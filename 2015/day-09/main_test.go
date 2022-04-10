@@ -23,7 +23,7 @@ var distances = map[string]map[string]int{
 func TestFindShortestRoute(t *testing.T) {
 	gotRoute, gotDistance := findShortestRoute(distances)
 
-	wantRoute := []string{"London", "Dublin", "Belfast"}
+	wantRoute := []string{"Belfast", "Dublin", "London"}
 	wantDistance := 605
 
 	if fmt.Sprint(gotRoute) != fmt.Sprint(wantRoute) || gotDistance != wantDistance {

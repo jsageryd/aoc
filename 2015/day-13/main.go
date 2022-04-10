@@ -35,7 +35,7 @@ func optimalTotalHappiness(attendees []string, happiness map[string]map[string]i
 
 	// this tests more permutations than it needs to, but I already had the perm
 	// function and it's fast enough.
-	for perm(attendees) {
+	for ok := true; ok; ok = perm(attendees) {
 		var total int
 
 		for i := range attendees {
