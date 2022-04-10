@@ -21,6 +21,13 @@ func main() {
 	totalHappiness := optimalTotalHappiness(attendees, happiness)
 
 	fmt.Printf("Part 1: %d\n", totalHappiness)
+
+	attendees = append(attendees, "self")
+	sort.Strings(attendees)
+
+	totalHappinessWithSelf := optimalTotalHappiness(attendees, happiness)
+
+	fmt.Printf("Part 2: %d\n", totalHappinessWithSelf)
 }
 
 func optimalTotalHappiness(attendees []string, happiness map[string]map[string]int) int {
