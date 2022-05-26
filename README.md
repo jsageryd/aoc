@@ -85,3 +85,4 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 11: Corporate Policy](2015/day-11)
 - [Day 12: JSAbacusFramework.io](2015/day-12)
 - [Day 13: Knights of the Dinner Table](2015/day-13)
+- [Day 14: Reindeer Olympics](2015/day-14)
