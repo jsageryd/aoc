@@ -34,6 +34,41 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", furthestDistance(rs, 2503))
+	fmt.Printf("Part 2: %d\n", highestScore(rs, 2503))
+}
+
+func highestScore(rs []reindeer, seconds int) (score int) {
+	scores := make(map[reindeer]int)
+
+	for s := 1; s <= seconds; s++ {
+		l := leader(rs, s)
+		scores[l]++
+	}
+
+	var maxScore int
+
+	for _, s := range scores {
+		if s > maxScore {
+			maxScore = s
+		}
+	}
+
+	return maxScore
+}
+
+func leader(rs []reindeer, seconds int) reindeer {
+	var lead reindeer
+	var leadDistance int
+
+	for _, r := range rs {
+		distance := flyReindeer(r, seconds)
+		if distance > leadDistance {
+			lead = r
+			leadDistance = distance
+		}
+	}
+
+	return lead
 }
 
 func furthestDistance(rs []reindeer, seconds int) (distance int) {
