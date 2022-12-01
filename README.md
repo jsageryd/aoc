@@ -2,6 +2,9 @@
 
 My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 
+## 2022
+- [Day 1: Calorie Counting](2022/day-01)
+
 ## 2021
 - [Day 1: Sonar Sweep](2021/day-01)
 - [Day 2: Dive!](2021/day-02)
