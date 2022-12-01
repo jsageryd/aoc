@@ -20,7 +20,17 @@ func TestMaxCalories(t *testing.T) {
 		"10000",
 	}
 
-	if got, want := maxCalories(input), 24000; got != want {
-		t.Errorf("got %d, want %d", got, want)
+	first, second, third := maxCalories(input)
+
+	if got, want := first, 24000; got != want {
+		t.Errorf("first is %d, want %d", got, want)
+	}
+
+	if got, want := second, 11000; got != want {
+		t.Errorf("second is %d, want %d", got, want)
+	}
+
+	if got, want := third, 10000; got != want {
+		t.Errorf("third is %d, want %d", got, want)
 	}
 }

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 	"strconv"
 )
 
@@ -16,14 +17,19 @@ func main() {
 		input = append(input, scanner.Text())
 	}
 
-	fmt.Printf("Part 1: %d\n", maxCalories(input))
+	first, second, third := maxCalories(input)
+
+	fmt.Printf("Part 1: %d\n", first)
+	fmt.Printf("Part 2: %d\n", first+second+third)
 }
 
-func maxCalories(input []string) int {
-	var cur, max int
+func maxCalories(input []string) (first, second, third int) {
+	var cur int
+	var sums []int
 
 	for _, line := range input {
 		if line == "" {
+			sums = append(sums, cur)
 			cur = 0
 			continue
 		}
@@ -34,11 +40,11 @@ func maxCalories(input []string) int {
 		}
 
 		cur += cal
-
-		if cur > max {
-			max = cur
-		}
 	}
 
-	return max
+	sums = append(sums, cur)
+
+	sort.Sort(sort.Reverse(sort.IntSlice(sums)))
+
+	return sums[0], sums[1], sums[2]
 }
