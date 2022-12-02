@@ -14,6 +14,18 @@ func TestTotalScore(t *testing.T) {
 	}
 }
 
+func TestTotalScore2(t *testing.T) {
+	input := []string{
+		"A Y",
+		"B X",
+		"C Z",
+	}
+
+	if got, want := totalScore2(input), 12; got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
 func TestPlay(t *testing.T) {
 	for n, tc := range []struct {
 		ours, theirs string

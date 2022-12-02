@@ -16,6 +16,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", totalScore(input))
+	fmt.Printf("Part 2: %d\n", totalScore2(input))
 }
 
 func totalScore(input []string) int {
@@ -30,6 +31,32 @@ func totalScore(input []string) int {
 	for _, line := range input {
 		theirs, ours, _ := strings.Cut(line, " ")
 		totalScore += play(xyzToAbc[ours], theirs)
+	}
+
+	return totalScore
+}
+
+func totalScore2(input []string) int {
+	theirsAndOutcomeToOurs := map[string]string{
+		"AX": "C", // rock + lose => scissors
+		"BX": "A", // paper + lose => rock
+		"CX": "B", // scissors + lose => paper
+
+		"AY": "A", // rock + draw => rock
+		"BY": "B", // paper + draw => paper
+		"CY": "C", // scissors + draw => scissors
+
+		"AZ": "B", // rock + win => paper
+		"BZ": "C", // paper + win => scissors
+		"CZ": "A", // scissors + win => rock
+	}
+
+	var totalScore int
+
+	for _, line := range input {
+		theirs, outcome, _ := strings.Cut(line, " ")
+		ours := theirsAndOutcomeToOurs[theirs+outcome]
+		totalScore += play(ours, theirs)
 	}
 
 	return totalScore
