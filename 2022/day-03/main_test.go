@@ -17,6 +17,21 @@ func TestPart1(t *testing.T) {
 	}
 }
 
+func TestPart2(t *testing.T) {
+	input := []string{
+		"vJrwpWtwJgWrhcsFMMfFFhFp",
+		"jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
+		"PmmdzqPrVvPwwTWBwg",
+		"wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn",
+		"ttgJtRGJQctTZtZT",
+		"CrZsJsPPZsGzwwsLwLmpwMDw",
+	}
+
+	if got, want := part2(input), 70; got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
 func TestDuplicateItem(t *testing.T) {
 	for n, tc := range []struct {
 		items     string
@@ -41,6 +56,30 @@ func TestSplit(t *testing.T) {
 
 	if gotA != wantA || gotB != wantB {
 		t.Errorf("got %q, %q, want %q, %q", gotA, gotB, wantA, wantB)
+	}
+}
+
+func TestCommonItem(t *testing.T) {
+	for n, tc := range []struct {
+		a, b, c string
+		common  string
+	}{
+		{
+			a:      "vJrwpWtwJgWrhcsFMMfFFhFp",
+			b:      "jqHRNqRjqzjGDLGLrsFMfFZSrLrFZsSL",
+			c:      "PmmdzqPrVvPwwTWBwg",
+			common: "r",
+		},
+		{
+			a:      "wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn",
+			b:      "ttgJtRGJQctTZtZT",
+			c:      "CrZsJsPPZsGzwwsLwLmpwMDw",
+			common: "Z",
+		},
+	} {
+		if got, want := commonItem(tc.a, tc.b, tc.c), tc.common; got != want {
+			t.Errorf("[%d] commonItem(%q, %q, %q) = %q, want %q", n, tc.a, tc.b, tc.c, got, want)
+		}
 	}
 }
 

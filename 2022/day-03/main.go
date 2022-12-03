@@ -15,6 +15,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -22,6 +23,16 @@ func part1(input []string) int {
 
 	for _, items := range input {
 		sum += priority(duplicateItem(items))
+	}
+
+	return sum
+}
+
+func part2(input []string) int {
+	var sum int
+
+	for n := 0; n < len(input); n += 3 {
+		sum += priority(commonItem(input[n], input[n+1], input[n+2]))
 	}
 
 	return sum
@@ -41,6 +52,19 @@ func duplicateItem(items string) string {
 
 func split(items string) (a, b string) {
 	return items[:len(items)/2], items[len(items)/2:]
+}
+
+func commonItem(a, b, c string) string {
+	for _, aa := range a {
+		for _, bb := range b {
+			for _, cc := range c {
+				if aa == bb && bb == cc {
+					return string(aa)
+				}
+			}
+		}
+	}
+	return ""
 }
 
 func priority(item string) int {
