@@ -6,6 +6,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 1: Calorie Counting](2022/day-01)
 - [Day 2: Rock Paper Scissors](2022/day-02)
 - [Day 3: Rucksack Reorganization](2022/day-03)
+- [Day 4: Camp Cleanup](2022/day-04)
 
 ## 2021
 - [Day 1: Sonar Sweep](2021/day-01)
