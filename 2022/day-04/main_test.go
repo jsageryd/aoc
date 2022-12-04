@@ -27,6 +27,30 @@ func TestFullyOverlappingPairs(t *testing.T) {
 	}
 }
 
+func TestPartiallyOverlappingPairs(t *testing.T) {
+	input := []string{
+		"2-4,6-8",
+		"2-3,4-5",
+		"5-7,7-9",
+		"2-8,3-7",
+		"6-6,4-6",
+		"2-6,4-8",
+	}
+
+	gotPairs := partiallyOverlappingPairs(input)
+
+	wantPairs := []string{
+		"5-7,7-9",
+		"2-8,3-7",
+		"6-6,4-6",
+		"2-6,4-8",
+	}
+
+	if fmt.Sprint(gotPairs) != fmt.Sprint(wantPairs) {
+		t.Errorf("got %v, want %v", gotPairs, wantPairs)
+	}
+}
+
 func TestParsePair(t *testing.T) {
 	gotA, gotB := parsePair("1-11,2-22")
 
@@ -56,6 +80,33 @@ func TestRang_Contains(t *testing.T) {
 	} {
 		if got, want := tc.rangeA.contains(tc.rangeB), tc.contains; got != want {
 			t.Errorf("[%d] %v.contains(%v) = %t, want %t", n, tc.rangeA, tc.rangeB, got, want)
+		}
+	}
+}
+
+func TestRang_Overlaps(t *testing.T) {
+	for n, tc := range []struct {
+		rangeA, rangeB rang
+		overlaps       bool
+	}{
+		{rang{2, 8}, rang{3, 7}, true},
+		{rang{2, 8}, rang{2, 2}, true},
+		{rang{2, 8}, rang{2, 3}, true},
+		{rang{2, 8}, rang{8, 8}, true},
+		{rang{2, 8}, rang{7, 8}, true},
+		{rang{2, 8}, rang{1, 3}, true},
+		{rang{2, 8}, rang{7, 9}, true},
+		{rang{2, 8}, rang{0, 1}, false},
+		{rang{2, 8}, rang{9, 10}, false},
+		{rang{2, 8}, rang{1, 1}, false},
+		{rang{2, 8}, rang{9, 9}, false},
+	} {
+		if got, want := tc.rangeA.overlaps(tc.rangeB), tc.overlaps; got != want {
+			t.Errorf("[%d.1] %v.overlaps(%v) = %t, want %t", n, tc.rangeA, tc.rangeB, got, want)
+		}
+
+		if got, want := tc.rangeB.overlaps(tc.rangeA), tc.overlaps; got != want {
+			t.Errorf("[%d.2] %v.overlaps(%v) = %t, want %t", n, tc.rangeB, tc.rangeA, got, want)
 		}
 	}
 }
