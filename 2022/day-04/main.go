@@ -62,6 +62,5 @@ func (r rang) contains(other rang) bool {
 }
 
 func (r rang) overlaps(other rang) bool {
-	return !(r.from < other.from && r.to < other.from) &&
-		!(r.to > other.to && r.from > other.to)
+	return r.from <= other.to && r.to >= other.from
 }
