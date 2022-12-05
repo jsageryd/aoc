@@ -111,9 +111,9 @@ func (s *stack) push(item string) {
 	*s = append(*s, item)
 }
 
-func (s *stack) pop() string {
-	*s = (*s)[:len(*s)-1]
-	return (*s)[:len(*s)+1][len(*s)]
+func (s *stack) pop() (item string) {
+	item, *s = (*s)[len(*s)-1], (*s)[:len(*s)-1]
+	return item
 }
 
 type step struct {
