@@ -15,12 +15,27 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %s\n", part1(input))
+	fmt.Printf("Part 2: %s\n", part2(input))
 }
 
 func part1(input []string) string {
 	stacks, steps := parseInput(input)
 
 	moveCrates(stacks, steps)
+
+	s := make([]rune, len(stacks))
+
+	for idx, stack := range stacks {
+		s[idx-1] = rune(stack.pop()[0])
+	}
+
+	return string(s)
+}
+
+func part2(input []string) string {
+	stacks, steps := parseInput(input)
+
+	moveCrates2(stacks, steps)
 
 	s := make([]rune, len(stacks))
 
@@ -75,6 +90,24 @@ func moveCrates(stacks map[int]stack, steps []step) {
 
 		for n := 0; n < step.count; n++ {
 			to.push(from.pop())
+		}
+
+		stacks[step.from], stacks[step.to] = from, to
+	}
+}
+
+func moveCrates2(stacks map[int]stack, steps []step) {
+	for _, step := range steps {
+		from, to := stacks[step.from], stacks[step.to]
+
+		var buf stack
+
+		for n := 0; n < step.count; n++ {
+			buf.push(from.pop())
+		}
+
+		for n := 0; n < step.count; n++ {
+			to.push(buf.pop())
 		}
 
 		stacks[step.from], stacks[step.to] = from, to

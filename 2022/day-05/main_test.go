@@ -23,6 +23,24 @@ func TestPart1(t *testing.T) {
 	}
 }
 
+func TestPart2(t *testing.T) {
+	input := []string{
+		"    [D]",
+		"[N] [C]",
+		"[Z] [M] [P]",
+		" 1   2   3",
+		"",
+		"move 1 from 2 to 1",
+		"move 3 from 1 to 3",
+		"move 2 from 2 to 1",
+		"move 1 from 1 to 2",
+	}
+
+	if got, want := part2(input), "MCD"; got != want {
+		t.Errorf("got %q, want %q", got, want)
+	}
+}
+
 func TestParseInput(t *testing.T) {
 	input := []string{
 		"    [D]",
@@ -123,6 +141,33 @@ func TestMoveCrates(t *testing.T) {
 		1: stack{"C"},
 		2: stack{"M"},
 		3: stack{"P", "D", "N", "Z"},
+	}
+
+	if fmt.Sprint(crates) != fmt.Sprint(wantCrates) {
+		t.Errorf("got %v, want %v", crates, wantCrates)
+	}
+}
+
+func TestMoveCrates2(t *testing.T) {
+	crates := map[int]stack{
+		1: stack{"Z", "N"},
+		2: stack{"M", "C", "D"},
+		3: stack{"P"},
+	}
+
+	steps := []step{
+		{count: 1, from: 2, to: 1},
+		{count: 3, from: 1, to: 3},
+		{count: 2, from: 2, to: 1},
+		{count: 1, from: 1, to: 2},
+	}
+
+	moveCrates2(crates, steps)
+
+	wantCrates := map[int]stack{
+		1: stack{"M"},
+		2: stack{"C"},
+		3: stack{"P", "Z", "N", "D"},
 	}
 
 	if fmt.Sprint(crates) != fmt.Sprint(wantCrates) {
