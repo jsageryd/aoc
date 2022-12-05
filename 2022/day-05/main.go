@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -23,13 +24,13 @@ func part1(input []string) string {
 
 	moveCrates(stacks, steps)
 
-	s := make([]rune, len(stacks))
+	var s string
 
-	for idx, stack := range stacks {
-		s[idx-1] = rune(stack.pop()[0])
+	for _, stack := range stacks {
+		s += stack.pop()
 	}
 
-	return string(s)
+	return s
 }
 
 func part2(input []string) string {
@@ -37,16 +38,16 @@ func part2(input []string) string {
 
 	moveCrates2(stacks, steps)
 
-	s := make([]rune, len(stacks))
+	var s string
 
-	for idx, stack := range stacks {
-		s[idx-1] = rune(stack.pop()[0])
+	for _, stack := range stacks {
+		s += stack.pop()
 	}
 
-	return string(s)
+	return s
 }
 
-func parseInput(input []string) (stacks map[int]stack, steps []step) {
+func parseInput(input []string) (stacks []stack, steps []step) {
 	for n := range input {
 		if input[n] == "" {
 			return parseStacks(input[:n]), parseSteps(input[n+1:])
@@ -55,16 +56,14 @@ func parseInput(input []string) (stacks map[int]stack, steps []step) {
 	return nil, nil
 }
 
-func parseStacks(stacksStrs []string) map[int]stack {
-	stacks := make(map[int]stack)
+func parseStacks(stacksStrs []string) []stack {
+	stackCount := len(strings.Fields(stacksStrs[len(stacksStrs)-1]))
+	stacks := make([]stack, stackCount)
 
 	for n := len(stacksStrs) - 1; n >= 0; n-- {
 		for m := range stacksStrs[n] {
 			if stacksStrs[n][m] == '[' {
-				idx := m/4 + 1
-				s := stacks[idx]
-				s.push(string(stacksStrs[n][m+1]))
-				stacks[idx] = s
+				stacks[m/4].push(string(stacksStrs[n][m+1]))
 			}
 		}
 	}
@@ -84,33 +83,25 @@ func parseSteps(stepStrs []string) []step {
 	return steps
 }
 
-func moveCrates(stacks map[int]stack, steps []step) {
+func moveCrates(stacks []stack, steps []step) {
 	for _, step := range steps {
-		from, to := stacks[step.from], stacks[step.to]
-
 		for n := 0; n < step.count; n++ {
-			to.push(from.pop())
+			stacks[step.to-1].push(stacks[step.from-1].pop())
 		}
-
-		stacks[step.from], stacks[step.to] = from, to
 	}
 }
 
-func moveCrates2(stacks map[int]stack, steps []step) {
+func moveCrates2(stacks []stack, steps []step) {
 	for _, step := range steps {
-		from, to := stacks[step.from], stacks[step.to]
-
 		var buf stack
 
 		for n := 0; n < step.count; n++ {
-			buf.push(from.pop())
+			buf.push(stacks[step.from-1].pop())
 		}
 
 		for n := 0; n < step.count; n++ {
-			to.push(buf.pop())
+			stacks[step.to-1].push(buf.pop())
 		}
-
-		stacks[step.from], stacks[step.to] = from, to
 	}
 }
 
