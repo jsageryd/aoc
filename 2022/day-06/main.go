@@ -14,14 +14,16 @@ func main() {
 }
 
 func startOfMessage(input string, markerLength int) int {
+next:
 	for n := markerLength - 1; n < len(input); n++ {
-		m := make(map[byte]struct{})
 		for i := 0; i < markerLength; i++ {
-			m[input[n-i]] = struct{}{}
+			for j := 0; j < markerLength; j++ {
+				if i != j && input[n-i] == input[n-j] {
+					continue next
+				}
+			}
 		}
-		if len(m) == markerLength {
-			return n + 1
-		}
+		return n + 1
 	}
 	return 0
 }
