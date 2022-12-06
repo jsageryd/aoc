@@ -8,6 +8,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 3: Rucksack Reorganization](2022/day-03)
 - [Day 4: Camp Cleanup](2022/day-04)
 - [Day 5: Supply Stacks](2022/day-05)
+- [Day 6: Tuning Trouble](2022/day-06)
 
 ## 2021
 - [Day 1: Sonar Sweep](2021/day-01)
