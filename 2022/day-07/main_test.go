@@ -34,6 +34,12 @@ func TestPart1(t *testing.T) {
 	}
 }
 
+func TestPart2(t *testing.T) {
+	if got, want := part2(input), 24933642; got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
 func TestEntry_TotalSize(t *testing.T) {
 	entry := &Entry{
 		children: []*Entry{

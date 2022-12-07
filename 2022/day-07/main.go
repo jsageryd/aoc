@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -17,6 +18,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -38,6 +40,43 @@ func part1(input []string) int {
 	rec(buildTree(input))
 
 	return sum
+}
+
+func part2(input []string) int {
+	const totalSpace = 70000000
+	const spaceNeeded = 30000000
+
+	root := buildTree(input)
+
+	freeSpace := totalSpace - root.totalSize()
+	deleteAtLeast := spaceNeeded - freeSpace
+
+	var allDirs []*Entry
+
+	var rec func(cur *Entry)
+
+	rec = func(cur *Entry) {
+		if cur.typ == "dir" {
+			allDirs = append(allDirs, cur)
+			for _, c := range cur.children {
+				rec(c)
+			}
+		}
+	}
+
+	rec(buildTree(input))
+
+	sort.Slice(allDirs, func(i, j int) bool {
+		return allDirs[i].totalSize() < allDirs[j].totalSize()
+	})
+
+	for _, entry := range allDirs {
+		if s := entry.totalSize(); s >= deleteAtLeast {
+			return s
+		}
+	}
+
+	return 0
 }
 
 type Entry struct {
