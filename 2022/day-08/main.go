@@ -16,6 +16,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -30,6 +31,20 @@ func part1(input []string) int {
 	}
 
 	return count
+}
+
+func part2(input []string) int {
+	var max int
+
+	for y := range input {
+		for x := range input[y] {
+			if s := scenicScore(input, x, y); s > max {
+				max = s
+			}
+		}
+	}
+
+	return max
 }
 
 func visible(input []string, x, y int) bool {
@@ -93,4 +108,61 @@ func visible(input []string, x, y int) bool {
 	}
 
 	return false
+}
+
+func scenicScore(input []string, x, y int) int {
+	height := func(x, y int) int {
+		n, _ := strconv.Atoi(string(input[y][x]))
+		return n
+	}
+
+	score := 1
+
+	h := height(x, y)
+
+	{
+		var s int
+		for xx := x - 1; xx >= 0; xx-- {
+			s++
+			if height(xx, y) >= h {
+				break
+			}
+		}
+		score *= s
+	}
+
+	{
+		var s int
+		for xx := x + 1; xx < len(input[y]); xx++ {
+			s++
+			if height(xx, y) >= h {
+				break
+			}
+		}
+		score *= s
+	}
+
+	{
+		var s int
+		for yy := y - 1; yy >= 0; yy-- {
+			s++
+			if height(x, yy) >= h {
+				break
+			}
+		}
+		score *= s
+	}
+
+	{
+		var s int
+		for yy := y + 1; yy < len(input); yy++ {
+			s++
+			if height(x, yy) >= h {
+				break
+			}
+		}
+		score *= s
+	}
+
+	return score
 }

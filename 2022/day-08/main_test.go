@@ -16,6 +16,20 @@ func TestPart1(t *testing.T) {
 	}
 }
 
+func TestPart2(t *testing.T) {
+	input := []string{
+		"30373",
+		"25512",
+		"65332",
+		"33549",
+		"35390",
+	}
+
+	if got, want := part2(input), 8; got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
 func TestVisible(t *testing.T) {
 	input := []string{
 		"30373",
@@ -45,6 +59,28 @@ func TestVisible(t *testing.T) {
 	} {
 		if got, want := visible(input, tc.x, tc.y), tc.visible; got != want {
 			t.Errorf("[%d] (%d, %d) got %t, want %t", n, tc.x, tc.y, got, want)
+		}
+	}
+}
+
+func TestScenicScore(t *testing.T) {
+	input := []string{
+		"30373",
+		"25512",
+		"65332",
+		"33549",
+		"35390",
+	}
+
+	for n, tc := range []struct {
+		x, y  int
+		score int
+	}{
+		{x: 2, y: 1, score: 4},
+		{x: 2, y: 3, score: 8},
+	} {
+		if got, want := scenicScore(input, tc.x, tc.y), tc.score; got != want {
+			t.Errorf("[%d] (%d, %d) got %d, want %d", n, tc.x, tc.y, got, want)
 		}
 	}
 }
