@@ -82,45 +82,41 @@ func TestCoord_Follow(t *testing.T) {
 	}
 }
 
-func TestCoord_Near(t *testing.T) {
+func TestChebyshevDistance(t *testing.T) {
 	for n, tc := range []struct {
-		c     coord
-		other coord
-		near  bool
+		a, b     coord
+		distance int
 	}{
-		// Same spot
-		{coord{0, 0}, coord{0, 0}, true},
+		{coord{0, 0}, coord{0, 0}, 0},
 
-		// Left/right
-		{coord{0, 0}, coord{1, 0}, true},
-		{coord{0, 0}, coord{2, 0}, false},
-		{coord{0, 0}, coord{-1, 0}, true},
-		{coord{0, 0}, coord{-2, 0}, false},
+		{coord{0, 0}, coord{0, -1}, 1},
+		{coord{0, 0}, coord{-1, -1}, 1},
+		{coord{0, 0}, coord{-1, 0}, 1},
+		{coord{0, 0}, coord{-1, 1}, 1},
+		{coord{0, 0}, coord{0, 1}, 1},
+		{coord{0, 0}, coord{1, 1}, 1},
+		{coord{0, 0}, coord{1, 0}, 1},
+		{coord{0, 0}, coord{1, -1}, 1},
 
-		// Up/down
-		{coord{0, 0}, coord{0, 1}, true},
-		{coord{0, 0}, coord{0, 2}, false},
-		{coord{0, 0}, coord{0, -1}, true},
-		{coord{0, 0}, coord{0, -2}, false},
-
-		// Diagonal
-		{coord{0, 0}, coord{1, 1}, true},
-		{coord{0, 0}, coord{2, 2}, false},
-		{coord{0, 0}, coord{-1, -1}, true},
-		{coord{0, 0}, coord{-2, -2}, false},
-
-		// Diagonal plus one
-		{coord{0, 0}, coord{2, 1}, false},
-		{coord{0, 0}, coord{2, -1}, false},
-		{coord{0, 0}, coord{-2, -1}, false},
-		{coord{0, 0}, coord{-2, 1}, false},
-		{coord{0, 0}, coord{1, 2}, false},
-		{coord{0, 0}, coord{-1, 2}, false},
-		{coord{0, 0}, coord{-1, -2}, false},
-		{coord{0, 0}, coord{1, -2}, false},
+		{coord{0, 0}, coord{0, -2}, 2},
+		{coord{0, 0}, coord{-1, -2}, 2},
+		{coord{0, 0}, coord{-2, -2}, 2},
+		{coord{0, 0}, coord{-2, -1}, 2},
+		{coord{0, 0}, coord{-2, 0}, 2},
+		{coord{0, 0}, coord{-2, 1}, 2},
+		{coord{0, 0}, coord{-2, 2}, 2},
+		{coord{0, 0}, coord{-1, 2}, 2},
+		{coord{0, 0}, coord{0, 2}, 2},
+		{coord{0, 0}, coord{1, 2}, 2},
+		{coord{0, 0}, coord{2, 2}, 2},
+		{coord{0, 0}, coord{2, 1}, 2},
+		{coord{0, 0}, coord{2, 0}, 2},
+		{coord{0, 0}, coord{2, -1}, 2},
+		{coord{0, 0}, coord{2, -2}, 2},
+		{coord{0, 0}, coord{1, -2}, 2},
 	} {
-		if got, want := tc.c.near(tc.other), tc.near; got != want {
-			t.Errorf("[%d] %v - %v got %t, want %t", n, tc.c, tc.other, got, want)
+		if got, want := chebyshevDistance(tc.a, tc.b), tc.distance; got != want {
+			t.Errorf("[%d] chebyshevDistance(%v, %v) = %d, want %d", n, tc.a, tc.b, got, want)
 		}
 	}
 }

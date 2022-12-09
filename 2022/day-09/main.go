@@ -56,7 +56,7 @@ func (c *coord) move(direction string) {
 }
 
 func (c *coord) follow(other coord) {
-	for !c.near(other) {
+	for chebyshevDistance(*c, other) > 1 {
 		switch {
 		case c.x < other.x:
 			c.x++
@@ -73,7 +73,19 @@ func (c *coord) follow(other coord) {
 	}
 }
 
-func (c *coord) near(other coord) bool {
+// chebyshevDistance returns the Chebyshev distance between the given
+// coordinates.
+//
+// Chebyshev distances from center point:
+//
+//	22222
+//	21112
+//	21012
+//	21112
+//	22222
+//
+// https://en.wikipedia.org/wiki/Chebyshev_distance
+func chebyshevDistance(a, b coord) int {
 	abs := func(n int) int {
 		if n < 0 {
 			return -n
@@ -81,5 +93,12 @@ func (c *coord) near(other coord) bool {
 		return n
 	}
 
-	return abs(c.x-other.x) < 2 && abs(c.y-other.y) < 2
+	max := func(a, b int) int {
+		if a > b {
+			return a
+		}
+		return b
+	}
+
+	return max(abs(b.x-a.x), abs(b.y-a.y))
 }
