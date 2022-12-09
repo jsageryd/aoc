@@ -11,6 +11,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 6: Tuning Trouble](2022/day-06)
 - [Day 7: No Space Left On Device](2022/day-07)
 - [Day 8: Treetop Tree House](2022/day-08)
+- [Day 9: Rope Bridge](2022/day-09)
 
 ## 2021
 - [Day 1: Sonar Sweep](2021/day-01)
