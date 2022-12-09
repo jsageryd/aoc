@@ -2,32 +2,17 @@ package main
 
 import "testing"
 
-func TestPart1(t *testing.T) {
-	input := []string{
-		"R 4",
-		"U 4",
-		"L 3",
-		"D 1",
-		"R 4",
-		"D 1",
-		"L 5",
-		"R 2",
-	}
-
-	if got, want := part1(input), 13; got != want {
-		t.Errorf("got %d, want %d", got, want)
-	}
-}
-
-func TestPart2(t *testing.T) {
+func TestMove(t *testing.T) {
 	for n, tc := range []struct {
-		input []string
-		want  int
+		input     []string
+		knotCount int
+		want      int
 	}{
-		{[]string{"R 4", "U 4", "L 3", "D 1", "R 4", "D 1", "L 5", "R 2"}, 1},
-		{[]string{"R 5", "U 8", "L 8", "D 3", "R 17", "D 10", "L 25", "U 20"}, 36},
+		{[]string{"R 4", "U 4", "L 3", "D 1", "R 4", "D 1", "L 5", "R 2"}, 2, 13},
+		{[]string{"R 4", "U 4", "L 3", "D 1", "R 4", "D 1", "L 5", "R 2"}, 10, 1},
+		{[]string{"R 5", "U 8", "L 8", "D 3", "R 17", "D 10", "L 25", "U 20"}, 10, 36},
 	} {
-		if got, want := part2(tc.input), tc.want; got != want {
+		if got, want := move(tc.input, tc.knotCount), tc.want; got != want {
 			t.Errorf("[%d] got %d, want %d", n, got, want)
 		}
 	}
