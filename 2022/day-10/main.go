@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"os"
 	"strconv"
@@ -17,6 +18,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2:\n%s\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -31,6 +33,29 @@ func part1(input []string) int {
 	})
 
 	return sum
+}
+
+func part2(input []string) string {
+	const w, h = 40, 6
+
+	screen := make([][]byte, h)
+	for y := 0; y < h; y++ {
+		screen[y] = make([]byte, w)
+	}
+
+	c := newCPU(input)
+
+	c.run(func() {
+		x, y := (c.cycle-1)%w, (c.cycle-1)/w
+
+		if c.x-1 <= x && x <= c.x+1 {
+			screen[y][x] = '#'
+		} else {
+			screen[y][x] = '.'
+		}
+	})
+
+	return string(bytes.Join(screen, []byte{'\n'}))
 }
 
 type cpu struct {
