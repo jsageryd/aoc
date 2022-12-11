@@ -13,6 +13,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 8: Treetop Tree House](2022/day-08)
 - [Day 9: Rope Bridge](2022/day-09)
 - [Day 10: Cathode-Ray Tube](2022/day-10)
+- [Day 11: Monkey in the Middle](2022/day-11)
 
 ## 2021
 - [Day 1: Sonar Sweep](2021/day-01)
