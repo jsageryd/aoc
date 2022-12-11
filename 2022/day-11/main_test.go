@@ -42,6 +42,12 @@ func TestPart1(t *testing.T) {
 	}
 }
 
+func TestPart2(t *testing.T) {
+	if got, want := part2(input), 2713310158; got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
 func TestParseMonkeys(t *testing.T) {
 	gotMonkeys := parseMonkeys(input)
 

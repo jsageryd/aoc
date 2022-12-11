@@ -19,6 +19,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -27,7 +28,34 @@ func part1(input []string) int {
 	for n := 0; n < 20; n++ {
 		for _, m := range monkeys {
 			for len(m.items) > 0 {
-				m.inspectAndThrow()
+				m.inspectAndThrow(func(worry *int) {
+					*worry /= 3
+				})
+			}
+		}
+	}
+
+	sort.Slice(monkeys, func(i, j int) bool {
+		return monkeys[i].itemsInspected > monkeys[j].itemsInspected
+	})
+
+	return monkeys[0].itemsInspected * monkeys[1].itemsInspected
+}
+
+func part2(input []string) int {
+	monkeys := parseMonkeys(input)
+
+	div := 1
+	for _, m := range monkeys {
+		div *= m.testDiv
+	}
+
+	for n := 0; n < 10000; n++ {
+		for _, m := range monkeys {
+			for len(m.items) > 0 {
+				m.inspectAndThrow(func(worry *int) {
+					*worry %= div
+				})
 			}
 		}
 	}
@@ -88,7 +116,7 @@ type monkey struct {
 	itemsInspected int
 }
 
-func (m *monkey) inspectAndThrow() {
+func (m *monkey) inspectAndThrow(manageWorry func(worry *int)) {
 	if len(m.items) == 0 {
 		return
 	}
@@ -117,7 +145,7 @@ func (m *monkey) inspectAndThrow() {
 
 	m.itemsInspected++
 
-	item /= 3
+	manageWorry(&item)
 
 	var nextMonkey *monkey
 
