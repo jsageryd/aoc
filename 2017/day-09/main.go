@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 )
 
 func main() {
-	input, _ := ioutil.ReadAll(os.Stdin)
+	input, _ := io.ReadAll(os.Stdin)
 
 	score, garbage := scoreAndGarbage(input)
 

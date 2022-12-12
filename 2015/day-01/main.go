@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 )
 
 func main() {
-	input, _ := ioutil.ReadAll(os.Stdin)
+	input, _ := io.ReadAll(os.Stdin)
 
 	fmt.Printf("Part 1: %d\n", floor(input))
 	fmt.Printf("Part 2: %d\n", firstBasementPosition(input))

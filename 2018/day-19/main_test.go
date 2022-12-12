@@ -1,7 +1,7 @@
 package main
 
 import (
-	"io/ioutil"
+	"os"
 	"strings"
 	"testing"
 )
@@ -30,7 +30,7 @@ func TestRun(t *testing.T) {
 }
 
 func BenchmarkRun(b *testing.B) {
-	input, _ := ioutil.ReadFile("input")
+	input, _ := os.ReadFile("input")
 	programStrs := strings.Split(string(input), "\n")
 
 	for n := 0; n < b.N; n++ {

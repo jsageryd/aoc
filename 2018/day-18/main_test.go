@@ -1,7 +1,7 @@
 package main
 
 import (
-	"io/ioutil"
+	"io"
 	"os"
 	"strings"
 	"testing"
@@ -203,7 +203,7 @@ func TestStep(t *testing.T) {
 func BenchmarkStep(b *testing.B) {
 	f, _ := os.Open("input")
 	defer f.Close()
-	input, _ := ioutil.ReadAll(f)
+	input, _ := io.ReadAll(f)
 	inputArea := stringToArea(string(input))
 
 	for n := 0; n < b.N; n++ {

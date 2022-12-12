@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"sort"
 	"strings"
@@ -18,6 +19,14 @@ func main() {
 	}
 
 	root := readTree(input)
+
+	outputDot := flag.Bool("dot", false, "Output GraphViz dot")
+	flag.Parse()
+
+	if *outputDot {
+		fmt.Println(dot(root))
+		return
+	}
 
 	fmt.Printf("Part 1: %d\n", sumOfMetadata(root))
 	fmt.Printf("Part 2: %d\n", valueOfRootNode(root))

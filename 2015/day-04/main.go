@@ -4,13 +4,13 @@ import (
 	"bytes"
 	"crypto/md5"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"os"
 	"strconv"
 )
 
 func main() {
-	input, _ := ioutil.ReadAll(os.Stdin)
+	input, _ := io.ReadAll(os.Stdin)
 	input = bytes.TrimSpace(input)
 
 	var n, n1, n2 int
