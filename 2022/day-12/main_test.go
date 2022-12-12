@@ -46,8 +46,8 @@ func TestAStar(t *testing.T) {
 		###*..
 		.***..
 		.*###.
-		.**...
-		..***g
+		.****.
+		....*g
 	*/
 
 	grid := []string{
@@ -109,7 +109,7 @@ func TestAStar(t *testing.T) {
 	wantPath := []coord{
 		{0, 0}, {1, 0}, {2, 0}, {3, 0}, {3, 1},
 		{3, 2}, {2, 2}, {1, 2}, {1, 3}, {1, 4},
-		{2, 4}, {2, 5}, {3, 5}, {4, 5}, {5, 5},
+		{2, 4}, {3, 4}, {4, 4}, {4, 5}, {5, 5},
 	}
 
 	if fmt.Sprint(gotPath) != fmt.Sprint(wantPath) {

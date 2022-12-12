@@ -2,10 +2,10 @@ package main
 
 import (
 	"bufio"
+	"container/heap"
 	"fmt"
 	"os"
 	"runtime"
-	"sort"
 	"sync"
 )
 
@@ -188,11 +188,16 @@ func aStar(
 ) (path []coord, found bool) {
 	prev := make(map[coord]coord)
 	accCost := map[coord]int{start: 0}
-	nexts := []coord{start}
 
-	for len(nexts) > 0 {
-		cur := nexts[len(nexts)-1]
-		nexts = nexts[:len(nexts)-1]
+	nexts := &pqCoords{
+		coords: []coord{start},
+		less: func(a, b coord) bool {
+			return accCost[a]+heuristic(a) < accCost[b]+heuristic(b)
+		},
+	}
+
+	for nexts.Len() > 0 {
+		cur := heap.Pop(nexts).(coord)
 
 		if cur == goal {
 			found = true
@@ -205,14 +210,9 @@ func aStar(
 			if !ok || neighbourCost < accCost[neighbour] {
 				accCost[neighbour] = neighbourCost
 				prev[neighbour] = cur
-				nexts = append(nexts, neighbour)
+				heap.Push(nexts, neighbour)
 			}
 		}
-
-		sort.Slice(nexts, func(i, j int) bool {
-			a, b := nexts[i], nexts[j]
-			return accCost[a]+heuristic(a) >= accCost[b]+heuristic(b)
-		})
 	}
 
 	if !found {
@@ -229,6 +229,33 @@ func aStar(
 	}
 
 	return path, true
+}
+
+type pqCoords struct {
+	coords []coord
+	less   func(a, b coord) bool
+}
+
+func (q *pqCoords) Len() int {
+	return len(q.coords)
+}
+
+func (q *pqCoords) Less(i, j int) bool {
+	return q.less(q.coords[i], q.coords[j])
+}
+
+func (q *pqCoords) Swap(i, j int) {
+	q.coords[i], q.coords[j] = q.coords[j], q.coords[i]
+}
+
+func (q *pqCoords) Push(x interface{}) {
+	q.coords = append(q.coords, x.(coord))
+}
+
+func (q *pqCoords) Pop() interface{} {
+	c := q.coords[len(q.coords)-1]
+	q.coords = q.coords[:len(q.coords)-1]
+	return c
 }
 
 // manhattanDistance returns the Manhattan distance between the given
