@@ -4,7 +4,9 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"runtime"
 	"sort"
+	"sync"
 )
 
 func main() {
@@ -122,15 +124,40 @@ func part2(input []string) int {
 		return manhattanDistance(c, goal)
 	}
 
-	var shortestPath []coord
+	workers := runtime.NumCPU()
 
-	for n, start := range starts {
-		path, found := aStar(start, goal, neighbours, cost, heuristic)
-		if !found {
-			continue
-		}
+	var wg sync.WaitGroup
+	wg.Add(workers)
 
-		if n == 0 || len(path) < len(shortestPath) {
+	in := make(chan coord, len(starts))
+	for _, start := range starts {
+		in <- start
+	}
+	close(in)
+
+	out := make(chan []coord)
+
+	for n := 0; n < workers; n++ {
+		go func() {
+			for start := range in {
+				path, found := aStar(start, goal, neighbours, cost, heuristic)
+				if found {
+					out <- path
+				}
+			}
+			wg.Done()
+		}()
+	}
+
+	go func() {
+		wg.Wait()
+		close(out)
+	}()
+
+	shortestPath := <-out
+
+	for path := range out {
+		if len(path) < len(shortestPath) {
 			shortestPath = path
 		}
 	}
