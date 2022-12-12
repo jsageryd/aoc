@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
 	"testing"
 )
 
@@ -152,5 +153,51 @@ func TestManhattanDistance(t *testing.T) {
 		if got, want := manhattanDistance(tc.a, tc.b), tc.distance; got != want {
 			t.Errorf("[%d] manhattanDistance(%v, %v) = %d, want %d", n, tc.a, tc.b, got, want)
 		}
+	}
+}
+
+func BenchmarkAStar(b *testing.B) {
+	const w, h = 100, 100
+
+	start := coord{0, 0}
+	goal := coord{w - 1, h - 1}
+
+	grid := make(map[coord]int)
+
+	rand.Seed(0)
+
+	for y := 0; y < h; y++ {
+		for x := 0; x < w; x++ {
+			grid[coord{x, y}] = rand.Intn(100)
+		}
+	}
+
+	neighbours := func(c coord) []coord {
+		var ns []coord
+
+		for _, n := range []coord{
+			{c.x - 1, c.y},
+			{c.x + 1, c.y},
+			{c.x, c.y - 1},
+			{c.x, c.y + 1},
+		} {
+			if _, ok := grid[n]; ok {
+				ns = append(ns, n)
+			}
+		}
+
+		return ns
+	}
+
+	cost := func(a, b coord) int {
+		return grid[b]
+	}
+
+	heuristic := func(c coord) int {
+		return manhattanDistance(c, goal)
+	}
+
+	for n := 0; n < b.N; n++ {
+		aStar(start, goal, neighbours, cost, heuristic)
 	}
 }
