@@ -15,18 +15,18 @@ func main() {
 }
 
 func sumOfNumbers(input []byte, skipRedObjects bool) int {
-	var v interface{}
+	var v any
 	json.Unmarshal(input, &v)
 
-	var sum func(v interface{}) int
+	var sum func(v any) int
 
-	sum = func(v interface{}) int {
+	sum = func(v any) int {
 		var s int
 
 		switch val := v.(type) {
 		case float64:
 			s = int(val)
-		case map[string]interface{}:
+		case map[string]any:
 			if skipRedObjects {
 				for _, v := range val {
 					if s, ok := v.(string); ok && s == "red" {
@@ -37,7 +37,7 @@ func sumOfNumbers(input []byte, skipRedObjects bool) int {
 			for _, v := range val {
 				s += sum(v)
 			}
-		case []interface{}:
+		case []any:
 			for _, e := range val {
 				s += sum(e)
 			}

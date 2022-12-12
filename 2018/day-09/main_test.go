@@ -99,7 +99,7 @@ func TestCircle(t *testing.T) {
 			}
 
 			var data []int
-			c.data.Do(func(v interface{}) {
+			c.data.Do(func(v any) {
 				data = append(data, v.(int))
 			})
 			for data[0] != 0 {

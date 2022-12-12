@@ -50,7 +50,7 @@ func (c *circle) String() string {
 	}
 	cur := c.data.Value.(int)
 	var data []int
-	c.data.Do(func(v interface{}) {
+	c.data.Do(func(v any) {
 		data = append(data, v.(int))
 	})
 	for data[0] != 0 {

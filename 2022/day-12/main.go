@@ -248,11 +248,11 @@ func (q *pqCoords) Swap(i, j int) {
 	q.coords[i], q.coords[j] = q.coords[j], q.coords[i]
 }
 
-func (q *pqCoords) Push(x interface{}) {
+func (q *pqCoords) Push(x any) {
 	q.coords = append(q.coords, x.(coord))
 }
 
-func (q *pqCoords) Pop() interface{} {
+func (q *pqCoords) Pop() any {
 	c := q.coords[len(q.coords)-1]
 	q.coords = q.coords[:len(q.coords)-1]
 	return c
