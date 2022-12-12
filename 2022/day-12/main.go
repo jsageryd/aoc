@@ -16,6 +16,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -71,6 +72,70 @@ func part1(input []string) int {
 	}
 
 	return len(path) - 1
+}
+
+func part2(input []string) int {
+	coords := make(map[coord]byte)
+
+	var starts []coord
+	var goal coord
+
+	for y := range input {
+		for x := range input[y] {
+			elevation := input[y][x]
+			switch input[y][x] {
+			case 'a', 'S':
+				starts = append(starts, coord{x, y})
+				elevation = 'a'
+			case 'E':
+				goal = coord{x, y}
+				elevation = 'z'
+			}
+			coords[coord{x, y}] = elevation
+		}
+	}
+
+	neighbours := func(c coord) []coord {
+		var ns []coord
+
+		for _, n := range []coord{
+			{c.x - 1, c.y},
+			{c.x + 1, c.y},
+			{c.x, c.y - 1},
+			{c.x, c.y + 1},
+		} {
+			if neighbour, ok := coords[n]; ok {
+				if neighbour <= coords[c]+1 {
+					ns = append(ns, n)
+				}
+			}
+		}
+
+		return ns
+	}
+
+	cost := func(a, b coord) int {
+		return 1
+	}
+
+	heuristic := func(c coord) int {
+		return manhattanDistance(c, goal)
+	}
+
+	var shortestPath []coord
+
+	for n, start := range starts {
+		path, found := aStar(start, goal, neighbours, cost, heuristic)
+		if !found {
+			continue
+		}
+
+		if n == 0 || len(path) < len(shortestPath) {
+			shortestPath = path
+		}
+	}
+
+	return len(shortestPath) - 1
 }
 
 type coord struct {
