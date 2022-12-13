@@ -5,8 +5,7 @@ import (
 	"testing"
 )
 
-func TestPart1(t *testing.T) {
-	input := []byte(`[1,1,3,1,1]
+var input = []byte(`[1,1,3,1,1]
 [1,1,5,1,1]
 
 [[1],[2,3,4]]
@@ -31,7 +30,14 @@ func TestPart1(t *testing.T) {
 [1,[2,[3,[4,[5,6,0]]]],8,9]
 `)
 
+func TestPart1(t *testing.T) {
 	if got, want := part1(input), 13; got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
+func TestPart2(t *testing.T) {
+	if got, want := part2(input), 140; got != want {
 		t.Errorf("got %d, want %d", got, want)
 	}
 }

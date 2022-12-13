@@ -7,12 +7,14 @@ import (
 	"io"
 	"log"
 	"os"
+	"sort"
 )
 
 func main() {
 	input, _ := io.ReadAll(os.Stdin)
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []byte) int {
@@ -37,6 +39,45 @@ func part1(input []byte) int {
 	}
 
 	return sum
+}
+
+func part2(input []byte) int {
+	const divider1 = "[[2]]"
+	const divider2 = "[[6]]"
+
+	input = append(input, []byte(divider1+"\n")...)
+	input = append(input, []byte(divider2+"\n")...)
+
+	dec := json.NewDecoder(bytes.NewReader(input))
+
+	var packets []any
+
+	for dec.More() {
+		var p any
+
+		if err := dec.Decode(&p); err != nil {
+			log.Fatal(err)
+		}
+
+		packets = append(packets, p)
+	}
+
+	sort.Slice(packets, func(i, j int) bool {
+		return compare(packets[i], packets[j]) == -1
+	})
+
+	var idx1, idx2 int
+
+	for n, p := range packets {
+		if fmt.Sprint(p) == divider1 {
+			idx1 = n + 1
+		}
+		if fmt.Sprint(p) == divider2 {
+			idx2 = n + 1
+		}
+	}
+
+	return idx1 * idx2
 }
 
 // compare returns -1 if a is less than b, 0 if a is equal to b, and 1 if a is
