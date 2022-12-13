@@ -15,6 +15,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 10: Cathode-Ray Tube](2022/day-10)
 - [Day 11: Monkey in the Middle](2022/day-11)
 - [Day 12: Hill Climbing Algorithm](2022/day-12)
+- [Day 13: Distress Signal](2022/day-13)
 
 ## 2021
 - [Day 1: Sonar Sweep](2021/day-01)
