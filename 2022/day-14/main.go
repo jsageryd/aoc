@@ -16,10 +16,20 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
-	cave := newCave(input)
+	cave := newCave(input, false)
+
+	for cave.step() {
+	}
+
+	return cave.amountOfSand()
+}
+
+func part2(input []string) int {
+	cave := newCave(input, true)
 
 	for cave.step() {
 	}
@@ -36,9 +46,10 @@ type Cave struct {
 	sandSource           coord
 	topLeft, bottomRight coord
 	grain                coord
+	withFloor            bool
 }
 
-func newCave(input []string) *Cave {
+func newCave(input []string, withFloor bool) *Cave {
 	min := func(a, b int) int {
 		if a < b {
 			return a
@@ -61,6 +72,7 @@ func newCave(input []string) *Cave {
 		topLeft:     sandSource,
 		bottomRight: sandSource,
 		grain:       sandSource,
+		withFloor:   withFloor,
 	}
 
 	updateBounds := func(wall coord) {
@@ -75,6 +87,9 @@ func newCave(input []string) *Cave {
 		}
 		if wall.y > cave.bottomRight.y {
 			cave.bottomRight.y = wall.y
+			if withFloor {
+				cave.bottomRight.y += 2
+			}
 		}
 	}
 
@@ -103,6 +118,12 @@ func newCave(input []string) *Cave {
 		}
 	}
 
+	if withFloor {
+		height := cave.bottomRight.y - sandSource.y
+		cave.topLeft.x = sandSource.x - height - 1
+		cave.bottomRight.x = sandSource.x + height + 1
+	}
+
 	return cave
 }
 
@@ -119,6 +140,11 @@ func (c *Cave) step() bool {
 
 		_, foundObstacle := c.grid[coord{c.grain.x + dx, c.grain.y + dy}]
 
+		if c.withFloor {
+			reachedFloor := c.grain.y >= c.bottomRight.y-1
+			foundObstacle = foundObstacle || reachedFloor
+		}
+
 		if !foundObstacle {
 			c.grain.x += dx
 			c.grain.y += dy
@@ -127,14 +153,19 @@ func (c *Cave) step() bool {
 		}
 	}
 
-	if c.grain.y > c.bottomRight.y {
-		c.grain = c.sandSource
-		return false
+	if !c.withFloor {
+		if c.grain.y > c.bottomRight.y {
+			c.grain = c.sandSource
+			return false
+		}
 	}
 
 	c.grid[c.grain] = 'o'
 
 	if rest {
+		if c.grain == c.sandSource {
+			return false
+		}
 		c.grain = c.sandSource
 	}
 
@@ -162,9 +193,12 @@ func (c *Cave) String() string {
 			case '#', 'o':
 				b.WriteByte(t)
 			default:
-				if (coord{x, y}) == c.sandSource {
+				switch {
+				case (coord{x, y}) == c.sandSource:
 					b.WriteByte('+')
-				} else {
+				case c.withFloor && y == c.bottomRight.y:
+					b.WriteByte('#')
+				default:
 					b.WriteByte('.')
 				}
 			}
