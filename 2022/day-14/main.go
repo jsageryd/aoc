@@ -2,12 +2,27 @@ package main
 
 import (
 	"bufio"
+	"bytes"
+	"errors"
+	"flag"
 	"fmt"
+	"image"
+	"image/color"
+	"image/gif"
+	"log"
 	"os"
 	"strings"
 )
 
 func main() {
+	fASCII := flag.Bool("ascii", false, "Output an ASCII map")
+	fAGIF := flag.Bool("agif", false, "Output an animated GIF")
+	fGIF := flag.Bool("gif", false, "Output a GIF of the final state")
+	fFloor := flag.Bool("floor", false, "Whether cave has floor (part 2)")
+	fScale := flag.Int("scale", 15, "Scale of output image")
+
+	flag.Parse()
+
 	var input []string
 
 	scanner := bufio.NewScanner(os.Stdin)
@@ -15,8 +30,17 @@ func main() {
 		input = append(input, scanner.Text())
 	}
 
-	fmt.Printf("Part 1: %d\n", part1(input))
-	fmt.Printf("Part 2: %d\n", part2(input))
+	switch {
+	case *fASCII:
+		makeASCII(input, *fFloor)
+	case *fAGIF:
+		makeAnimatedGIF(input, *fFloor, *fScale)
+	case *fGIF:
+		makeGIF(input, *fFloor, *fScale)
+	default:
+		fmt.Printf("Part 1: %d\n", part1(input))
+		fmt.Printf("Part 2: %d\n", part2(input))
+	}
 }
 
 func part1(input []string) int {
@@ -209,4 +233,160 @@ func (c *Cave) String() string {
 	}
 
 	return b.String()
+}
+
+func makeASCII(input []string, floor bool) {
+	cave := newCave(input, floor)
+
+	for cave.step() {
+	}
+
+	fmt.Println(cave)
+}
+
+func makeAnimatedGIF(input []string, floor bool, scale int) {
+	cave := newCave(input, floor)
+
+	imgYOffset := 0
+	imgHeight := 15
+
+	imgs := []*image.Paletted{draw(cave, imgYOffset, imgHeight, scale)}
+	imgFrameDelay := []int{200}
+
+	var grainMaxY int
+
+	for n := 0; cave.step(); n++ {
+		if cave.bottomRight.y > 100 {
+			if cave.grain.y < imgYOffset {
+				continue
+			}
+			if cave.grain.y > grainMaxY {
+				grainMaxY = cave.grain.y
+			}
+			if n%4 == 0 && grainMaxY > imgYOffset+imgHeight*3/4 &&
+				imgYOffset <= cave.bottomRight.y-imgHeight {
+				imgYOffset++
+			}
+			if n%2 != 0 {
+				continue
+			}
+		}
+		imgs = append(imgs, draw(cave, imgYOffset, imgHeight, scale))
+		imgFrameDelay = append(imgFrameDelay, 1)
+	}
+
+	imgs = append(imgs, draw(cave, imgYOffset, imgHeight, scale))
+	imgFrameDelay = append(imgFrameDelay, 200)
+	disposalMethods := bytes.Repeat([]byte{gif.DisposalNone}, len(imgs))
+
+	imgBoundsMax := imgs[0].Bounds().Max
+
+	if err := optimizeImgs(imgs); err != nil {
+		log.Fatalf("error optimizing images: %v", err)
+	}
+
+	gif.EncodeAll(os.Stdout, &gif.GIF{
+		Image:    imgs,
+		Delay:    imgFrameDelay,
+		Disposal: disposalMethods,
+		Config: image.Config{
+			ColorModel: imgs[0].Palette,
+			Width:      imgBoundsMax.X,
+			Height:     imgBoundsMax.Y,
+		},
+	})
+}
+
+func makeGIF(input []string, floor bool, scale int) {
+	cave := newCave(input, floor)
+
+	for cave.step() {
+	}
+
+	img := draw(cave, 0, 0, scale)
+
+	gif.Encode(os.Stdout, img, &gif.Options{NumColors: len(img.Palette)})
+}
+
+func draw(cave *Cave, yOffset, height, scale int) *image.Paletted {
+	transparent := color.RGBA{0x00, 0x00, 0x00, 0x00}
+	background := color.RGBA{0xcc, 0xcc, 0xcc, 0xff}
+	wall := color.RGBA{0x30, 0x30, 0x30, 0xff}
+	sand := color.RGBA{0xdd, 0x99, 0x22, 0xff}
+
+	palette := []color.Color{
+		transparent, background, wall, sand,
+	}
+
+	width := cave.bottomRight.x - cave.topLeft.x + 1
+
+	maxHeight := cave.bottomRight.y - cave.topLeft.y + 1
+
+	if height == 0 || height > maxHeight {
+		height = maxHeight
+	}
+
+	img := image.NewPaletted(image.Rect(0, 0, scale*width, scale*height), palette)
+
+	for y := 0; y < height; y++ {
+		for x := 0; x < width; x++ {
+			tx, ty := cave.topLeft.x+x, cave.topLeft.y+y+yOffset
+
+			tile := cave.grid[coord{tx, ty}]
+
+			c := background
+
+			switch tile {
+			case '#':
+				c = wall
+			case 'o':
+				c = sand
+			}
+
+			if cave.withFloor && ty == cave.bottomRight.y {
+				c = wall
+			}
+
+			for sy := 0; sy < scale; sy++ {
+				for sx := 0; sx < scale; sx++ {
+					img.Set(scale*x+sx, scale*y+sy, c)
+				}
+			}
+		}
+	}
+
+	return img
+}
+
+// optimizeImgs optimizes the given set of images for use in a GIF animation
+// with disposal method "none", by replacing pixels that do not change between
+// frames with transparent ones. This reduces the size of the resulting GIF.
+func optimizeImgs(imgs []*image.Paletted) error {
+	var transparent color.Color
+
+	for _, c := range imgs[0].Palette {
+		if _, _, _, a := c.RGBA(); a == 0x00 {
+			transparent = c
+			break
+		}
+	}
+
+	if transparent == nil {
+		return errors.New("palette contains no transparent color")
+	}
+
+	bounds := imgs[0].Bounds()
+
+	for n := len(imgs) - 1; n > 0; n-- {
+		prev, cur := imgs[n-1], imgs[n]
+		for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
+			for x := bounds.Min.X; x < bounds.Max.X; x++ {
+				if prev.At(x, y) == cur.At(x, y) {
+					cur.Set(x, y, transparent)
+				}
+			}
+		}
+	}
+
+	return nil
 }

@@ -1,5 +1,8 @@
 # Day 14: Regolith Reservoir
 
+![Output](./img/part-1-output-animated.gif)
+![Example output](./img/part-1-example-output-animated.gif)
+
 The distress signal leads you to a giant waterfall! Actually, hang on - the
 signal seems like it's coming from the waterfall itself, and that doesn't make
 any sense. However, you do notice a little path that leads behind the waterfall.
