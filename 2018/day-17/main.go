@@ -2,11 +2,14 @@ package main
 
 import (
 	"bufio"
+	"bytes"
+	"errors"
 	"flag"
 	"fmt"
 	"image"
 	"image/color"
 	"image/gif"
+	"log"
 	"os"
 	"strings"
 )
@@ -65,10 +68,17 @@ func main() {
 	case *fASCII:
 		fmt.Println(m)
 	case *fAGIF:
+		if err := optimizeImgs(imgs); err != nil {
+			log.Fatalf("error optimizing images: %v", err)
+		}
+
+		disposalMethods := bytes.Repeat([]byte{gif.DisposalNone}, len(imgs))
 		imgBoundsMax := imgs[0].Bounds().Max
+
 		gif.EncodeAll(os.Stdout, &gif.GIF{
-			Image: imgs,
-			Delay: imgFrameDelay,
+			Image:    imgs,
+			Delay:    imgFrameDelay,
+			Disposal: disposalMethods,
 			Config: image.Config{
 				ColorModel: imgs[0].Palette,
 				Width:      imgBoundsMax.X,
@@ -216,13 +226,14 @@ func (m *Map) Step() bool {
 }
 
 func (m *Map) Image(offset, height, scale int) *image.Paletted {
+	transparent := color.RGBA{0x00, 0x00, 0x00, 0x00}
 	sand := color.RGBA{0xcc, 0xcc, 0xcc, 0xff}
 	clay := color.RGBA{0x30, 0x30, 0x30, 0xff}
 	movingWater := color.RGBA{0x00, 0x99, 0xff, 0xff}
 	stillWater := color.RGBA{0x00, 0x50, 0x99, 0xff}
 
 	palette := []color.Color{
-		sand, clay, movingWater, stillWater,
+		transparent, sand, clay, movingWater, stillWater,
 	}
 
 	width := m.maxX + 1 - m.minX
@@ -279,4 +290,37 @@ func (m *Map) String() string {
 	}
 
 	return strings.Join(rows, "\n")
+}
+
+// optimizeImgs optimizes the given set of images for use in a GIF animation
+// with disposal method "none", by replacing pixels that do not change between
+// frames with transparent ones. This reduces the size of the resulting GIF.
+func optimizeImgs(imgs []*image.Paletted) error {
+	var transparent color.Color
+
+	for _, c := range imgs[0].Palette {
+		if _, _, _, a := c.RGBA(); a == 0x00 {
+			transparent = c
+			break
+		}
+	}
+
+	if transparent == nil {
+		return errors.New("palette contains no transparent color")
+	}
+
+	bounds := imgs[0].Bounds()
+
+	for n := len(imgs) - 1; n > 0; n-- {
+		prev, cur := imgs[n-1], imgs[n]
+		for y := bounds.Min.Y; y < bounds.Max.Y; y++ {
+			for x := bounds.Min.X; x < bounds.Max.X; x++ {
+				if prev.At(x, y) == cur.At(x, y) {
+					cur.Set(x, y, transparent)
+				}
+			}
+		}
+	}
+
+	return nil
 }
