@@ -15,6 +15,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input, 2000000))
+	fmt.Printf("Part 2: %d\n", part2(input, 4000000))
 }
 
 func part1(input []string, row int) int {
@@ -37,6 +38,32 @@ func part1(input []string, row int) int {
 	}
 
 	return len(noBeacon)
+}
+
+func part2(input []string, max int) int {
+	m := parseInput(input)
+
+	var missingBeacon coord
+
+	md := manhattanDistance
+
+	for y := 0; y <= max; y++ {
+		for x := 0; x <= max; x++ {
+			var withinRange bool
+			for sensor, beacon := range m {
+				if md(sensor, beacon) >= md(sensor, coord{x, y}) {
+					withinRange = true
+					break
+				}
+			}
+			if !withinRange {
+				missingBeacon = coord{x, y}
+				break
+			}
+		}
+	}
+
+	return missingBeacon.x*4000000 + missingBeacon.y
 }
 
 type coord struct {

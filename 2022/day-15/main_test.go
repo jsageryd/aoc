@@ -28,6 +28,12 @@ func TestPart1(t *testing.T) {
 	}
 }
 
+func TestPart2(t *testing.T) {
+	if got, want := part2(input, 20), 56000011; got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
 func TestParseInput(t *testing.T) {
 	gotMap := parseInput(input)
 
