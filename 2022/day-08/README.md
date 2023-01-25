@@ -1,4 +1,4 @@
-Day 8: Treetop Tree House
+# Day 8: Treetop Tree House
 
 The expedition comes across a peculiar patch of tall trees all planted carefully
 in a grid. The Elves explain that a previous expedition planted these trees as a
