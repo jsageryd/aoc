@@ -30,6 +30,7 @@ func main() {
 	sues := parseInput(input)
 
 	fmt.Printf("Part 1: %d\n", findSue(detected, sues))
+	fmt.Printf("Part 2: %d\n", findRealSue(detected, sues))
 }
 
 type sue struct {
@@ -62,6 +63,39 @@ func findSue(detected map[string]int, sues []sue) int {
 	for _, s := range sues {
 		for thing, kinds := range s.things {
 			if kinds == detected[thing] {
+				scores[s.id]++
+			}
+		}
+	}
+
+	var sueWithMaxScore int
+
+	for id, score := range scores {
+		if score > scores[sueWithMaxScore] {
+			sueWithMaxScore = id
+		}
+	}
+
+	return sueWithMaxScore
+}
+
+func findRealSue(detected map[string]int, sues []sue) int {
+	scores := make(map[int]int) // id -> score
+
+	for _, s := range sues {
+		for thing, kinds := range s.things {
+			var match bool
+
+			switch thing {
+			case "cats", "trees":
+				match = kinds > detected[thing]
+			case "pomeranians", "goldfish":
+				match = kinds < detected[thing]
+			default:
+				match = kinds == detected[thing]
+			}
+
+			if match {
 				scores[s.id]++
 			}
 		}
