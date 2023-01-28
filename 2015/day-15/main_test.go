@@ -89,3 +89,12 @@ func TestDistribute(t *testing.T) {
 		}
 	}
 }
+
+func TestScore(t *testing.T) {
+	list := parseInput(input)
+	dist := []int{44, 56}
+
+	if got, want := score(list, dist), 62842880; got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}

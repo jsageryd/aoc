@@ -20,34 +20,15 @@ func main() {
 }
 
 func part1(input []string) int {
-	max := func(a, b int) int {
-		if a > b {
-			return a
-		}
-		return b
-	}
-
 	list := parseInput(input)
 
 	var bestScore int
 
 	distribute(len(list), 100, func(dist []int) {
-		var capacity, durability, flavor, texture int
+		s := score(list, dist)
 
-		for idx, amount := range dist {
-			capacity += list[idx].capacity * amount
-			durability += list[idx].durability * amount
-			flavor += list[idx].flavor * amount
-			texture += list[idx].texture * amount
-		}
-
-		score := max(0, capacity) *
-			max(0, durability) *
-			max(0, flavor) *
-			max(0, texture)
-
-		if score > bestScore {
-			bestScore = score
+		if s > bestScore {
+			bestScore = s
 		}
 	})
 
@@ -55,25 +36,14 @@ func part1(input []string) int {
 }
 
 func part2(input []string) int {
-	max := func(a, b int) int {
-		if a > b {
-			return a
-		}
-		return b
-	}
-
 	list := parseInput(input)
 
 	var bestScore int
 
 	distribute(len(list), 100, func(dist []int) {
-		var capacity, durability, flavor, texture, calories int
+		var calories int
 
 		for idx, amount := range dist {
-			capacity += list[idx].capacity * amount
-			durability += list[idx].durability * amount
-			flavor += list[idx].flavor * amount
-			texture += list[idx].texture * amount
 			calories += list[idx].calories * amount
 		}
 
@@ -81,13 +51,10 @@ func part2(input []string) int {
 			return
 		}
 
-		score := max(0, capacity) *
-			max(0, durability) *
-			max(0, flavor) *
-			max(0, texture)
+		s := score(list, dist)
 
-		if score > bestScore {
-			bestScore = score
+		if s > bestScore {
+			bestScore = s
 		}
 	})
 
@@ -149,4 +116,27 @@ func distribute(n, max int, f func(dist []int)) {
 	}
 
 	rec(0, max)
+}
+
+func score(list []ingredient, dist []int) int {
+	max := func(a, b int) int {
+		if a > b {
+			return a
+		}
+		return b
+	}
+
+	var capacity, durability, flavor, texture int
+
+	for idx, amount := range dist {
+		capacity += list[idx].capacity * amount
+		durability += list[idx].durability * amount
+		flavor += list[idx].flavor * amount
+		texture += list[idx].texture * amount
+	}
+
+	return max(0, capacity) *
+		max(0, durability) *
+		max(0, flavor) *
+		max(0, texture)
 }
