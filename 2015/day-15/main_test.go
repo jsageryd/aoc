@@ -16,10 +16,16 @@ func TestPart1(t *testing.T) {
 	}
 }
 
+func TestPart2(t *testing.T) {
+	if got, want := part2(input), 57600000; got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
 func TestParseInput(t *testing.T) {
 	wantOutput := []ingredient{
-		{name: "Butterscotch", capacity: -1, durability: -2, flavor: 6, texture: 3},
-		{name: "Cinnamon", capacity: 2, durability: 3, flavor: -2, texture: -1},
+		{name: "Butterscotch", capacity: -1, durability: -2, flavor: 6, texture: 3, calories: 8},
+		{name: "Cinnamon", capacity: 2, durability: 3, flavor: -2, texture: -1, calories: 3},
 	}
 
 	if got, want := parseInput(input), wantOutput; fmt.Sprint(got) != fmt.Sprint(want) {
