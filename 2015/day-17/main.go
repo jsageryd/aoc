@@ -17,6 +17,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(containers, 150))
+	fmt.Printf("Part 2: %d\n", part2(containers, 150))
 }
 
 func part1(containers []int, litres int) int {
@@ -36,6 +37,33 @@ func part1(containers []int, litres int) int {
 	}
 
 	return count
+}
+
+func part2(containers []int, litres int) int {
+	counts := make(map[int]int) // number of containers -> number of combinations
+
+	for k := 1; k < len(containers); k++ {
+		combinations(containers, k, func(comb []int) bool {
+			var sum int
+			for _, c := range comb {
+				sum += c
+			}
+			if sum == litres {
+				counts[len(comb)]++
+			}
+			return true
+		})
+	}
+
+	lowest := len(containers)
+
+	for num := range counts {
+		if num < lowest {
+			lowest = num
+		}
+	}
+
+	return counts[lowest]
 }
 
 // combinations picks k elements from s and calls f for each combination, until

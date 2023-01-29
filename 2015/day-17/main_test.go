@@ -13,6 +13,14 @@ func TestPart1(t *testing.T) {
 	}
 }
 
+func TestPart2(t *testing.T) {
+	containers := []int{20, 15, 10, 5, 5}
+
+	if got, want := part2(containers, 25), 3; got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
 func TestCombinations(t *testing.T) {
 	s := []int{1, 2, 3, 4, 5, 6}
 	k := 3
