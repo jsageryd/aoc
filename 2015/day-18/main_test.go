@@ -15,9 +15,9 @@ var input = []string{
 }
 
 func TestStep(t *testing.T) {
-	grid := parse(input)
+	grid := parse(input, false)
 
-	step(grid, 4)
+	step(grid, 4, false)
 
 	gotStr := draw(grid)
 
@@ -35,7 +35,7 @@ func TestStep(t *testing.T) {
 }
 
 func TestCountOn(t *testing.T) {
-	grid := parse(input)
+	grid := parse(input, false)
 
 	if got, want := countOn(grid), 15; got != want {
 		t.Errorf("got %d, want %d", got, want)
@@ -43,7 +43,7 @@ func TestCountOn(t *testing.T) {
 }
 
 func TestParseAndDraw(t *testing.T) {
-	gotStr := draw(parse(input))
+	gotStr := draw(parse(input, false))
 	wantStr := strings.Join(input, "\n")
 
 	if gotStr != wantStr {

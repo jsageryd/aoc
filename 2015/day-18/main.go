@@ -15,22 +15,35 @@ func main() {
 		input = append(input, scanner.Text())
 	}
 
-	grid := parse(input)
-	step(grid, 100)
+	grid := parse(input, false)
+	step(grid, 100, false)
 
 	fmt.Printf("Part 1: %d\n", countOn(grid))
+
+	grid = parse(input, true)
+	step(grid, 100, true)
+
+	fmt.Printf("Part 2: %d\n", countOn(grid))
 }
 
 type coord struct {
 	x, y int
 }
 
-func parse(input []string) map[coord]bool {
+func parse(input []string, cornersStuck bool) map[coord]bool {
 	grid := make(map[coord]bool)
 
 	for y := range input {
 		for x := range input[y] {
 			grid[coord{x, y}] = input[y][x] == '#'
+		}
+	}
+
+	if cornersStuck {
+		tl, tr, bl, br := corners(grid)
+
+		for _, c := range []coord{tl, tr, bl, br} {
+			grid[c] = true
 		}
 	}
 
@@ -49,11 +62,20 @@ func countOn(grid map[coord]bool) int {
 	return count
 }
 
-func step(grid map[coord]bool, steps int) {
+func step(grid map[coord]bool, steps int, cornersStuck bool) {
 	toggle := make(map[coord]struct{})
+
+	tl, tr, bl, br := corners(grid)
 
 	for n := 0; n < steps; n++ {
 		for c, on := range grid {
+			if cornersStuck {
+				switch c {
+				case tl, tr, bl, br:
+					continue
+				}
+			}
+
 			var neighboursOn int
 
 			for _, dc := range []coord{
@@ -84,17 +106,21 @@ func step(grid map[coord]bool, steps int) {
 	}
 }
 
-func draw(grid map[coord]bool) string {
-	var max coord
-
+func corners(grid map[coord]bool) (topLeft, topRight, bottomLeft, bottomRight coord) {
 	for c := range grid {
-		if c.x > max.x {
-			max.x = c.x
+		if c.x > bottomRight.x {
+			bottomRight.x = c.x
 		}
-		if c.y > max.y {
-			max.y = c.y
+		if c.y > bottomRight.y {
+			bottomRight.y = c.y
 		}
 	}
+
+	return coord{0, 0}, coord{bottomRight.x, 0}, coord{0, bottomRight.y}, bottomRight
+}
+
+func draw(grid map[coord]bool) string {
+	_, _, _, max := corners(grid)
 
 	var buf bytes.Buffer
 
