@@ -27,7 +27,7 @@ func TestPart1(t *testing.T) {
 		{60, 4},
 		{80, 6},
 		{130, 8},
-		// {150, 8}, the binary search implementation doesn't get this one right
+		{150, 8},
 	} {
 		if got, want := part1(tc.input), tc.want; got != want {
 			t.Errorf("[%d] got %d, want %d", n, got, want)

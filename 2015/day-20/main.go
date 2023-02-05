@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"sort"
 )
 
 func main() {
@@ -14,19 +13,19 @@ func main() {
 }
 
 func part1(input int) int {
-	return sort.Search(input, func(h int) bool {
-		var p int
+	p := make([]int, input) // house -> presents
 
-		for e := 1; e <= h; e++ {
-			if h%e == 0 {
-				p += 10 * e
-			}
+	for e := 1; e < len(p); e++ {
+		for h := 0; h < len(p); h += e {
+			p[h] += 10 * e
 		}
 
-		if p >= input {
-			return true
+		// p is house -> presents so p[e] looks like an error, but e is already
+		// looping from 1 to len(p), so we can re-use that.
+		if p[e] >= input {
+			return e
 		}
+	}
 
-		return false
-	})
+	return 0
 }
