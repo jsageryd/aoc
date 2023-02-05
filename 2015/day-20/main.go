@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 )
 
 func main() {
@@ -13,7 +14,7 @@ func main() {
 }
 
 func part1(input int) int {
-	for h := 1; ; h++ {
+	return sort.Search(input, func(h int) bool {
 		var p int
 
 		for e := 1; e <= h; e++ {
@@ -23,9 +24,9 @@ func part1(input int) int {
 		}
 
 		if p >= input {
-			return h
+			return true
 		}
-	}
 
-	return 0
+		return false
+	})
 }
