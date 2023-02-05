@@ -15,7 +15,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", overlappingArea(claims))
-	fmt.Printf("Part 1: %d\n", nonOverlappingClaim(claims).ID)
+	fmt.Printf("Part 2: %d\n", nonOverlappingClaim(claims).ID)
 }
 
 func parseClaim(s string) claim {

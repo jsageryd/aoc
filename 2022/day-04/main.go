@@ -15,7 +15,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", len(fullyOverlappingPairs(input)))
-	fmt.Printf("Part 1: %d\n", len(partiallyOverlappingPairs(input)))
+	fmt.Printf("Part 2: %d\n", len(partiallyOverlappingPairs(input)))
 }
 
 func fullyOverlappingPairs(input []string) []string {
