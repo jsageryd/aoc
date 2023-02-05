@@ -38,20 +38,20 @@ func TestParseInput(t *testing.T) {
 	gotMap := parseInput(input)
 
 	wantMap := map[coord]coord{
-		coord{x: 2, y: 18}:  coord{x: -2, y: 15},
-		coord{x: 9, y: 16}:  coord{x: 10, y: 16},
-		coord{x: 13, y: 2}:  coord{x: 15, y: 3},
-		coord{x: 12, y: 14}: coord{x: 10, y: 16},
-		coord{x: 10, y: 20}: coord{x: 10, y: 16},
-		coord{x: 14, y: 17}: coord{x: 10, y: 16},
-		coord{x: 8, y: 7}:   coord{x: 2, y: 10},
-		coord{x: 2, y: 0}:   coord{x: 2, y: 10},
-		coord{x: 0, y: 11}:  coord{x: 2, y: 10},
-		coord{x: 20, y: 14}: coord{x: 25, y: 17},
-		coord{x: 17, y: 20}: coord{x: 21, y: 22},
-		coord{x: 16, y: 7}:  coord{x: 15, y: 3},
-		coord{x: 14, y: 3}:  coord{x: 15, y: 3},
-		coord{x: 20, y: 1}:  coord{x: 15, y: 3},
+		{x: 2, y: 18}:  {x: -2, y: 15},
+		{x: 9, y: 16}:  {x: 10, y: 16},
+		{x: 13, y: 2}:  {x: 15, y: 3},
+		{x: 12, y: 14}: {x: 10, y: 16},
+		{x: 10, y: 20}: {x: 10, y: 16},
+		{x: 14, y: 17}: {x: 10, y: 16},
+		{x: 8, y: 7}:   {x: 2, y: 10},
+		{x: 2, y: 0}:   {x: 2, y: 10},
+		{x: 0, y: 11}:  {x: 2, y: 10},
+		{x: 20, y: 14}: {x: 25, y: 17},
+		{x: 17, y: 20}: {x: 21, y: 22},
+		{x: 16, y: 7}:  {x: 15, y: 3},
+		{x: 14, y: 3}:  {x: 15, y: 3},
+		{x: 20, y: 1}:  {x: 15, y: 3},
 	}
 
 	if fmt.Sprint(gotMap) != fmt.Sprint(wantMap) {

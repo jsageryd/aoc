@@ -43,24 +43,24 @@ func TestPart2(t *testing.T) {
 func TestEntry_TotalSize(t *testing.T) {
 	entry := &Entry{
 		children: []*Entry{
-			&Entry{size: 1},
-			&Entry{size: 2},
-			&Entry{
+			{size: 1},
+			{size: 2},
+			{
 				children: []*Entry{
-					&Entry{size: 3},
+					{size: 3},
 				},
 			},
-			&Entry{size: 4},
-			&Entry{
+			{size: 4},
+			{
 				children: []*Entry{
-					&Entry{
+					{
 						children: []*Entry{
-							&Entry{size: 5},
-							&Entry{size: 6},
+							{size: 5},
+							{size: 6},
 						},
 					},
-					&Entry{size: 7},
-					&Entry{size: 8},
+					{size: 7},
+					{size: 8},
 				},
 			},
 		},
