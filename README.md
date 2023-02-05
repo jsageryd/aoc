@@ -108,3 +108,4 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 17: No Such Thing as Too Much](2015/day-17)
 - [Day 18: Like a GIF For Your Yard](2015/day-18)
 - [Day 19: Medicine for Rudolph](2015/day-19)
+- [Day 20: Infinite Elves and Infinite Houses](2015/day-20)
