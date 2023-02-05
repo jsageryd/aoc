@@ -19,6 +19,20 @@ func TestPart1(t *testing.T) {
 	}
 }
 
+func TestPart2(t *testing.T) {
+	for n, tc := range []struct {
+		input []string
+		want  int
+	}{
+		{[]string{"e => H", "e => O", "H => HO", "H => OH", "O => HH", "", "HOH"}, 3},
+		{[]string{"e => H", "e => O", "H => HO", "H => OH", "O => HH", "", "HOHOHO"}, 6},
+	} {
+		if got, want := part2(tc.input), tc.want; got != want {
+			t.Errorf("[%d] got %d, want %d", n, got, want)
+		}
+	}
+}
+
 func TestIndices(t *testing.T) {
 	for n, tc := range []struct {
 		s, sep string

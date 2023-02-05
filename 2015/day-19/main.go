@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math/rand"
 	"os"
 	"strings"
 )
@@ -16,6 +17,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -30,6 +32,34 @@ func part1(input []string) int {
 	}
 
 	return len(m)
+}
+
+func part2(input []string) int {
+	const limit = 100
+
+	for tries := 0; tries < limit; tries++ {
+		rs, s := parse(input)
+
+		rand.Shuffle(len(rs), func(i, j int) {
+			rs[i], rs[j] = rs[j], rs[i]
+		})
+
+		var count int
+		var ok bool
+
+		for {
+			if s, ok = reduce(rs, s); !ok {
+				break
+			}
+			count++
+		}
+
+		if s == "e" {
+			return count
+		}
+	}
+
+	return 0
 }
 
 type replacement struct {
@@ -55,4 +85,13 @@ func indices(s, sep string) []int {
 	}
 
 	return idxs
+}
+
+func reduce(rs []replacement, s string) (string, bool) {
+	for _, r := range rs {
+		if strings.Contains(s, r.to) {
+			return strings.Replace(s, r.to, r.from, 1), true
+		}
+	}
+	return s, false
 }
