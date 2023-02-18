@@ -15,6 +15,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -32,6 +33,23 @@ func part1(input []string) int {
 	}
 
 	return minCost
+}
+
+func part2(input []string) int {
+	enemy := parse(input)
+
+	maxCost := 0
+
+	for _, c := range configurations() {
+		player := contender{hitPoints: 100, damage: c.damage, armor: c.armor}
+		boss := enemy
+
+		if !playerWins(&player, &boss) && c.cost > maxCost {
+			maxCost = c.cost
+		}
+	}
+
+	return maxCost
 }
 
 func parse(input []string) contender {
