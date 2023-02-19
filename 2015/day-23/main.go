@@ -17,10 +17,18 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
 	c := newCPU(input)
+	c.run()
+	return c.reg["b"]
+}
+
+func part2(input []string) int {
+	c := newCPU(input)
+	c.reg["a"] = 1
 	c.run()
 	return c.reg["b"]
 }
