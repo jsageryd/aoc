@@ -161,7 +161,11 @@ func playerWins(player, enemy *contender) bool {
 
 	for n := 0; ; n++ {
 		a, b := cs[n%2], cs[(n+1)%2]
-		b.hitPoints -= a.damage - b.armor
+		damage := a.damage - b.armor
+		if damage < 1 {
+			damage = 1
+		}
+		b.hitPoints -= damage
 		if b.hitPoints <= 0 {
 			break
 		}

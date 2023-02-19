@@ -21,18 +21,37 @@ func TestParse(t *testing.T) {
 }
 
 func TestPlayerWins(t *testing.T) {
-	player := contender{hitPoints: 8, damage: 5, armor: 5}
-	enemy := contender{hitPoints: 12, damage: 7, armor: 2}
+	t.Run("Example from description", func(t *testing.T) {
+		player := contender{hitPoints: 8, damage: 5, armor: 5}
+		enemy := contender{hitPoints: 12, damage: 7, armor: 2}
 
-	if got, want := playerWins(&player, &enemy), true; got != want {
-		t.Errorf("got %t, want %t", got, want)
-	}
+		if got, want := playerWins(&player, &enemy), true; got != want {
+			t.Errorf("got %t, want %t", got, want)
+		}
 
-	if got, want := player.hitPoints, 2; got != want {
-		t.Errorf("player has %d hit points, want %d", got, want)
-	}
+		if got, want := player.hitPoints, 2; got != want {
+			t.Errorf("player has %d hit points, want %d", got, want)
+		}
 
-	if got, want := enemy.hitPoints, 0; got != want {
-		t.Errorf("enemy has %d hit points, want %d", got, want)
-	}
+		if got, want := enemy.hitPoints, 0; got != want {
+			t.Errorf("enemy has %d hit points, want %d", got, want)
+		}
+	})
+
+	t.Run("Armor equal to damage", func(t *testing.T) {
+		player := contender{hitPoints: 8, damage: 5, armor: 7}
+		enemy := contender{hitPoints: 12, damage: 7, armor: 2}
+
+		if got, want := playerWins(&player, &enemy), true; got != want {
+			t.Errorf("got %t, want %t", got, want)
+		}
+
+		if got, want := player.hitPoints, 5; got != want {
+			t.Errorf("player has %d hit points, want %d", got, want)
+		}
+
+		if got, want := enemy.hitPoints, 0; got != want {
+			t.Errorf("enemy has %d hit points, want %d", got, want)
+		}
+	})
 }
