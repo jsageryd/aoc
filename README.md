@@ -111,3 +111,4 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 20: Infinite Elves and Infinite Houses](2015/day-20)
 - [Day 21: RPG Simulator 20XX](2015/day-21)
 - [Day 22: Wizard Simulator 20XX](2015/day-22)
+- [Day 23: Opening the Turing Lock](2015/day-23)
