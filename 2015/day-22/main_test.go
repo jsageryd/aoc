@@ -65,6 +65,7 @@ func TestPlayerWins(t *testing.T) {
 			player              player
 			enemy               enemy
 			spellIdxs           []int
+			hardMode            bool
 			wantWin             bool
 			wantPlayerHitPoints int
 			wantEnemyHitPoints  int
@@ -74,6 +75,7 @@ func TestPlayerWins(t *testing.T) {
 				player:              player{hitPoints: 10, mana: 250},
 				enemy:               enemy{hitPoints: 13, damage: 8},
 				spellIdxs:           []int{3, 0},
+				hardMode:            false,
 				wantWin:             true,
 				wantPlayerHitPoints: 2,
 				wantEnemyHitPoints:  0,
@@ -83,6 +85,7 @@ func TestPlayerWins(t *testing.T) {
 				player:              player{hitPoints: 10, mana: 250},
 				enemy:               enemy{hitPoints: 14, damage: 8},
 				spellIdxs:           []int{4, 2, 1, 3, 0},
+				hardMode:            false,
 				wantWin:             true,
 				wantPlayerHitPoints: 1,
 				wantEnemyHitPoints:  -1,
@@ -92,6 +95,7 @@ func TestPlayerWins(t *testing.T) {
 				player:              player{hitPoints: 10, mana: 500},
 				enemy:               enemy{hitPoints: 13, damage: 8},
 				spellIdxs:           []int{4, 3},
+				hardMode:            false,
 				wantWin:             false,
 				wantPlayerHitPoints: -6,
 				wantEnemyHitPoints:  10,
@@ -101,6 +105,7 @@ func TestPlayerWins(t *testing.T) {
 				player:              player{hitPoints: 10, mana: 10},
 				enemy:               enemy{hitPoints: 13, damage: 8},
 				spellIdxs:           []int{0},
+				hardMode:            false,
 				wantWin:             false,
 				wantPlayerHitPoints: 10,
 				wantEnemyHitPoints:  13,
@@ -110,15 +115,26 @@ func TestPlayerWins(t *testing.T) {
 				player:              player{hitPoints: 10, mana: 500},
 				enemy:               enemy{hitPoints: 5, damage: 7},
 				spellIdxs:           []int{2, 0, 0},
+				hardMode:            false,
 				wantWin:             true,
 				wantPlayerHitPoints: 8,
 				wantEnemyHitPoints:  -3,
+			},
+			{
+				desc:                "First example from description with hard mode",
+				player:              player{hitPoints: 10, mana: 250},
+				enemy:               enemy{hitPoints: 13, damage: 8},
+				spellIdxs:           []int{3, 0},
+				hardMode:            true,
+				wantWin:             false,
+				wantPlayerHitPoints: 0,
+				wantEnemyHitPoints:  7,
 			},
 		} {
 			t.Run(tc.desc, func(t *testing.T) {
 				p, e := tc.player, tc.enemy
 
-				gotWin, err := playerWins(&p, &e, tc.spellIdxs)
+				gotWin, err := playerWins(&p, &e, tc.spellIdxs, tc.hardMode)
 				if err != nil {
 					t.Fatalf("unexpected error: %v", err)
 				}
@@ -164,7 +180,7 @@ func TestPlayerWins(t *testing.T) {
 			t.Run(tc.desc, func(t *testing.T) {
 				p, e := tc.player, tc.enemy
 
-				gotWin, gotErr := playerWins(&p, &e, tc.spellIdxs)
+				gotWin, gotErr := playerWins(&p, &e, tc.spellIdxs, false)
 
 				if got, want := gotWin, false; got != want {
 					t.Errorf("got %t, want %t", got, want)

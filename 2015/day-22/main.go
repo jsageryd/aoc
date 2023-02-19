@@ -12,10 +12,11 @@ import (
 func main() {
 	input, _ := io.ReadAll(os.Stdin)
 
-	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 1: %d\n", run(input, false))
+	fmt.Printf("Part 2: %d\n", run(input, true))
 }
 
-func part1(input []byte) int {
+func run(input []byte, hardMode bool) int {
 	p := player{hitPoints: 50, mana: 500}
 	e := parse(input)
 
@@ -31,7 +32,7 @@ func part1(input []byte) int {
 
 		p, e := p, e
 
-		win, err := playerWins(&p, &e, spellIndices)
+		win, err := playerWins(&p, &e, spellIndices, hardMode)
 		if err != nil {
 			switch err {
 			case errNoMoreSpells:
@@ -134,7 +135,7 @@ type enemy struct {
 }
 
 // playerWins runs the fight and returns true if player wins.
-func playerWins(p *player, e *enemy, spellIndices []int) (win bool, err error) {
+func playerWins(p *player, e *enemy, spellIndices []int, hardMode bool) (win bool, err error) {
 	defer func() {
 		if win {
 			debugLogf("Player wins")
@@ -183,6 +184,15 @@ func playerWins(p *player, e *enemy, spellIndices []int) (win bool, err error) {
 		playersTurn := turn%2 == 0
 
 		if playersTurn {
+			if hardMode {
+				p.hitPoints--
+
+				if p.hitPoints <= 0 {
+					debugLogf("Player dies because game too hard")
+					return false, nil
+				}
+			}
+
 			if len(spellList) == 0 {
 				debugLogf("Player runs out of spells")
 				return false, errNoMoreSpells
