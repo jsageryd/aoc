@@ -164,11 +164,11 @@ func BenchmarkAStar(b *testing.B) {
 
 	grid := make(map[coord]int)
 
-	rand.Seed(0)
+	rng := rand.New(rand.NewSource(0))
 
 	for y := 0; y < h; y++ {
 		for x := 0; x < w; x++ {
-			grid[coord{x, y}] = rand.Intn(100)
+			grid[coord{x, y}] = rng.Intn(100)
 		}
 	}
 
