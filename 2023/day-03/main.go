@@ -14,6 +14,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input [][]byte) int {
@@ -27,6 +28,43 @@ func part1(input [][]byte) int {
 				if isPartNum {
 					sum += n
 				}
+			}
+		}
+	}
+
+	return sum
+}
+
+func part2(input [][]byte) int {
+	var sum int
+
+	s := parseSchematic(input)
+	heads, tails := s.numsMap()
+
+	for y := range input {
+		for x := range input[y] {
+			if s[coord{x, y}] == '*' {
+				nums := make(map[coord]int)
+
+				for _, nc := range (coord{x, y}).neighbours() {
+					if n, ok := heads[nc]; ok {
+						nums[nc] = n
+					}
+					if tc, ok := tails[nc]; ok {
+						nums[tails[tc]] = heads[tc]
+					}
+				}
+
+				if len(nums) < 2 {
+					continue
+				}
+
+				ratio := 1
+				for _, n := range nums {
+					ratio *= n
+				}
+
+				sum += ratio
 			}
 		}
 	}
@@ -104,4 +142,27 @@ func (s schematic) num(x, y int) (n int, isPartNum bool) {
 	}
 
 	return num, isPartNum
+}
+
+// numsMap returns a map of all coordinates that represent the first digit
+// (head) of a number, as well as a mapping of each of the following digits
+// (tail) of each number to its head.
+func (s schematic) numsMap() (heads map[coord]int, tails map[coord]coord) {
+	isDigit := func(b byte) bool {
+		return b >= '0' && b <= '9'
+	}
+
+	heads = make(map[coord]int)
+	tails = make(map[coord]coord)
+
+	for c := range s {
+		if n, _ := s.num(c.x, c.y); n != 0 {
+			heads[c] = n
+			for x := c.x; isDigit(s[coord{x, c.y}]); x++ {
+				tails[coord{x, c.y}] = c
+			}
+		}
+	}
+
+	return heads, tails
 }

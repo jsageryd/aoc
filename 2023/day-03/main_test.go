@@ -5,8 +5,7 @@ import (
 	"testing"
 )
 
-func TestPart1(t *testing.T) {
-	input := split(`
+var input = split(`
 467..114..
 ...*......
 ..35..633.
@@ -19,7 +18,14 @@ func TestPart1(t *testing.T) {
 .664.598..
 `)
 
+func TestPart1(t *testing.T) {
 	if got, want := part1(input), 4361; got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
+func TestPart2(t *testing.T) {
+	if got, want := part2(input), 467835; got != want {
 		t.Errorf("got %d, want %d", got, want)
 	}
 }
