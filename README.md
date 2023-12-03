@@ -5,6 +5,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 ## 2023
 - [Day 1: Trebuchet?!](2023/day-01)
 - [Day 2: Cube Conundrum](2023/day-02)
+- [Day 3: Gear Ratios](2023/day-03)
 
 ## 2022
 - [Day 1: Calorie Counting](2022/day-01)
