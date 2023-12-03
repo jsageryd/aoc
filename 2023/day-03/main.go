@@ -20,15 +20,11 @@ func main() {
 func part1(input [][]byte) int {
 	var sum int
 
-	s := parseSchematic(input)
+	symbols, digits := parse(input)
 
-	for y := range input {
-		for x := range input[y] {
-			if n, isPartNum := s.num(x, y); n != 0 {
-				if isPartNum {
-					sum += n
-				}
-			}
+	for sc := range symbols {
+		for _, n := range neighbouringNumbers(sc, digits) {
+			sum += n
 		}
 	}
 
@@ -38,131 +34,104 @@ func part1(input [][]byte) int {
 func part2(input [][]byte) int {
 	var sum int
 
-	s := parseSchematic(input)
-	heads, tails := s.numsMap()
+	symbols, digits := parse(input)
 
-	for y := range input {
-		for x := range input[y] {
-			if s[coord{x, y}] == '*' {
-				nums := make(map[coord]int)
-
-				for _, nc := range (coord{x, y}).neighbours() {
-					if n, ok := heads[nc]; ok {
-						nums[nc] = n
-					}
-					if tc, ok := tails[nc]; ok {
-						nums[tails[tc]] = heads[tc]
-					}
-				}
-
-				if len(nums) < 2 {
-					continue
-				}
-
-				ratio := 1
-				for _, n := range nums {
-					ratio *= n
-				}
-
-				sum += ratio
-			}
+	for sc, sb := range symbols {
+		if sb != '*' {
+			continue
 		}
+
+		nn := neighbouringNumbers(sc, digits)
+		if len(nn) < 2 {
+			continue
+		}
+
+		ratio := 1
+		for _, n := range nn {
+			ratio *= n
+		}
+
+		sum += ratio
 	}
 
 	return sum
 }
 
-func parseSchematic(input [][]byte) schematic {
-	s := make(schematic)
+func parse(input [][]byte) (symbols, digits map[coord]byte) {
+	symbols = make(map[coord]byte)
+	digits = make(map[coord]byte)
 
 	for y := range input {
 		for x := range input[y] {
-			s[coord{x, y}] = input[y][x]
+			c := coord{x, y}
+			b := input[y][x]
+
+			switch {
+			case isSymbol(b):
+				symbols[c] = b
+			case isDigit(b):
+				digits[c] = b
+			}
 		}
 	}
 
-	return s
+	return symbols, digits
+}
+
+func isSymbol(b byte) bool {
+	return !isDigit(b) && b != '.'
+}
+
+func isDigit(b byte) bool {
+	return b >= '0' && b <= '9'
+}
+
+func neighbouringNumbers(c coord, digits map[coord]byte) []int {
+	var nums []int
+
+	seen := make(map[coord]bool)
+	for _, nc := range neighbours(c) {
+		if _, ok := digits[nc]; ok {
+			numC, n := findNumber(nc, digits)
+			if !seen[numC] {
+				nums = append(nums, n)
+				seen[numC] = true
+			}
+		}
+	}
+
+	return nums
+}
+
+func findNumber(c coord, digits map[coord]byte) (firstDigit coord, n int) {
+	for {
+		if _, ok := digits[coord{c.x + 1, c.y}]; !ok {
+			break
+		}
+		c.x++
+	}
+
+	var num int
+	m := 1
+
+	for d, ok := digits[c]; ok; d, ok = digits[c] {
+		c.x--
+		num += m * (int(d) - '0')
+		m *= 10
+	}
+
+	return c, num
 }
 
 type coord struct {
 	x, y int
 }
 
-func (c coord) neighbours() []coord {
+func neighbours(c coord) []coord {
 	return []coord{
-		{c.x + 1, c.y},
-		{c.x + 1, c.y - 1},
-		{c.x, c.y - 1},
-		{c.x - 1, c.y - 1},
-		{c.x - 1, c.y},
-		{c.x - 1, c.y + 1},
-		{c.x, c.y + 1},
-		{c.x + 1, c.y + 1},
+		{c.x + 1, c.y}, {c.x + 1, c.y - 1},
+		{c.x, c.y - 1}, {c.x - 1, c.y - 1},
+		{c.x - 1, c.y}, {c.x - 1, c.y + 1},
+		{c.x, c.y + 1}, {c.x + 1, c.y + 1},
 	}
-}
-
-type schematic map[coord]byte
-
-func (s schematic) num(x, y int) (n int, isPartNum bool) {
-	isDigit := func(b byte) bool {
-		return b >= '0' && b <= '9'
-	}
-
-	isSymbol := func(b byte) bool {
-		return b != 0 && b != '.' && !isDigit(b)
-	}
-
-	// return if the coordinate is not a digit
-	if !isDigit(s[coord{x, y}]) {
-		return 0, false
-	}
-
-	// return if this is not the first digit in the number
-	if isDigit(s[coord{x - 1, y}]) {
-		return 0, false
-	}
-
-	var digits []int
-	for xx := x; isDigit(s[coord{xx, y}]); xx++ {
-		digits = append(digits, int(s[coord{xx, y}])-'0')
-
-		for _, nc := range (coord{xx, y}).neighbours() {
-			if isSymbol(s[nc]) {
-				isPartNum = true
-			}
-		}
-	}
-
-	var num int
-
-	m := 1
-	for n := len(digits) - 1; n >= 0; n-- {
-		num += m * digits[n]
-		m *= 10
-	}
-
-	return num, isPartNum
-}
-
-// numsMap returns a map of all coordinates that represent the first digit
-// (head) of a number, as well as a mapping of each of the following digits
-// (tail) of each number to its head.
-func (s schematic) numsMap() (heads map[coord]int, tails map[coord]coord) {
-	isDigit := func(b byte) bool {
-		return b >= '0' && b <= '9'
-	}
-
-	heads = make(map[coord]int)
-	tails = make(map[coord]coord)
-
-	for c := range s {
-		if n, _ := s.num(c.x, c.y); n != 0 {
-			heads[c] = n
-			for x := c.x; isDigit(s[coord{x, c.y}]); x++ {
-				tails[coord{x, c.y}] = c
-			}
-		}
-	}
-
-	return heads, tails
 }
