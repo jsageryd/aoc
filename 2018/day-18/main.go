@@ -23,7 +23,7 @@ func main() {
 
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
-		area = append(area, scanner.Bytes())
+		area = append(area, []byte(scanner.Text()))
 	}
 
 	var (
