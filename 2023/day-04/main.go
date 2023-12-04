@@ -17,6 +17,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -34,6 +35,39 @@ func part1(input []string) int {
 	}
 
 	return sum
+}
+
+func part2(input []string) int {
+	cards := make(map[int]card) // card number -> card
+
+	var cardIDs []int
+	var scratchedCardIDs []int
+
+	for n, line := range input {
+		c := parse(line)
+		cards[n+1] = c
+		cardIDs = append(cardIDs, n+1)
+	}
+
+	for len(cardIDs) > 0 {
+		c := cards[cardIDs[0]]
+
+		var matches int
+		for _, winningN := range c.winning {
+			if slices.Contains(c.have, winningN) {
+				matches++
+			}
+		}
+
+		for n := 1; n <= matches; n++ {
+			cardIDs = append(cardIDs, cardIDs[0]+n)
+		}
+
+		scratchedCardIDs = append(scratchedCardIDs, cardIDs[0])
+		cardIDs = cardIDs[1:]
+	}
+
+	return len(scratchedCardIDs)
 }
 
 func parse(line string) card {
