@@ -25,13 +25,7 @@ func part1(input []string) int {
 
 	for _, line := range input {
 		c := parse(line)
-		var matches int
-		for _, winningN := range c.winning {
-			if slices.Contains(c.have, winningN) {
-				matches++
-			}
-		}
-		sum += (1 << matches) >> 1
+		sum += (1 << matches(c)) >> 1
 	}
 
 	return sum
@@ -52,14 +46,7 @@ func part2(input []string) int {
 	for len(cardIDs) > 0 {
 		c := cards[cardIDs[0]]
 
-		var matches int
-		for _, winningN := range c.winning {
-			if slices.Contains(c.have, winningN) {
-				matches++
-			}
-		}
-
-		for n := 1; n <= matches; n++ {
+		for n := 1; n <= matches(c); n++ {
 			cardIDs = append(cardIDs, cardIDs[0]+n)
 		}
 
@@ -92,4 +79,16 @@ func parse(line string) card {
 type card struct {
 	winning []int
 	have    []int
+}
+
+func matches(c card) int {
+	var matches int
+
+	for _, winningN := range c.winning {
+		if slices.Contains(c.have, winningN) {
+			matches++
+		}
+	}
+
+	return matches
 }
