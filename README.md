@@ -7,6 +7,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 2: Cube Conundrum](2023/day-02)
 - [Day 3: Gear Ratios](2023/day-03)
 - [Day 4: Scratchcards](2023/day-04)
+- [Day 5: If You Give A Seed A Fertilizer](2023/day-05)
 
 ## 2022
 - [Day 1: Calorie Counting](2022/day-01)
