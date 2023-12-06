@@ -25,11 +25,9 @@ func part1(input []byte) int {
 	nextMap:
 		for _, m := range maps {
 			for _, l := range m {
-				for offset := 0; offset < l[2]; offset++ {
-					if cur == l[1]+offset {
-						cur = l[0] + offset
-						continue nextMap
-					}
+				if cur >= l[1] && cur < l[1]+l[2] {
+					cur = l[0] + cur - l[1]
+					continue nextMap
 				}
 			}
 		}
