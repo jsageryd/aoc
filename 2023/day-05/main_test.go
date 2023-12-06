@@ -4,8 +4,7 @@ import (
 	"testing"
 )
 
-func TestPart1(t *testing.T) {
-	input := []byte(`
+var input = []byte(`
 seeds: 79 14 55 13
 
 seed-to-soil map:
@@ -41,7 +40,14 @@ humidity-to-location map:
 56 93 4
 `[1:])
 
+func TestPart1(t *testing.T) {
 	if got, want := part1(input), 35; got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
+func TestPart2(t *testing.T) {
+	if got, want := part2(input), 46; got != want {
 		t.Errorf("got %d, want %d", got, want)
 	}
 }
