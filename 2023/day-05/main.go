@@ -21,18 +21,26 @@ func part1(input []byte) int {
 	var locations []int
 
 	for _, cur := range seeds {
+
+	nextMap:
 		for _, m := range maps {
-			if next, ok := m[cur]; ok {
-				cur = next
+			for _, l := range m {
+				for offset := 0; offset < l[2]; offset++ {
+					if cur == l[1]+offset {
+						cur = l[0] + offset
+						continue nextMap
+					}
+				}
 			}
 		}
+
 		locations = append(locations, cur)
 	}
 
 	return slices.Min(locations)
 }
 
-func parse(input []byte) (seeds []int, maps []map[int]int) {
+func parse(input []byte) (seeds []int, maps [][][3]int) {
 	parts := strings.Split(string(input), "\n\n")
 
 	for _, s := range strings.Fields(parts[0][7:]) {
@@ -41,19 +49,15 @@ func parse(input []byte) (seeds []int, maps []map[int]int) {
 	}
 
 	for _, mapStr := range parts[1:] {
-		m := make(map[int]int)
+		var lines [][3]int
 
-		for _, line := range strings.Split(strings.TrimSpace(mapStr), "\n")[1:] {
-			var dst, src, length int
-
-			fmt.Sscanf(line, "%d %d %d", &dst, &src, &length)
-
-			for n := 0; n < length; n++ {
-				m[src+n] = dst + n
-			}
+		for _, lineStr := range strings.Split(strings.TrimSpace(mapStr), "\n")[1:] {
+			var l [3]int
+			fmt.Sscanf(lineStr, "%d %d %d", &l[0], &l[1], &l[2])
+			lines = append(lines, l)
 		}
 
-		maps = append(maps, m)
+		maps = append(maps, lines)
 	}
 
 	return seeds, maps
