@@ -29,18 +29,7 @@ func part1(input []string) int {
 		raceTime, _ := strconv.Atoi(timesStr[n])
 		recordDistance, _ := strconv.Atoi(distancesStr[n])
 
-		var waysToWin int
-
-		for speed := 1; speed < raceTime; speed++ {
-			remainingTime := raceTime - speed
-			distance := speed * remainingTime
-
-			if distance > recordDistance {
-				waysToWin++
-			}
-		}
-
-		multipliedWaysToWin *= waysToWin
+		multipliedWaysToWin *= waysToWin(raceTime, recordDistance)
 	}
 
 	return multipliedWaysToWin
@@ -53,6 +42,10 @@ func part2(input []string) int {
 	raceTime, _ := strconv.Atoi(timeStr)
 	recordDistance, _ := strconv.Atoi(distanceStr)
 
+	return waysToWin(raceTime, recordDistance)
+}
+
+func waysToWin(raceTime, recordDistance int) int {
 	var waysToWin int
 
 	for speed := 1; speed < raceTime; speed++ {
