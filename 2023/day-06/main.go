@@ -16,6 +16,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -43,4 +44,25 @@ func part1(input []string) int {
 	}
 
 	return multipliedWaysToWin
+}
+
+func part2(input []string) int {
+	timeStr := strings.ReplaceAll(strings.TrimPrefix(input[0], "Time:"), " ", "")
+	distanceStr := strings.ReplaceAll(strings.TrimPrefix(input[1], "Distance:"), " ", "")
+
+	raceTime, _ := strconv.Atoi(timeStr)
+	recordDistance, _ := strconv.Atoi(distanceStr)
+
+	var waysToWin int
+
+	for speed := 1; speed < raceTime; speed++ {
+		remainingTime := raceTime - speed
+		distance := speed * remainingTime
+
+		if distance > recordDistance {
+			waysToWin++
+		}
+	}
+
+	return waysToWin
 }
