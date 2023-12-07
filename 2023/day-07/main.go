@@ -21,42 +21,22 @@ func main() {
 }
 
 func part1(input []string) int {
-	var habs []handAndBid
+	habs := parse(input)
 
-	for _, line := range input {
-		var hab handAndBid
-		fmt.Sscanf(line, "%s %d", &hab.hand, &hab.bid)
-		habs = append(habs, hab)
-	}
+	sortHandAndBids(habs, false)
 
-	slices.SortFunc(habs, func(a, b handAndBid) int {
-		const jr = false
-
-		if v := cmp.Compare(handType(a.hand, jr), handType(b.hand, jr)); v != 0 {
-			return v
-		}
-
-		for n := range a.hand {
-			if v := cmp.Compare(cardRank(a.hand[n], jr), cardRank(b.hand[n], jr)); v != 0 {
-				return v
-			}
-		}
-
-		return 0
-	})
-
-	slices.Reverse(habs)
-
-	var sum int
-
-	for n := range habs {
-		sum += habs[n].bid * (n + 1)
-	}
-
-	return sum
+	return totalWinnings(habs)
 }
 
 func part2(input []string) int {
+	habs := parse(input)
+
+	sortHandAndBids(habs, true)
+
+	return totalWinnings(habs)
+}
+
+func parse(input []string) []handAndBid {
 	var habs []handAndBid
 
 	for _, line := range input {
@@ -65,15 +45,23 @@ func part2(input []string) int {
 		habs = append(habs, hab)
 	}
 
-	slices.SortFunc(habs, func(a, b handAndBid) int {
-		const jr = true
+	return habs
+}
 
-		if v := cmp.Compare(handType(a.hand, jr), handType(b.hand, jr)); v != 0 {
+func sortHandAndBids(habs []handAndBid, jokerRule bool) {
+	slices.SortFunc(habs, func(a, b handAndBid) int {
+		if v := cmp.Compare(
+			handType(a.hand, jokerRule),
+			handType(b.hand, jokerRule),
+		); v != 0 {
 			return v
 		}
 
 		for n := range a.hand {
-			if v := cmp.Compare(cardRank(a.hand[n], jr), cardRank(b.hand[n], jr)); v != 0 {
+			if v := cmp.Compare(
+				cardRank(a.hand[n], jokerRule),
+				cardRank(b.hand[n], jokerRule),
+			); v != 0 {
 				return v
 			}
 		}
@@ -82,7 +70,9 @@ func part2(input []string) int {
 	})
 
 	slices.Reverse(habs)
+}
 
+func totalWinnings(habs []handAndBid) int {
 	var sum int
 
 	for n := range habs {
