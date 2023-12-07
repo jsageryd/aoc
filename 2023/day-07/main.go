@@ -17,6 +17,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -29,12 +30,50 @@ func part1(input []string) int {
 	}
 
 	slices.SortFunc(habs, func(a, b handAndBid) int {
-		if v := cmp.Compare(handType(a.hand), handType(b.hand)); v != 0 {
+		const jr = false
+
+		if v := cmp.Compare(handType(a.hand, jr), handType(b.hand, jr)); v != 0 {
 			return v
 		}
 
 		for n := range a.hand {
-			if v := cmp.Compare(cardRank(a.hand[n]), cardRank(b.hand[n])); v != 0 {
+			if v := cmp.Compare(cardRank(a.hand[n], jr), cardRank(b.hand[n], jr)); v != 0 {
+				return v
+			}
+		}
+
+		return 0
+	})
+
+	slices.Reverse(habs)
+
+	var sum int
+
+	for n := range habs {
+		sum += habs[n].bid * (n + 1)
+	}
+
+	return sum
+}
+
+func part2(input []string) int {
+	var habs []handAndBid
+
+	for _, line := range input {
+		var hab handAndBid
+		fmt.Sscanf(line, "%s %d", &hab.hand, &hab.bid)
+		habs = append(habs, hab)
+	}
+
+	slices.SortFunc(habs, func(a, b handAndBid) int {
+		const jr = true
+
+		if v := cmp.Compare(handType(a.hand, jr), handType(b.hand, jr)); v != 0 {
+			return v
+		}
+
+		for n := range a.hand {
+			if v := cmp.Compare(cardRank(a.hand[n], jr), cardRank(b.hand[n], jr)); v != 0 {
 				return v
 			}
 		}
@@ -58,7 +97,7 @@ type handAndBid struct {
 	bid  int
 }
 
-func handType(hand string) int {
+func handType(hand string, jokerRule bool) int {
 	freq := make(map[byte]int)
 
 	for n := range hand {
@@ -69,11 +108,22 @@ func handType(hand string) int {
 
 	var freqs []int
 
-	for _, f := range freq {
+	if jokerRule && freq['J'] == 5 {
+		return 0
+	}
+
+	for c, f := range freq {
+		if jokerRule && c == 'J' {
+			continue
+		}
 		freqs = append(freqs, f)
 	}
 
 	slices.Sort(freqs)
+
+	if jokerRule {
+		freqs[len(freqs)-1] += freq['J']
+	}
 
 	m := 1
 	for n := len(freqs) - 1; n >= 0; n-- {
@@ -92,6 +142,10 @@ func handType(hand string) int {
 	}[id]
 }
 
-func cardRank(card byte) int {
-	return strings.IndexByte("AKQJT98765432", card)
+func cardRank(card byte, jokerRule bool) int {
+	if jokerRule {
+		return strings.IndexByte("AKQT98765432J", card)
+	} else {
+		return strings.IndexByte("AKQJT98765432", card)
+	}
 }
