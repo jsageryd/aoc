@@ -10,6 +10,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 5: If You Give A Seed A Fertilizer](2023/day-05)
 - [Day 6: Wait For It](2023/day-06)
 - [Day 7: Camel Cards](2023/day-07)
+- [Day 8: Haunted Wasteland](2023/day-08)
 
 ## 2022
 - [Day 1: Calorie Counting](2022/day-01)
