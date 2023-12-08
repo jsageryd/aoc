@@ -59,20 +59,15 @@ func part2(input []string) int {
 	}
 
 	var steps int
-	var arrived bool
 
 	inst := input[0]
+	cycles := make(map[int]int)
 
-	for {
-		arrived = true
+	for len(cycles) < len(curs) {
 		for n := range curs {
-			if curs[n][2] != 'Z' {
-				arrived = false
+			if curs[n][2] == 'Z' {
+				cycles[n] = steps
 			}
-		}
-
-		if arrived {
-			break
 		}
 
 		for n := range curs {
@@ -80,6 +75,29 @@ func part2(input []string) int {
 		}
 
 		steps++
+	}
+
+	minCycle := cycles[0]
+
+	for _, cycle := range cycles {
+		if cycle < minCycle {
+			minCycle = cycle
+		}
+	}
+
+	var arrived bool
+
+	for {
+		arrived = true
+		for n := range cycles {
+			if steps%cycles[n] != 0 {
+				arrived = false
+			}
+		}
+		if arrived {
+			break
+		}
+		steps += minCycle
 	}
 
 	return steps
