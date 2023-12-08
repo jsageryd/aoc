@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"slices"
 )
 
 func main() {
@@ -61,12 +62,12 @@ func part2(input []string) int {
 	var steps int
 
 	inst := input[0]
-	cycles := make(map[int]int)
+	cyclesMap := make(map[int]int)
 
-	for len(cycles) < len(curs) {
+	for len(cyclesMap) < len(curs) {
 		for n := range curs {
 			if curs[n][2] == 'Z' {
-				cycles[n] = steps
+				cyclesMap[n] = steps
 			}
 		}
 
@@ -77,28 +78,37 @@ func part2(input []string) int {
 		steps++
 	}
 
-	minCycle := cycles[0]
+	var cycles []int
 
-	for _, cycle := range cycles {
-		if cycle < minCycle {
-			minCycle = cycle
-		}
+	for _, cycle := range cyclesMap {
+		cycles = append(cycles, cycle)
 	}
 
-	var arrived bool
+	slices.Sort(cycles)
+	loopedCycles := make([]int, len(cycles))
+	copy(loopedCycles, cycles)
 
 	for {
-		arrived = true
-		for n := range cycles {
-			if steps%cycles[n] != 0 {
-				arrived = false
+		var minCycleIdx int
+
+		for n := range loopedCycles {
+			if loopedCycles[n] < loopedCycles[minCycleIdx] {
+				minCycleIdx = n
 			}
 		}
-		if arrived {
+
+		loopedCycles[minCycleIdx] += cycles[minCycleIdx]
+
+		found := true
+		for n := 1; n < len(loopedCycles); n++ {
+			if loopedCycles[n] != loopedCycles[n-1] {
+				found = false
+			}
+		}
+		if found {
 			break
 		}
-		steps += minCycle
 	}
 
-	return steps
+	return loopedCycles[0]
 }
