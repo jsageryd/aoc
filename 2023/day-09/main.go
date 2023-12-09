@@ -40,19 +40,7 @@ func part2(input []string) int {
 }
 
 func nextValue(line string) int {
-	seqs := [][]int{ints(line)}
-
-	for {
-		var seq []int
-		lastSeq := seqs[len(seqs)-1]
-		for i := 1; i < len(lastSeq); i++ {
-			seq = append(seq, lastSeq[i]-lastSeq[i-1])
-		}
-		if len(seq) < 1 {
-			break
-		}
-		seqs = append(seqs, seq)
-	}
+	seqs := sequences(line)
 
 	for n := len(seqs) - 2; n >= 0; n-- {
 		seqs[n] = append(seqs[n], seqs[n][len(seqs[n])-1]+seqs[n+1][len(seqs[n+1])-1])
@@ -62,7 +50,24 @@ func nextValue(line string) int {
 }
 
 func prevValue(line string) int {
-	seqs := [][]int{ints(line)}
+	seqs := sequences(line)
+
+	for n := len(seqs) - 2; n >= 0; n-- {
+		seqs[n] = append([]int{seqs[n][0] - seqs[n+1][0]}, seqs[n]...)
+	}
+
+	return seqs[0][0]
+}
+
+func sequences(line string) [][]int {
+	var seq []int
+
+	for _, s := range strings.Fields(line) {
+		i, _ := strconv.Atoi(s)
+		seq = append(seq, i)
+	}
+
+	seqs := [][]int{seq}
 
 	for {
 		var seq []int
@@ -76,18 +81,5 @@ func prevValue(line string) int {
 		seqs = append(seqs, seq)
 	}
 
-	for n := len(seqs) - 2; n >= 0; n-- {
-		seqs[n] = append([]int{seqs[n][0] - seqs[n+1][0]}, seqs[n]...)
-	}
-
-	return seqs[0][0]
-}
-
-func ints(s string) []int {
-	var is []int
-	for _, ss := range strings.Fields(s) {
-		i, _ := strconv.Atoi(ss)
-		is = append(is, i)
-	}
-	return is
+	return seqs
 }
