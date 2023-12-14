@@ -14,13 +14,14 @@ func main() {
 		input = append(input, s.Text())
 	}
 
-	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 1: %d\n", process(input, 2))
+	fmt.Printf("Part 2: %d\n", process(input, 1000000))
 }
 
-func part1(input []string) int {
+func process(input []string, expansion int) int {
 	galaxies := parse(input)
 
-	expand(galaxies)
+	expand(galaxies, expansion)
 
 	var indices []int
 	for n := range galaxies {
@@ -67,7 +68,7 @@ func bounds(coords []coord) (topLeft, bottomRight coord) {
 	return topLeft, bottomRight
 }
 
-func expand(galaxies []coord) {
+func expand(galaxies []coord, multiplier int) {
 	topLeft, bottomRight := bounds(galaxies)
 
 	var emptyRows, emptyCols []int
@@ -108,12 +109,12 @@ func expand(galaxies []coord) {
 	for n := range galaxies {
 		for _, y := range emptyRows {
 			if galaxies[n].y > y {
-				galaxies[n].y++
+				galaxies[n].y += multiplier - 1
 			}
 		}
 		for _, x := range emptyCols {
 			if galaxies[n].x > x {
-				galaxies[n].x++
+				galaxies[n].x += multiplier - 1
 			}
 		}
 	}

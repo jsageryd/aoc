@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestPart1(t *testing.T) {
+func TestProcess(t *testing.T) {
 	input := []string{
 		"...#......",
 		".......#..",
@@ -19,8 +19,17 @@ func TestPart1(t *testing.T) {
 		"#...#.....",
 	}
 
-	if got, want := part1(input), 374; got != want {
-		t.Errorf("got %d, want %d", got, want)
+	for n, tc := range []struct {
+		expansion int
+		want      int
+	}{
+		{expansion: 2, want: 374},
+		{expansion: 10, want: 1030},
+		{expansion: 100, want: 8410},
+	} {
+		if got, want := process(input, tc.expansion), tc.want; got != want {
+			t.Errorf("[%d] process(input, %d) = %d, want %d", n, tc.expansion, got, want)
+		}
 	}
 }
 
