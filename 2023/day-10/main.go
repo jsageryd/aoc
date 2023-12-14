@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"slices"
 	"strings"
 )
 
@@ -15,6 +16,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -46,6 +48,68 @@ func part1(input []string) int {
 	}
 
 	return distance
+}
+
+func part2(input []string) int {
+	m := parse(input)
+
+	s := start(m)
+
+	seen := map[coord]bool{s: true}
+
+	ab := neighbours(m, s)
+	a, ok := ab[0], true
+
+	m[s] = findType(m, s)
+
+	for ok {
+		seen[a] = true
+		a, ok = next(m, a, seen)
+	}
+
+	var area int
+
+	flip := map[byte]byte{
+		'F': 'J',
+		'J': 'F',
+		'7': 'L',
+		'L': '7',
+	}
+
+	var edgeStart byte
+
+	for y := range input {
+		var in bool
+		var edge bool
+
+		for x := range input[y] {
+			c := coord{x, y}
+
+			if seen[c] {
+				switch m[c] {
+				case '|':
+					in = !in
+				case 'F', '7', 'J', 'L':
+					if !edge {
+						edgeStart = m[c]
+						in = !in
+					} else {
+						if m[c] != flip[edgeStart] {
+							in = !in
+						}
+						edgeStart = 0
+					}
+					edge = !edge
+				}
+			} else {
+				if in {
+					area++
+				}
+			}
+		}
+	}
+
+	return area
 }
 
 type coord struct {
@@ -128,4 +192,47 @@ func next(m map[coord]byte, c coord, seen map[coord]bool) (n coord, ok bool) {
 		}
 	}
 	return coord{}, false
+}
+
+func findType(m map[coord]byte, c coord) byte {
+	var (
+		north = coord{c.x, c.y - 1}
+		west  = coord{c.x - 1, c.y}
+		south = coord{c.x, c.y + 1}
+		east  = coord{c.x + 1, c.y}
+	)
+
+	var dirs []byte
+
+	for _, c := range neighbours(m, c) {
+		switch c {
+		case north:
+			dirs = append(dirs, 'n')
+		case west:
+			dirs = append(dirs, 'w')
+		case south:
+			dirs = append(dirs, 's')
+		case east:
+			dirs = append(dirs, 'e')
+		}
+	}
+
+	slices.Sort(dirs)
+
+	switch string(dirs) {
+	case "en":
+		return 'L'
+	case "es":
+		return '7'
+	case "ew":
+		return '-'
+	case "ns":
+		return '|'
+	case "nw":
+		return 'F'
+	case "sw":
+		return 'J'
+	default:
+		return 0
+	}
 }
