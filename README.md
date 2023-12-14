@@ -13,6 +13,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 8: Haunted Wasteland](2023/day-08)
 - [Day 9: Mirage Maintenance](2023/day-09)
 - [Day 10: Pipe Maze](2023/day-10)
+- [Day 11: Cosmic Expansion](2023/day-11)
 
 ## 2022
 - [Day 1: Calorie Counting](2022/day-01)
