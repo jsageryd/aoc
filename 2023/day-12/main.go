@@ -18,6 +18,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -25,6 +26,16 @@ func part1(input []string) int {
 
 	for _, row := range input {
 		sum += arrangements(row)
+	}
+
+	return sum
+}
+
+func part2(input []string) int {
+	var sum int
+
+	for _, row := range input {
+		sum += arrangements(expand(row))
 	}
 
 	return sum
@@ -124,4 +135,17 @@ func rev(b []byte) {
 	for i := 0; i < len(b)/2; i++ {
 		b[i], b[len(b)-i-1] = b[len(b)-i-1], b[i]
 	}
+}
+
+func expand(row string) string {
+	pattern, groupsStr, _ := strings.Cut(row, " ")
+
+	var patterns []string
+	var groupsStrs []string
+	for n := 0; n < 5; n++ {
+		patterns = append(patterns, pattern)
+		groupsStrs = append(groupsStrs, groupsStr)
+	}
+
+	return strings.Join(patterns, "?") + " " + strings.Join(groupsStrs, ",")
 }

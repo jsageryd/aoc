@@ -3,20 +3,39 @@ package main
 import (
 	"fmt"
 	"testing"
+	"time"
 )
 
-func TestPart1(t *testing.T) {
-	input := []string{
-		"???.### 1,1,3",
-		".??..??...?##. 1,1,3",
-		"?#?#?#?#?#?#?#? 1,3,1,6",
-		"????.#...#... 4,1,1",
-		"????.######..#####. 1,6,5",
-		"?###???????? 3,2,1",
-	}
+var input = []string{
+	"???.### 1,1,3",
+	".??..??...?##. 1,1,3",
+	"?#?#?#?#?#?#?#? 1,3,1,6",
+	"????.#...#... 4,1,1",
+	"????.######..#####. 1,6,5",
+	"?###???????? 3,2,1",
+}
 
+func TestPart1(t *testing.T) {
 	if got, want := part1(input), 21; got != want {
 		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
+func TestPart2(t *testing.T) {
+	done := make(chan struct{})
+
+	go func() {
+		defer close(done)
+
+		if got, want := part2(input), 525152; got != want {
+			t.Errorf("got %d, want %d", got, want)
+		}
+	}()
+
+	select {
+	case <-done:
+	case <-time.After(300 * time.Millisecond):
+		t.Error("test timed out")
 	}
 }
 
@@ -96,6 +115,20 @@ func TestRev(t *testing.T) {
 		rev(got)
 		if fmt.Sprint(got) != fmt.Sprint(tc.want) {
 			t.Errorf("[%d] got %q, want %q", i, got, tc.want)
+		}
+	}
+}
+
+func TestExpand(t *testing.T) {
+	for n, tc := range []struct {
+		row  string
+		want string
+	}{
+		{row: ".# 1", want: ".#?.#?.#?.#?.# 1,1,1,1,1"},
+		{row: "???.### 1,1,3", want: "???.###????.###????.###????.###????.### 1,1,3,1,1,3,1,1,3,1,1,3,1,1,3"},
+	} {
+		if got, want := expand(tc.row), tc.want; got != want {
+			t.Errorf("[%d] expand(%q) = %q, want %q", n, tc.row, got, want)
 		}
 	}
 }
