@@ -14,6 +14,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 9: Mirage Maintenance](2023/day-09)
 - [Day 10: Pipe Maze](2023/day-10)
 - [Day 11: Cosmic Expansion](2023/day-11)
+- [Day 12: Hot Springs](2023/day-12)
 
 ## 2022
 - [Day 1: Calorie Counting](2022/day-01)
