@@ -15,6 +15,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -27,6 +28,24 @@ func part1(input []string) int {
 
 	for n := range list1 {
 		sum += abs(list1[n] - list2[n])
+	}
+
+	return sum
+}
+
+func part2(input []string) int {
+	list1, list2 := parse(input)
+
+	freq := make(map[int]int)
+
+	for n := range list2 {
+		freq[list2[n]]++
+	}
+
+	var sum int
+
+	for n := range list1 {
+		sum += list1[n] * freq[list1[n]]
 	}
 
 	return sum
