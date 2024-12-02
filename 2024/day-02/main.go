@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"slices"
 	"strconv"
 	"strings"
 )
@@ -16,6 +17,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -24,6 +26,31 @@ func part1(input []string) int {
 	for n := range input {
 		if safe(parseReport(input[n])) {
 			sum++
+		}
+	}
+
+	return sum
+}
+
+func part2(input []string) int {
+	var sum int
+
+	for n := range input {
+		report := parseReport(input[n])
+
+		if safe(report) {
+			sum++
+			continue
+		}
+
+		for n := range report {
+			r := slices.Clone(report)
+			r = append(r[:n], r[n+1:]...)
+
+			if safe(r) {
+				sum++
+				break
+			}
 		}
 	}
 
