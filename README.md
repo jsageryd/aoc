@@ -5,6 +5,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 ## 2024
 - [Day 1: Historian Hysteria](2024/day-01)
 - [Day 2: Red-Nosed Reports](2024/day-02)
+- [Day 3: Mull It Over](2024/day-03)
 
 ## 2023
 - [Day 1: Trebuchet?!](2023/day-01)
