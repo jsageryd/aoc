@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"slices"
 	"strings"
 )
 
@@ -15,6 +16,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -23,6 +25,37 @@ func part1(input []string) int {
 	for d := range 8 {
 		for _, line := range rotate(input, d) {
 			sum += strings.Count(line, "XMAS")
+		}
+	}
+
+	return sum
+}
+
+func part2(input []string) int {
+	var sum int
+
+	xmas := []string{
+		"M.M",
+		".A.",
+		"S.S",
+	}
+
+	for y := 1; y < len(input)-1; y++ {
+		for x := 1; x < len(input[0])-1; x++ {
+			if input[y][x] == 'A' {
+				var block []string
+
+				block = append(block, string(input[y-1][x-1])+"."+string(input[y-1][x+1]))
+				block = append(block, ".A.")
+				block = append(block, string(input[y+1][x-1])+"."+string(input[y+1][x+1]))
+
+				for _, d := range []int{0, 2, 4, 6} {
+					if slices.Equal(xmas, rotate(block, d)) {
+						sum++
+						break
+					}
+				}
+			}
 		}
 	}
 

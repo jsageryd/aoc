@@ -5,21 +5,27 @@ import (
 	"testing"
 )
 
-func TestPart1(t *testing.T) {
-	input := []string{
-		"MMMSXXMASM",
-		"MSAMXMSMSA",
-		"AMXSXMAAMM",
-		"MSAMASMSMX",
-		"XMASAMXAMM",
-		"XXAMMXXAMA",
-		"SMSMSASXSS",
-		"SAXAMASAAA",
-		"MAMMMXMMMM",
-		"MXMXAXMASX",
-	}
+var input = []string{
+	"MMMSXXMASM",
+	"MSAMXMSMSA",
+	"AMXSXMAAMM",
+	"MSAMASMSMX",
+	"XMASAMXAMM",
+	"XXAMMXXAMA",
+	"SMSMSASXSS",
+	"SAXAMASAAA",
+	"MAMMMXMMMM",
+	"MXMXAXMASX",
+}
 
+func TestPart1(t *testing.T) {
 	if got, want := part1(input), 18; got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
+func TestPart2(t *testing.T) {
+	if got, want := part2(input), 9; got != want {
 		t.Errorf("got %d, want %d", got, want)
 	}
 }
