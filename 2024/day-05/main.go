@@ -17,6 +17,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -25,22 +26,41 @@ func part1(input []string) int {
 	rules, updates := parse(input)
 
 	for n := range updates {
-		if slices.IsSortedFunc(updates[n], func(a, b int) int {
-			for _, rule := range rules {
-				switch rule {
-				case [2]int{a, b}:
-					return -1
-				case [2]int{b, a}:
-					return 1
-				}
-			}
-			return 0
-		}) {
+		if slices.IsSortedFunc(updates[n], updateSortFunc(rules)) {
 			sum += updates[n][len(updates[n])/2]
 		}
 	}
 
 	return sum
+}
+
+func part2(input []string) int {
+	var sum int
+
+	rules, updates := parse(input)
+
+	for n := range updates {
+		if !slices.IsSortedFunc(updates[n], updateSortFunc(rules)) {
+			slices.SortFunc(updates[n], updateSortFunc(rules))
+			sum += updates[n][len(updates[n])/2]
+		}
+	}
+
+	return sum
+}
+
+func updateSortFunc(rules [][2]int) func(a, b int) int {
+	return func(a, b int) int {
+		for _, rule := range rules {
+			switch rule {
+			case [2]int{a, b}:
+				return -1
+			case [2]int{b, a}:
+				return 1
+			}
+		}
+		return 0
+	}
 }
 
 func parse(input []string) (rules [][2]int, updates [][]int) {
