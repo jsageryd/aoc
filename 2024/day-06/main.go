@@ -42,31 +42,32 @@ func part2(input []string) int {
 
 	guard, grid := parse(input)
 
+	candidates := make(map[Coord]bool)
+
+	walk(guard, grid, func(guard Guard) bool {
+		candidates[guard.loc] = true
+		return true
+	})
+
 	var sum int
 
-	for y := range input {
-		for x := range input[y] {
-			if grid[Coord{x, y}] != '.' {
-				continue
+	for c := range candidates {
+		grid[c] = 'O'
+
+		seen := make(map[Guard]bool)
+
+		walk(guard, grid, func(guard Guard) bool {
+			if seen[guard] {
+				sum++
+				return false
 			}
 
-			grid[Coord{x, y}] = 'O'
+			seen[guard] = true
 
-			seen := make(map[Guard]bool)
+			return true
+		})
 
-			walk(guard, grid, func(guard Guard) bool {
-				if seen[guard] {
-					sum++
-					return false
-				}
-
-				seen[guard] = true
-
-				return true
-			})
-
-			grid[Coord{x, y}] = '.'
-		}
+		grid[c] = '.'
 	}
 
 	return sum
