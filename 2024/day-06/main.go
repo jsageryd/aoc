@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -24,41 +25,12 @@ func part1(input []string) int {
 
 	guard, grid := parse(input)
 
-	topLeft := Coord{0, 0}
-	bottomRight := Coord{len(input[0]) - 1, len(input) - 1}
-
 	seen := make(map[Coord]bool)
 
-	for withinBounds(guard.loc, topLeft, bottomRight) {
+	walk(guard, grid, func(guard Guard) bool {
 		seen[guard.loc] = true
-
-		switch guard.dir {
-		case '^':
-			if grid[Coord{guard.loc.x, guard.loc.y - 1}] == '#' {
-				guard.dir = '>'
-			} else {
-				guard.loc.y--
-			}
-		case '<':
-			if grid[Coord{guard.loc.x - 1, guard.loc.y}] == '#' {
-				guard.dir = '^'
-			} else {
-				guard.loc.x--
-			}
-		case 'v':
-			if grid[Coord{guard.loc.x, guard.loc.y + 1}] == '#' {
-				guard.dir = '<'
-			} else {
-				guard.loc.y++
-			}
-		case '>':
-			if grid[Coord{guard.loc.x + 1, guard.loc.y}] == '#' {
-				guard.dir = 'v'
-			} else {
-				guard.loc.x++
-			}
-		}
-	}
+		return true
+	})
 
 	return len(seen)
 }
@@ -68,10 +40,7 @@ func part2(input []string) int {
 		return 0
 	}
 
-	guardStart, grid := parse(input)
-
-	topLeft := Coord{0, 0}
-	bottomRight := Coord{len(input[0]) - 1, len(input) - 1}
+	guard, grid := parse(input)
 
 	var sum int
 
@@ -81,54 +50,22 @@ func part2(input []string) int {
 				continue
 			}
 
-			guard := guardStart
-			obstruction := Coord{x, y}
+			grid[Coord{x, y}] = 'O'
 
 			seen := make(map[Guard]bool)
 
-			for withinBounds(guard.loc, topLeft, bottomRight) {
+			walk(guard, grid, func(guard Guard) bool {
 				if seen[guard] {
 					sum++
-					break
+					return false
 				}
 
 				seen[guard] = true
 
-				switch guard.dir {
-				case '^':
-					next := Coord{guard.loc.x, guard.loc.y - 1}
+				return true
+			})
 
-					if grid[next] == '#' || next == obstruction {
-						guard.dir = '>'
-					} else {
-						guard.loc.y--
-					}
-				case '<':
-					next := Coord{guard.loc.x - 1, guard.loc.y}
-
-					if grid[next] == '#' || next == obstruction {
-						guard.dir = '^'
-					} else {
-						guard.loc.x--
-					}
-				case 'v':
-					next := Coord{guard.loc.x, guard.loc.y + 1}
-
-					if grid[next] == '#' || next == obstruction {
-						guard.dir = '<'
-					} else {
-						guard.loc.y++
-					}
-				case '>':
-					next := Coord{guard.loc.x + 1, guard.loc.y}
-
-					if grid[next] == '#' || next == obstruction {
-						guard.dir = 'v'
-					} else {
-						guard.loc.x++
-					}
-				}
-			}
+			grid[Coord{x, y}] = '.'
 		}
 	}
 
@@ -162,7 +99,22 @@ func parse(input []string) (Guard, map[Coord]byte) {
 	return guard, grid
 }
 
-func withinBounds(c Coord, topLeft, bottomRight Coord) bool {
-	return c.x >= topLeft.x && c.x <= bottomRight.x &&
-		c.y >= topLeft.y && c.y <= bottomRight.y
+// walk moves the guard through the grid until f returns false.
+func walk(guard Guard, grid map[Coord]byte, f func(Guard) bool) {
+	for grid[guard.loc] != 0 && f(guard) {
+		const dirs = "^>v<"
+
+		next := map[byte]Coord{
+			'^': Coord{guard.loc.x, guard.loc.y - 1},
+			'>': Coord{guard.loc.x + 1, guard.loc.y},
+			'v': Coord{guard.loc.x, guard.loc.y + 1},
+			'<': Coord{guard.loc.x - 1, guard.loc.y},
+		}
+
+		if block := grid[next[guard.dir]]; block != '.' && block != 0 {
+			guard.dir = dirs[(strings.IndexByte(dirs, guard.dir)+1)%4]
+		} else {
+			guard.loc = next[guard.dir]
+		}
+	}
 }
