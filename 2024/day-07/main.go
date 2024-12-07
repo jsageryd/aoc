@@ -26,7 +26,7 @@ func part1(input []string) int {
 	tests := parse(input)
 
 	for _, t := range tests {
-		results := calculate(t.numbers)
+		results := calculate(t.numbers, []op{add, mul})
 
 		if slices.Contains(results, t.value) {
 			sum += t.value
@@ -42,7 +42,7 @@ func part2(input []string) int {
 	tests := parse(input)
 
 	for _, t := range tests {
-		results := calculate2(t.numbers)
+		results := calculate(t.numbers, []op{add, mul, cat})
 
 		if slices.Contains(results, t.value) {
 			sum += t.value
@@ -52,7 +52,7 @@ func part2(input []string) int {
 	return sum
 }
 
-func calculate(numbers []int) []int {
+func calculate(numbers []int, ops []op) []int {
 	var res []int
 
 	var rec func(acc int, numbers []int)
@@ -63,8 +63,9 @@ func calculate(numbers []int) []int {
 			return
 		}
 
-		rec(acc+numbers[0], numbers[1:])
-		rec(acc*numbers[0], numbers[1:])
+		for _, op := range ops {
+			rec(op(acc, numbers[0]), numbers[1:])
+		}
 	}
 
 	rec(numbers[0], numbers[1:])
@@ -72,27 +73,19 @@ func calculate(numbers []int) []int {
 	return res
 }
 
-func calculate2(numbers []int) []int {
-	var res []int
+type op func(n1, n2 int) int
 
-	var rec func(acc int, numbers []int)
+func add(n1, n2 int) int {
+	return n1 + n2
+}
 
-	rec = func(acc int, numbers []int) {
-		if len(numbers) == 0 {
-			res = append(res, acc)
-			return
-		}
+func mul(n1, n2 int) int {
+	return n1 * n2
+}
 
-		rec(acc+numbers[0], numbers[1:])
-		rec(acc*numbers[0], numbers[1:])
-
-		n, _ := strconv.Atoi(strconv.Itoa(acc) + strconv.Itoa(numbers[0]))
-		rec(n, numbers[1:])
-	}
-
-	rec(numbers[0], numbers[1:])
-
-	return res
+func cat(n1, n2 int) int {
+	n, _ := strconv.Atoi(strconv.Itoa(n1) + strconv.Itoa(n2))
+	return n
 }
 
 type Test struct {
