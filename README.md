@@ -9,6 +9,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 4: Ceres Search](2024/day-04)
 - [Day 5: Print Queue](2024/day-05)
 - [Day 6: Guard Gallivant](2024/day-06)
+- [Day 7: Bridge Repair](2024/day-07)
 
 ## 2023
 - [Day 1: Trebuchet?!](2023/day-01)
