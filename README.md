@@ -2,6 +2,8 @@
 
 My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 
+Days marked with ★ have visualizations.
+
 ## 2024
 - [Day 1: Historian Hysteria](2024/day-01)
 - [Day 2: Red-Nosed Reports](2024/day-02)
@@ -39,7 +41,7 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 11: Monkey in the Middle](2022/day-11)
 - [Day 12: Hill Climbing Algorithm](2022/day-12)
 - [Day 13: Distress Signal](2022/day-13)
-- [Day 14: Regolith Reservoir](2022/day-14)
+- [Day 14: Regolith Reservoir](2022/day-14) ★
 - [Day 15: Beacon Exclusion Zone](2022/day-15)
 
 ## 2021
@@ -96,8 +98,8 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 - [Day 14: Chocolate Charts](2018/day-14)
 - [Day 15: Beverage Bandits](2018/day-15)
 - [Day 16: Chronal Classification](2018/day-16)
-- [Day 17: Reservoir Research](2018/day-17)
-- [Day 18: Settlers of The North Pole](2018/day-18)
+- [Day 17: Reservoir Research](2018/day-17) ★
+- [Day 18: Settlers of The North Pole](2018/day-18) ★
 - [Day 19: Go With The Flow](2018/day-19)
 
 ## 2017
