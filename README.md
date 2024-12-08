@@ -12,6 +12,7 @@ Days marked with ★ have visualizations.
 - [Day 5: Print Queue](2024/day-05)
 - [Day 6: Guard Gallivant](2024/day-06)
 - [Day 7: Bridge Repair](2024/day-07)
+- [Day 8: Resonant Collinearity](2024/day-08)
 
 ## 2023
 - [Day 1: Trebuchet?!](2023/day-01)
