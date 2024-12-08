@@ -18,17 +18,7 @@ func main() {
 }
 
 func part1(input []string) int {
-	antennas := make(map[byte][]Coord)
-
-	for y := range input {
-		for x := range input[y] {
-			if input[y][x] == '.' {
-				continue
-			}
-
-			antennas[input[y][x]] = append(antennas[input[y][x]], Coord{x, y})
-		}
-	}
+	antennas := parse(input)
 
 	antinodes := make(map[Coord]struct{})
 
@@ -56,17 +46,7 @@ func part1(input []string) int {
 }
 
 func part2(input []string) int {
-	antennas := make(map[byte][]Coord)
-
-	for y := range input {
-		for x := range input[y] {
-			if input[y][x] == '.' {
-				continue
-			}
-
-			antennas[input[y][x]] = append(antennas[input[y][x]], Coord{x, y})
-		}
-	}
+	antennas := parse(input)
 
 	antinodes := make(map[Coord]struct{})
 
@@ -92,4 +72,20 @@ func part2(input []string) int {
 
 type Coord struct {
 	x, y int
+}
+
+func parse(input []string) (antennas map[byte][]Coord) {
+	antennas = make(map[byte][]Coord)
+
+	for y := range input {
+		for x := range input[y] {
+			if input[y][x] == '.' {
+				continue
+			}
+
+			antennas[input[y][x]] = append(antennas[input[y][x]], Coord{x, y})
+		}
+	}
+
+	return antennas
 }
