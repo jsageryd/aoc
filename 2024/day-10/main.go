@@ -16,6 +16,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -34,6 +35,22 @@ func part1(input []string) int {
 			}
 
 			sum += len(seen)
+		}
+	}
+
+	return sum
+}
+
+func part2(input []string) int {
+	var sum int
+
+	grid := parse(input)
+
+	for c, v := range grid {
+		if v == 0 {
+			trails := search(grid, c)
+
+			sum += len(trails)
 		}
 	}
 
