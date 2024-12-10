@@ -14,6 +14,7 @@ Days marked with ★ have visualizations.
 - [Day 7: Bridge Repair](2024/day-07)
 - [Day 8: Resonant Collinearity](2024/day-08)
 - [Day 9: Disk Fragmenter](2024/day-09)
+- [Day 10: Hoof It](2024/day-10)
 
 ## 2023
 - [Day 1: Trebuchet?!](2023/day-01)
