@@ -15,6 +15,7 @@ Days marked with ★ have visualizations.
 - [Day 8: Resonant Collinearity](2024/day-08)
 - [Day 9: Disk Fragmenter](2024/day-09)
 - [Day 10: Hoof It](2024/day-10)
+- [Day 11: Plutonian Pebbles](2024/day-11)
 
 ## 2023
 - [Day 1: Trebuchet?!](2023/day-01)
