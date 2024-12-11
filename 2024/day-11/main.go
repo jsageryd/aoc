@@ -16,30 +16,56 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input string) int {
-	ints := parse(input)
+	return blink(parse(input), 25)
+}
 
-	for range 25 {
-		var newInts []int
+func part2(input string) int {
+	return blink(parse(input), 75)
+}
 
-		for n := range ints {
-			switch {
-			case ints[n] == 0:
-				newInts = append(newInts, 1)
-			case digits(ints[n])%2 == 0:
-				left, right := split(ints[n])
-				newInts = append(newInts, left, right)
-			default:
-				newInts = append(newInts, ints[n]*2024)
-			}
+func blink(ints []int, n int) int {
+	memory := make(map[[2]int]int)
+
+	var rec func(n, iterations int) int
+
+	rec = func(n, iterations int) int {
+		if iterations == 0 {
+			return 1
 		}
 
-		ints = newInts
+		if sum, ok := memory[[2]int{n, iterations}]; ok {
+			return sum
+		}
+
+		var sum int
+
+		switch {
+		case n == 0:
+			sum += rec(1, iterations-1)
+		case digits(n)%2 == 0:
+			left, right := split(n)
+			sum += rec(left, iterations-1)
+			sum += rec(right, iterations-1)
+		default:
+			sum += rec(n*2024, iterations-1)
+		}
+
+		memory[[2]int{n, iterations}] = sum
+
+		return sum
 	}
 
-	return len(ints)
+	var sum int
+
+	for _, v := range ints {
+		sum += rec(v, n)
+	}
+
+	return sum
 }
 
 func parse(input string) []int {
