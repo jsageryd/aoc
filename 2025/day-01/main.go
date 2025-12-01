@@ -45,23 +45,14 @@ func part2(input []string) int {
 	dial := 50
 
 	for _, v := range parse(input) {
-		left := v < 0
+		c := 1
 
 		if v < 0 {
 			v = -v
+			c = -1 + 100
 		}
 
 		for range v {
-			c := 1
-
-			if left {
-				c = -1
-			}
-
-			for c < 0 {
-				c += 100
-			}
-
 			dial = (dial + c) % 100
 
 			if dial == 0 {
