@@ -16,6 +16,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -41,6 +42,41 @@ func part1(input []string) int {
 
 		if dial == 0 {
 			count++
+		}
+	}
+
+	return count
+}
+
+func part2(input []string) int {
+	var count int
+
+	dial := 50
+
+	for _, line := range input {
+		v, err := strconv.Atoi(line[1:])
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		left := line[0] == 'L'
+
+		for range v {
+			c := 1
+
+			if left {
+				c = -1
+			}
+
+			for c < 0 {
+				c += 100
+			}
+
+			dial = (dial + c) % 100
+
+			if dial == 0 {
+				count++
+			}
 		}
 	}
 
