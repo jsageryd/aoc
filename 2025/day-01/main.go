@@ -24,16 +24,7 @@ func part1(input []string) int {
 
 	dial := 50
 
-	for _, line := range input {
-		v, err := strconv.Atoi(line[1:])
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		if line[0] == 'L' {
-			v = -v
-		}
-
+	for _, v := range parse(input) {
 		for v < 0 {
 			v += 100
 		}
@@ -53,13 +44,12 @@ func part2(input []string) int {
 
 	dial := 50
 
-	for _, line := range input {
-		v, err := strconv.Atoi(line[1:])
-		if err != nil {
-			log.Fatal(err)
-		}
+	for _, v := range parse(input) {
+		left := v < 0
 
-		left := line[0] == 'L'
+		if v < 0 {
+			v = -v
+		}
 
 		for range v {
 			c := 1
@@ -81,4 +71,23 @@ func part2(input []string) int {
 	}
 
 	return count
+}
+
+func parse(input []string) []int {
+	var vs []int
+
+	for _, line := range input {
+		v, err := strconv.Atoi(line[1:])
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if line[0] == 'L' {
+			v = -v
+		}
+
+		vs = append(vs, v)
+	}
+
+	return vs
 }
