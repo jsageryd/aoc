@@ -4,6 +4,9 @@ My solutions to the [Advent of Code](https://adventofcode.com/) puzzles.
 
 Days marked with ★ have visualizations.
 
+## 2025
+- [Day 1: Secret Entrance](2025/day-01)
+
 ## 2024
 - [Day 1: Historian Hysteria](2024/day-01)
 - [Day 2: Red-Nosed Reports](2024/day-02)

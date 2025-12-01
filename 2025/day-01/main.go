@@ -1,0 +1,48 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"log"
+	"os"
+	"strconv"
+)
+
+func main() {
+	var input []string
+
+	for s := bufio.NewScanner(os.Stdin); s.Scan(); {
+		input = append(input, s.Text())
+	}
+
+	fmt.Printf("Part 1: %d\n", part1(input))
+}
+
+func part1(input []string) int {
+	var count int
+
+	dial := 50
+
+	for _, line := range input {
+		v, err := strconv.Atoi(line[1:])
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		if line[0] == 'L' {
+			v = -v
+		}
+
+		for v < 0 {
+			v += 100
+		}
+
+		dial = (dial + v) % 100
+
+		if dial == 0 {
+			count++
+		}
+	}
+
+	return count
+}
