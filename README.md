@@ -6,6 +6,7 @@ Days marked with ★ have visualizations.
 
 ## 2025
 - [Day 1: Secret Entrance](2025/day-01)
+- [Day 2: Gift Shop](2025/day-02)
 
 ## 2024
 - [Day 1: Historian Hysteria](2024/day-01)
