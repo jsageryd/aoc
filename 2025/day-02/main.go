@@ -12,6 +12,7 @@ func main() {
 	input := string(inputBytes)
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input string) int {
@@ -27,6 +28,39 @@ func part1(input string) int {
 
 			if n/m == n%m {
 				sum += n
+			}
+		}
+	}
+
+	return sum
+}
+
+func part2(input string) int {
+	var sum int
+
+	for _, r := range parse(input) {
+		for n := r[0]; n <= r[1]; n++ {
+			d := digits(n)
+
+			for i := 2; i <= d; i++ {
+				if d%i != 0 {
+					continue
+				}
+
+				parts := split(n, i)
+
+				match := true
+
+				for j := 1; j < len(parts); j++ {
+					if parts[j-1] != parts[j] {
+						match = false
+					}
+				}
+
+				if match {
+					sum += n
+					break
+				}
 			}
 		}
 	}
@@ -58,4 +92,30 @@ func parse(input string) [][2]int {
 	}
 
 	return ranges
+}
+
+func split(n, parts int) []int {
+	d := digits(n)
+
+	if d%parts != 0 {
+		return nil
+	}
+
+	partSize := d / parts
+
+	var s []int
+
+	for exp := d - partSize; exp >= 0; exp -= partSize {
+		m := 1
+
+		for range exp {
+			m *= 10
+		}
+
+		s = append(s, n/m)
+
+		n %= m
+	}
+
+	return s
 }
