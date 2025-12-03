@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"slices"
 	"strings"
 )
 
@@ -40,24 +41,8 @@ func part2(input string) int {
 
 	for _, r := range parse(input) {
 		for n := r[0]; n <= r[1]; n++ {
-			d := digits(n)
-
-			for i := 2; i <= d; i++ {
-				if d%i != 0 {
-					continue
-				}
-
-				parts := split(n, i)
-
-				match := true
-
-				for j := 1; j < len(parts); j++ {
-					if parts[j-1] != parts[j] {
-						match = false
-					}
-				}
-
-				if match {
+			for i := 2; i <= digits(n); i++ {
+				if len(slices.Compact(split(n, i))) == 1 {
 					sum += n
 					break
 				}
