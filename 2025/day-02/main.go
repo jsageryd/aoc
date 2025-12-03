@@ -21,11 +21,7 @@ func part1(input string) int {
 
 	for _, r := range parse(input) {
 		for n := r[0]; n <= r[1]; n++ {
-			m := 1
-
-			for range digits(n) / 2 {
-				m *= 10
-			}
+			m := pow(10, digits(n)/2)
 
 			if n/m == n%m {
 				sum += n
@@ -79,6 +75,16 @@ func parse(input string) [][2]int {
 	return ranges
 }
 
+func pow(base, exp int) int {
+	m := 1
+
+	for range exp {
+		m *= base
+	}
+
+	return m
+}
+
 func split(n, parts int) []int {
 	d := digits(n)
 
@@ -91,14 +97,8 @@ func split(n, parts int) []int {
 	var s []int
 
 	for exp := d - partSize; exp >= 0; exp -= partSize {
-		m := 1
-
-		for range exp {
-			m *= 10
-		}
-
+		m := pow(10, exp)
 		s = append(s, n/m)
-
 		n %= m
 	}
 

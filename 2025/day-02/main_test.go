@@ -55,6 +55,30 @@ func TestParse(t *testing.T) {
 	}
 }
 
+func TestPow(t *testing.T) {
+	for _, tc := range []struct {
+		base int
+		exp  int
+		want int
+	}{
+		{base: 0, exp: 0, want: 1},
+		{base: 0, exp: 1, want: 0},
+		{base: 1, exp: 0, want: 1},
+		{base: 1, exp: 0, want: 1},
+		{base: 10, exp: 0, want: 1},
+		{base: 10, exp: 1, want: 10},
+		{base: 10, exp: 2, want: 100},
+		{base: 3, exp: 0, want: 1},
+		{base: 3, exp: 1, want: 3},
+		{base: 3, exp: 2, want: 9},
+		{base: 3, exp: 3, want: 27},
+	} {
+		if got, want := pow(tc.base, tc.exp), tc.want; got != want {
+			t.Errorf("pow(%d, %d) = %d, want %d", tc.base, tc.exp, got, want)
+		}
+	}
+}
+
 func TestSplit(t *testing.T) {
 	for _, tc := range []struct {
 		n     int
