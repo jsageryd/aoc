@@ -8,6 +8,7 @@ Days marked with ★ have visualizations.
 - [Day 1: Secret Entrance](2025/day-01)
 - [Day 2: Gift Shop](2025/day-02)
 - [Day 3: Lobby](2025/day-03)
+- [Day 4: Printing Department](2025/day-04)
 
 ## 2024
 - [Day 1: Historian Hysteria](2024/day-01)
