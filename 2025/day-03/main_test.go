@@ -1,7 +1,7 @@
 package main
 
 import (
-	"slices"
+	"bytes"
 	"testing"
 )
 
@@ -25,13 +25,13 @@ func TestPart2(t *testing.T) {
 }
 
 func TestMaxComb(t *testing.T) {
-	digits := []int{1, 5, 4, 3, 5, 6}
+	digits := []byte("154356")
 	k := 3
 
 	gotComb := maxComb(digits, k)
-	wantComb := []int{5, 5, 6}
+	wantComb := []byte("556")
 
-	if !slices.Equal(gotComb, wantComb) {
-		t.Errorf("got %v, want %v", gotComb, wantComb)
+	if !bytes.Equal(gotComb, wantComb) {
+		t.Errorf("got %q, want %q", gotComb, wantComb)
 	}
 }

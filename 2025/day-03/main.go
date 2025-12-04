@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 )
 
 func main() {
@@ -54,25 +55,10 @@ func part1(input []string) int {
 func part2(input []string) int {
 	var sum int
 
-	for _, line := range input {
-		bank := make([]int, len(line))
-
-		for n := range line {
-			bank[n] = int(line[n]) - '0'
-		}
-
-		comb := maxComb(bank, 12)
-
-		var total int
-
-		m := 1
-
-		for n := len(comb) - 1; n >= 0; n-- {
-			total += comb[n] * m
-			m *= 10
-		}
-
-		sum += total
+	for _, bank := range input {
+		maxJoltageStr := string(maxComb([]byte(bank), 12))
+		maxJoltage, _ := strconv.Atoi(maxJoltageStr)
+		sum += maxJoltage
 	}
 
 	return sum
@@ -80,13 +66,13 @@ func part2(input []string) int {
 
 // maxComb picks k elements from digits until it finds the combination with the
 // highest numeric value formed by the picked digits.
-func maxComb(digits []int, k int) []int {
-	comb := make([]int, k)
+func maxComb(digits []byte, k int) []byte {
+	comb := make([]byte, k)
 
-	var rec func(dd []int, cc []int) []int
+	var rec func(dd []byte, cc []byte) []byte
 
-	rec = func(dd []int, cc []int) []int {
-		var maxHead int
+	rec = func(dd []byte, cc []byte) []byte {
+		var maxHead byte
 
 		for n := 0; n <= len(dd)-len(cc); n++ {
 			if dd[n] <= maxHead {
