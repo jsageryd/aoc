@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"cmp"
 	"fmt"
 	"os"
 	"slices"
@@ -49,38 +50,32 @@ func part2(input []string) int {
 }
 
 func linearize(ranges [][2]int) [][2]int {
-	var done bool
-
-	for !done {
-		done = true
-
-		for n, r1 := range ranges {
-			for _, r2 := range ranges {
-				// If the ranges don't overlap, skip
-				// [r1   ] [r2   ]
-				// [r2   ] [r1   ]
-				if r1[1] < r2[0]-1 || r2[1] < r1[0]-1 {
-					continue
-				}
-
-				// Merge the overlapping ranges
-				r1[0] = min(r1[0], r2[0])
-				r1[1] = max(r1[1], r2[1])
-
-				if ranges[n] != r1 {
-					done = false
-				}
-
-				ranges[n] = r1
-			}
-		}
-	}
-
 	slices.SortFunc(ranges, func(a, b [2]int) int {
-		return slices.Compare(a[:], b[:])
+		return cmp.Compare(a[0], b[0])
 	})
 
-	return slices.Compact(ranges)
+	for n := 0; n < len(ranges)-1; n++ {
+		r1, r2 := ranges[n], ranges[n+1]
+
+		// If the ranges don't overlap, skip
+		// [r1   ] [r2   ]
+		// [r2   ] [r1   ]
+		if r1[1] < r2[0]-1 || r2[1] < r1[0]-1 {
+			continue
+		}
+
+		// Merge the overlapping ranges
+		ranges[n][0] = min(r1[0], r2[0])
+		ranges[n][1] = max(r1[1], r2[1])
+
+		// Delete the merged range
+		ranges = slices.Delete(ranges, n+1, n+2)
+
+		// Stay on the same index to check for more overlaps
+		n--
+	}
+
+	return ranges
 }
 
 func parse(input []string) (ranges [][2]int, ids []int) {
