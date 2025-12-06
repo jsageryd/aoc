@@ -23,47 +23,17 @@ func main() {
 }
 
 func part1(input []string) int {
-	var sum int
-
-	for _, problem := range slice(input) {
-		var op func(a, b int) int
-
-		switch opStr := strings.TrimSpace(problem[len(problem)-1]); opStr {
-		case "+":
-			op = func(a, b int) int { return a + b }
-		case "*":
-			op = func(a, b int) int { return a * b }
-		default:
-			log.Fatalf("unknown op string %q", opStr)
-		}
-
-		var values []int
-
-		for _, v := range problem[:len(problem)-1] {
-			i, err := strconv.Atoi(strings.TrimSpace(v))
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			values = append(values, i)
-		}
-
-		res := values[0]
-
-		for _, v := range values[1:] {
-			res = op(res, v)
-		}
-
-		sum += res
-	}
-
-	return sum
+	return calc(input, slice)
 }
 
 func part2(input []string) int {
+	return calc(input, sliceRightToLeft)
+}
+
+func calc(input []string, sliceFunc func(input []string) [][]string) int {
 	var sum int
 
-	for _, problem := range sliceRightToLeft(input) {
+	for _, problem := range sliceFunc(input) {
 		var op func(a, b int) int
 
 		switch opStr := strings.TrimSpace(problem[len(problem)-1]); opStr {
