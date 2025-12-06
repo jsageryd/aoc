@@ -19,12 +19,51 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
 	var sum int
 
 	for _, problem := range slice(input) {
+		var op func(a, b int) int
+
+		switch opStr := strings.TrimSpace(problem[len(problem)-1]); opStr {
+		case "+":
+			op = func(a, b int) int { return a + b }
+		case "*":
+			op = func(a, b int) int { return a * b }
+		default:
+			log.Fatalf("unknown op string %q", opStr)
+		}
+
+		var values []int
+
+		for _, v := range problem[:len(problem)-1] {
+			i, err := strconv.Atoi(strings.TrimSpace(v))
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			values = append(values, i)
+		}
+
+		res := values[0]
+
+		for _, v := range values[1:] {
+			res = op(res, v)
+		}
+
+		sum += res
+	}
+
+	return sum
+}
+
+func part2(input []string) int {
+	var sum int
+
+	for _, problem := range sliceRightToLeft(input) {
 		var op func(a, b int) int
 
 		switch opStr := strings.TrimSpace(problem[len(problem)-1]); opStr {
@@ -92,6 +131,25 @@ func slice(input []string) [][]string {
 
 	for n := range lastSlice {
 		lastSlice[n] += strings.Repeat(" ", maxLen-len(lastSlice[n]))
+	}
+
+	return ss
+}
+
+func sliceRightToLeft(input []string) [][]string {
+	var ss [][]string
+
+	for _, s := range slices.Backward(slice(input)) {
+		var vs []string
+		for x := len(s[0]) - 1; x >= 0; x-- {
+			v := make([]byte, len(s)-1)
+			for y := range len(s) - 1 {
+				v[y] = s[y][x]
+			}
+			vs = append(vs, string(v))
+		}
+		vs = append(vs, strings.TrimSpace(s[len(s)-1]))
+		ss = append(ss, vs)
 	}
 
 	return ss
