@@ -18,6 +18,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []int) int {
@@ -52,6 +53,60 @@ func part1(input []int) int {
 	})
 
 	return quantumEntanglement(groups[0])
+}
+
+func part2(input []int) int {
+	var sum int
+
+	for _, v := range input {
+		sum += v
+	}
+
+	targetWeight := sum / 4
+
+	slices.SortFunc(input, func(a, b int) int {
+		return cmp.Compare(b, a)
+	})
+
+	var best [][]int
+
+	cont := true
+
+	combTargetSum(input, targetWeight, func(comb1 []int) bool {
+		combTargetSum(subtract(input, comb1), targetWeight, func(comb2 []int) bool {
+			combTargetSum(subtract(subtract(input, comb1), comb2), targetWeight, func(comb3 []int) bool {
+				comb4 := subtract(subtract(subtract(input, comb1), comb2), comb3)
+				groups := [][]int{comb1, comb2, comb3, comb4}
+
+				slices.SortFunc(groups, func(a, b []int) int {
+					if lCmp := cmp.Compare(len(a), len(b)); lCmp != 0 {
+						return lCmp
+					}
+					return cmp.Compare(quantumEntanglement(a), quantumEntanglement(b))
+				})
+
+				if len(best) == 0 {
+					best = groups
+				}
+
+				if len(groups[0]) < len(best[0]) {
+					best = groups
+					cont = false
+				}
+
+				if len(groups[0]) == len(best[0]) && quantumEntanglement(groups[0]) < quantumEntanglement(best[0]) {
+					best = groups
+					cont = false
+				}
+
+				return cont
+			})
+			return cont
+		})
+		return cont
+	})
+
+	return quantumEntanglement(best[0])
 }
 
 func quantumEntanglement(group []int) int {

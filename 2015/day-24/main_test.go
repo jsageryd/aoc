@@ -5,10 +5,16 @@ import (
 	"testing"
 )
 
-func TestPart1(t *testing.T) {
-	input := []int{1, 2, 3, 4, 5, 7, 8, 9, 10, 11}
+var input = []int{1, 2, 3, 4, 5, 7, 8, 9, 10, 11}
 
+func TestPart1(t *testing.T) {
 	if got, want := part1(input), 99; got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
+func TestPart2(t *testing.T) {
+	if got, want := part2(input), 44; got != want {
 		t.Errorf("got %d, want %d", got, want)
 	}
 }
