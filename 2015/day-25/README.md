@@ -72,3 +72,13 @@ disconnects.
 
 Santa looks nervous. Your puzzle input contains the message on the machine's
 console. What code do you give the machine?
+
+## Part Two
+
+The machine springs to life, then falls silent again. It beeps. "Insufficient
+fuel", the console reads. "Fifty stars are required before proceeding. One star
+is available."
+
+..."one star is available"? You check the fuel tank; sure enough, a lone star
+sits at the bottom, awaiting its friends. Looks like you need to provide 49
+yourself.
