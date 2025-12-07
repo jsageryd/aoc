@@ -15,6 +15,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string) int {
@@ -64,6 +65,50 @@ func part1(input []string) int {
 	}
 
 	return splits
+}
+
+func part2(input []string) int {
+	grid := parse(input)
+
+	var start coord
+
+	for c, v := range grid {
+		if v == 'S' {
+			start = c
+			break
+		}
+	}
+
+	mem := make(map[coord]int)
+
+	var timelines func(next coord) int
+
+	timelines = func(next coord) int {
+		if c, ok := mem[next]; ok {
+			return c
+		}
+
+		for {
+			next = coord{next.x, next.y + 1}
+
+			v, ok := grid[next]
+			if !ok {
+				return 1
+			}
+
+			if v == '^' {
+				left := coord{next.x - 1, next.y}
+				right := coord{next.x + 1, next.y}
+
+				mem[left] = timelines(left)
+				mem[right] = timelines(right)
+
+				return mem[left] + mem[right]
+			}
+		}
+	}
+
+	return timelines(start)
 }
 
 type coord struct {

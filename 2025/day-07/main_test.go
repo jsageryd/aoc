@@ -30,6 +30,12 @@ func TestPart1(t *testing.T) {
 	}
 }
 
+func TestPart2(t *testing.T) {
+	if got, want := part2(input), 40; got != want {
+		t.Errorf("got %d, want %d", got, want)
+	}
+}
+
 func TestGridString(t *testing.T) {
 	grid := parse(input)
 	beams := []coord{{1, 1}, {1, 2}, {1, 3}}
