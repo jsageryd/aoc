@@ -11,6 +11,7 @@ Days marked with ★ have visualizations.
 - [Day 4: Printing Department](2025/day-04)
 - [Day 5: Cafeteria](2025/day-05)
 - [Day 6: Trash Compactor](2025/day-06)
+- [Day 7: Laboratories](2025/day-07)
 
 ## 2024
 - [Day 1: Historian Hysteria](2024/day-01)
