@@ -150,3 +150,4 @@ Days marked with ★ have visualizations.
 - [Day 21: RPG Simulator 20XX](2015/day-21)
 - [Day 22: Wizard Simulator 20XX](2015/day-22)
 - [Day 23: Opening the Turing Lock](2015/day-23)
+- [Day 24: It Hangs in the Balance](2015/day-24)
