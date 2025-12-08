@@ -18,6 +18,7 @@ func main() {
 	}
 
 	fmt.Printf("Part 1: %d\n", part1(input, 1000))
+	fmt.Printf("Part 2: %d\n", part2(input))
 }
 
 func part1(input []string, limit int) int {
@@ -65,6 +66,47 @@ func part1(input []string, limit int) int {
 	}
 
 	return m
+}
+
+func part2(input []string) int {
+	boxes := parse(input)
+	pairs := findPairs(boxes)
+
+	// Sort pairs descending by distance
+	slices.SortFunc(pairs, func(a, b [2]box) int {
+		return cmp.Compare(distance(a[0], a[1]), distance(b[0], b[1]))
+	})
+
+	var circuits []map[box]bool
+
+	for _, b := range boxes {
+		circuits = append(circuits, map[box]bool{b: true})
+	}
+
+	for _, pair := range pairs {
+		idxA := slices.IndexFunc(circuits, func(circuit map[box]bool) bool {
+			return circuit[pair[0]]
+		})
+
+		idxB := slices.IndexFunc(circuits, func(circuit map[box]bool) bool {
+			return circuit[pair[1]]
+		})
+
+		// If both are already in the same circuit, skip
+		if idxA == idxB {
+			continue
+		}
+
+		// Merge the circuits
+		maps.Insert(circuits[idxA], maps.All(circuits[idxB]))
+		circuits = slices.Delete(circuits, idxB, idxB+1)
+
+		if len(circuits) == 1 {
+			return int(pair[0].x) * int(pair[1].x)
+		}
+	}
+
+	return 0
 }
 
 // findPairs returns all possible box pairs.
