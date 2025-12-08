@@ -22,38 +22,7 @@ func main() {
 }
 
 func part1(input []string, limit int) int {
-	boxes := parse(input)
-	pairs := findPairs(boxes)
-
-	// Sort pairs descending by distance
-	slices.SortFunc(pairs, func(a, b [2]box) int {
-		return cmp.Compare(distance(a[0], a[1]), distance(b[0], b[1]))
-	})
-
-	var circuits []map[box]bool
-
-	for _, b := range boxes {
-		circuits = append(circuits, map[box]bool{b: true})
-	}
-
-	for _, pair := range pairs[:limit] {
-		idxA := slices.IndexFunc(circuits, func(circuit map[box]bool) bool {
-			return circuit[pair[0]]
-		})
-
-		idxB := slices.IndexFunc(circuits, func(circuit map[box]bool) bool {
-			return circuit[pair[1]]
-		})
-
-		// If both are already in the same circuit, skip
-		if idxA == idxB {
-			continue
-		}
-
-		// Merge the circuits
-		maps.Insert(circuits[idxA], maps.All(circuits[idxB]))
-		circuits = slices.Delete(circuits, idxB, idxB+1)
-	}
+	circuits, _ := find(input, limit)
 
 	slices.SortFunc(circuits, func(a, b map[box]bool) int {
 		return cmp.Compare(len(b), len(a))
@@ -69,6 +38,12 @@ func part1(input []string, limit int) int {
 }
 
 func part2(input []string) int {
+	_, lastPair := find(input, -1)
+
+	return int(lastPair[0].x) * int(lastPair[1].x)
+}
+
+func find(input []string, limit int) (circuits []map[box]bool, lastPair [2]box) {
 	boxes := parse(input)
 	pairs := findPairs(boxes)
 
@@ -77,10 +52,12 @@ func part2(input []string) int {
 		return cmp.Compare(distance(a[0], a[1]), distance(b[0], b[1]))
 	})
 
-	var circuits []map[box]bool
-
 	for _, b := range boxes {
 		circuits = append(circuits, map[box]bool{b: true})
+	}
+
+	if limit > -1 {
+		pairs = pairs[:limit]
 	}
 
 	for _, pair := range pairs {
@@ -101,12 +78,14 @@ func part2(input []string) int {
 		maps.Insert(circuits[idxA], maps.All(circuits[idxB]))
 		circuits = slices.Delete(circuits, idxB, idxB+1)
 
+		lastPair = pair
+
 		if len(circuits) == 1 {
-			return int(pair[0].x) * int(pair[1].x)
+			break
 		}
 	}
 
-	return 0
+	return circuits, lastPair
 }
 
 // findPairs returns all possible box pairs.
