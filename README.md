@@ -13,6 +13,7 @@ Days marked with ★ have visualizations.
 - [Day 6: Trash Compactor](2025/day-06)
 - [Day 7: Laboratories](2025/day-07)
 - [Day 8: Playground](2025/day-08)
+- [Day 9: Movie Theater](2025/day-09)
 
 ## 2024
 - [Day 1: Historian Hysteria](2024/day-01)
