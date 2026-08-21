@@ -243,6 +243,4 @@ func playerWins(p *player, e *enemy, spellIndices []int, hardMode bool) (win boo
 		debugLogf("Enemy: %+v", *e)
 		debugLogf("")
 	}
-
-	return false, errors.New("loop not infinite")
 }

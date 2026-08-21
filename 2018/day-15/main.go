@@ -192,8 +192,6 @@ func fight(c *Cave) (outcome, elvesDead int) {
 			return round * totalHP, elvesDead
 		}
 	}
-
-	return 0, 0
 }
 
 func findPath(to Coord, distanceMap map[Coord]int) []Coord {
